@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "NotificationManager.h"
 
 @interface AppDelegate ()
 
@@ -14,38 +15,86 @@
 
 @implementation AppDelegate
 
+#pragma mark - Life Cycle Methods
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [[NotificationManager sharedNotificationManager] requestAuthorization];
     return YES;
 }
 
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [[NotificationManager sharedNotificationManager] setDeviceToken:deviceToken];
 }
 
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(nonnull NSError *)error {
+    [[NotificationManager sharedNotificationManager] setDeviceToken:nil];
 }
 
+#pragma mark - Push Notifacation (iOS 9)
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
+    [[NotificationManager sharedNotificationManager] handleNotification:userInfo];
 }
 
+#pragma mark - Core Data Stack
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+@synthesize managedObjectModel = _managedObjectModel;
+@synthesize persistentStoreCorrdinator = _persistentStoreCorrdinator;
+@synthesize mainMOC = _mainMOC;
+@synthesize privateMOC = _privateMOC;
+
+- (NSURL *)applicationDocumentsDirectory {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
 }
 
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+- (NSManagedObjectModel *)managedObjectModel {
+    if (!_managedObjectModel) {
+        NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Model" withExtension:@"momd"];
+        _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    }
+    return _managedObjectModel;
 }
 
+- (NSPersistentStoreCoordinator *)persistentStoreCorrdinator {
+    if (!_persistentStoreCorrdinator) {
+        NSManagedObjectModel *model = self.managedObjectModel;
+        _persistentStoreCorrdinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+        NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Model.sqlite"];
+        NSError *error = nil;
+        
+        NSPersistentStore *persistentStore = [_persistentStoreCorrdinator addPersistentStoreWithType:NSSQLiteStoreType
+                                                                                       configuration:nil
+                                                                                                 URL:storeURL
+                                                                                             options:nil
+                                                                                               error:&error];
+        
+        if (!persistentStore) {
+            // TODO
+            NSLog(@"Error initializing PersistentStoreCorrdinator: %@\n%@", [error localizedDescription], [error userInfo]);
+            return nil;
+        }
+    }
+    return _persistentStoreCorrdinator;
+}
+
+- (NSManagedObjectContext *)mainMOC {
+    if (!_mainMOC) {
+        NSPersistentStoreCoordinator *psc = self.persistentStoreCorrdinator;
+        if (!psc) return nil;
+        _mainMOC = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+        [_mainMOC setPersistentStoreCoordinator:psc];
+    }
+    return _mainMOC;
+}
+
+- (NSManagedObjectContext *)privateMOC {
+    if (!_privateMOC) {
+        NSManagedObjectContext *mainMOC = self.mainMOC;
+        if (!mainMOC) return nil;
+        _privateMOC = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [_privateMOC setParentContext:mainMOC];
+    }
+    return _mainMOC;
+}
 
 @end

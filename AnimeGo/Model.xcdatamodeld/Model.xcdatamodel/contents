@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16C67" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="AppInstallURL" representedClassName="AppInstallURL" syncable="YES" codeGenerationType="class">
+        <attribute name="installurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="episodes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Schedule" inverseName="appinstallurl" inverseEntity="Schedule" syncable="YES"/>
+    </entity>
+    <entity name="Bangumi" representedClassName="Bangumi" syncable="YES" codeGenerationType="class">
+        <attribute name="charactervoice" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="coverimageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstreleasedepisode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="hot" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isfavorite" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="largeimageurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastreleasedepisode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="lastwatchedepisode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="releaseweekday" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="stuff" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="synopsis" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalepisodes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="schedule" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Schedule" inverseName="bangumi" inverseEntity="Schedule" syncable="YES"/>
+    </entity>
+    <entity name="Schedule" representedClassName="Schedule" syncable="YES" codeGenerationType="class">
+        <attribute name="appurl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bangumilastupdate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="display" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="episodenumber" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="releasedate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="weburl" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="appinstallurl" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AppInstallURL" inverseName="episodes" inverseEntity="AppInstallURL" syncable="YES"/>
+        <relationship name="bangumi" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Bangumi" inverseName="schedule" inverseEntity="Bangumi" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AppInstallURL" positionX="4102" positionY="2763" width="128" height="88"/>
+        <element name="Bangumi" positionX="4437" positionY="2498" width="128" height="285"/>
+        <element name="Schedule" positionX="4104" positionY="2543" width="128" height="210"/>
+    </elements>
+</model>

@@ -7,43 +7,269 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6014C42D6D876D42224B023E /* libPods-AnimeGo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B8EC260CCE5682EDFE818C3 /* libPods-AnimeGo.a */; };
+		7408295F1DEA88AA001831D7 /* AnimeGoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7408295E1DEA88AA001831D7 /* AnimeGoTests.m */; };
+		740829C41DEB05DD001831D7 /* NetworkConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 740829C31DEB05DD001831D7 /* NetworkConstant.m */; };
+		740829CB1DEB3F98001831D7 /* Schedule+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 740829CA1DEB3F98001831D7 /* Schedule+Create.m */; };
+		74082A1A1DEBFBF8001831D7 /* NetworkWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A191DEBFBF8001831D7 /* NetworkWorker.m */; };
+		74082A361DEC25A4001831D7 /* Bangumi+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A341DEC25A4001831D7 /* Bangumi+Create.m */; };
+		74082A431DECA94E001831D7 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A421DECA94E001831D7 /* MainViewController.m */; };
+		74082A461DECA994001831D7 /* MyFavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A451DECA994001831D7 /* MyFavoriteViewController.m */; };
+		74082A4C1DED4746001831D7 /* BangumiCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A4B1DED4746001831D7 /* BangumiCollectionViewCell.m */; };
+		741AAF141DF41175008C8AD5 /* LayoutConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF131DF41175008C8AD5 /* LayoutConstant.m */; };
+		741AAF1A1DF41898008C8AD5 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF181DF41898008C8AD5 /* Model.xcdatamodeld */; };
+		741AAF1D1DF43D0D008C8AD5 /* CustomBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */; };
+		741AAF291DF59217008C8AD5 /* FetcherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF281DF59217008C8AD5 /* FetcherViewController.m */; };
+		741AAF321DF5F01D008C8AD5 /* AppInstallURL+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF311DF5F01D008C8AD5 /* AppInstallURL+Create.m */; };
+		741AAF361DF67266008C8AD5 /* NotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF351DF67266008C8AD5 /* NotificationManager.m */; };
+		745233BE1E01E535005F1C1D /* UIColor+ExtraColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 745233BD1E01E535005F1C1D /* UIColor+ExtraColor.m */; };
+		745233C41E01FCCA005F1C1D /* InsetsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 745233C31E01FCCA005F1C1D /* InsetsLabel.m */; };
+		7452B73F1DE82CA3008F76EB /* HorizontalTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7452B73E1DE82CA3008F76EB /* HorizontalTableView.m */; };
+		7452B7421DE8354F008F76EB /* DailyDeliveryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7452B7411DE8354F008F76EB /* DailyDeliveryViewController.m */; };
+		7452B7461DE87E13008F76EB /* BangumiTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7452B7451DE87E13008F76EB /* BangumiTableViewCell.m */; };
+		7452B7491DE912AD008F76EB /* BangumiDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7452B7481DE912AD008F76EB /* BangumiDetailViewController.m */; };
+		745607ED1DE6E51C00D13E8E /* VerticalTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 745607EC1DE6E51C00D13E8E /* VerticalTableView.m */; };
+		746DAF131E0020AE001E6FF0 /* EpisodeButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */; };
+		746DAF3C1E005C11001E6FF0 /* RoundRectSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 746DAF3B1E005C11001E6FF0 /* RoundRectSwitcher.m */; };
+		747E827D1DEEB9A70089F83F /* IndicatorBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 747E827C1DEEB9A70089F83F /* IndicatorBarButton.m */; };
 		74A4BE441DE4FFD700C34A57 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A4BE431DE4FFD700C34A57 /* main.m */; };
 		74A4BE471DE4FFD700C34A57 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A4BE461DE4FFD700C34A57 /* AppDelegate.m */; };
-		74A4BE4A1DE4FFD700C34A57 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A4BE491DE4FFD700C34A57 /* ViewController.m */; };
 		74A4BE4D1DE4FFD700C34A57 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A4BE4B1DE4FFD700C34A57 /* Main.storyboard */; };
 		74A4BE4F1DE4FFD700C34A57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74A4BE4E1DE4FFD700C34A57 /* Assets.xcassets */; };
 		74A4BE521DE4FFD700C34A57 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A4BE501DE4FFD700C34A57 /* LaunchScreen.storyboard */; };
+		74C2F6721E0B19390054271B /* OpenByWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2F6711E0B19390054271B /* OpenByWebViewController.m */; };
+		74FEC1881DF27C9100892ADD /* EpisodeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC1871DF27C9100892ADD /* EpisodeDetailViewController.m */; };
+		74FEC1911DF2E7FF00892ADD /* NSDate+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC1901DF2E7FF00892ADD /* NSDate+Convert.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		740829611DEA88AA001831D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 74A4BE371DE4FFD700C34A57 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74A4BE3E1DE4FFD700C34A57;
+			remoteInfo = AnimeGo;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		3B8EC260CCE5682EDFE818C3 /* libPods-AnimeGo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AnimeGo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		62E210D0C31610AF592E5ACC /* Pods-AnimeGo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnimeGo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AnimeGo/Pods-AnimeGo.debug.xcconfig"; sourceTree = "<group>"; };
+		6AA8B050024AC34170F1B650 /* Pods-AnimeGo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AnimeGo.release.xcconfig"; path = "Pods/Target Support Files/Pods-AnimeGo/Pods-AnimeGo.release.xcconfig"; sourceTree = "<group>"; };
+		7408295C1DEA88AA001831D7 /* AnimeGoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnimeGoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7408295E1DEA88AA001831D7 /* AnimeGoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnimeGoTests.m; sourceTree = "<group>"; };
+		740829601DEA88AA001831D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		740829C31DEB05DD001831D7 /* NetworkConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkConstant.m; sourceTree = "<group>"; };
+		740829C51DEB05EC001831D7 /* NetworkConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkConstant.h; sourceTree = "<group>"; };
+		740829C61DEB3F87001831D7 /* Bangumi+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bangumi+Create.h"; sourceTree = "<group>"; };
+		740829C91DEB3F98001831D7 /* Schedule+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Schedule+Create.h"; sourceTree = "<group>"; };
+		740829CA1DEB3F98001831D7 /* Schedule+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Schedule+Create.m"; sourceTree = "<group>"; };
+		74082A191DEBFBF8001831D7 /* NetworkWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkWorker.m; sourceTree = "<group>"; };
+		74082A341DEC25A4001831D7 /* Bangumi+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Bangumi+Create.m"; sourceTree = "<group>"; };
+		74082A411DECA94E001831D7 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		74082A421DECA94E001831D7 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		74082A441DECA994001831D7 /* MyFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyFavoriteViewController.h; sourceTree = "<group>"; };
+		74082A451DECA994001831D7 /* MyFavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFavoriteViewController.m; sourceTree = "<group>"; };
+		74082A4A1DED4746001831D7 /* BangumiCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BangumiCollectionViewCell.h; sourceTree = "<group>"; };
+		74082A4B1DED4746001831D7 /* BangumiCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangumiCollectionViewCell.m; sourceTree = "<group>"; };
+		741AAF131DF41175008C8AD5 /* LayoutConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutConstant.m; sourceTree = "<group>"; };
+		741AAF151DF41182008C8AD5 /* LayoutConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutConstant.h; sourceTree = "<group>"; };
+		741AAF171DF41864008C8AD5 /* NetworkWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkWorker.h; sourceTree = "<group>"; };
+		741AAF191DF41898008C8AD5 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		741AAF1B1DF43D0D008C8AD5 /* CustomBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomBadge.h; sourceTree = "<group>"; };
+		741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomBadge.m; sourceTree = "<group>"; };
+		741AAF271DF59217008C8AD5 /* FetcherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetcherViewController.h; sourceTree = "<group>"; };
+		741AAF281DF59217008C8AD5 /* FetcherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetcherViewController.m; sourceTree = "<group>"; };
+		741AAF301DF5F01D008C8AD5 /* AppInstallURL+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppInstallURL+Create.h"; sourceTree = "<group>"; };
+		741AAF311DF5F01D008C8AD5 /* AppInstallURL+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppInstallURL+Create.m"; sourceTree = "<group>"; };
+		741AAF341DF67266008C8AD5 /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationManager.h; sourceTree = "<group>"; };
+		741AAF351DF67266008C8AD5 /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationManager.m; sourceTree = "<group>"; };
+		741AAF371DF67C0D008C8AD5 /* AnimeGo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AnimeGo.entitlements; sourceTree = "<group>"; };
+		745233BC1E01E535005F1C1D /* UIColor+ExtraColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+ExtraColor.h"; sourceTree = "<group>"; };
+		745233BD1E01E535005F1C1D /* UIColor+ExtraColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+ExtraColor.m"; sourceTree = "<group>"; };
+		745233C21E01FCCA005F1C1D /* InsetsLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InsetsLabel.h; sourceTree = "<group>"; };
+		745233C31E01FCCA005F1C1D /* InsetsLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InsetsLabel.m; sourceTree = "<group>"; };
+		7452B73D1DE82CA3008F76EB /* HorizontalTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalTableView.h; sourceTree = "<group>"; };
+		7452B73E1DE82CA3008F76EB /* HorizontalTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HorizontalTableView.m; sourceTree = "<group>"; };
+		7452B7401DE8354F008F76EB /* DailyDeliveryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DailyDeliveryViewController.h; sourceTree = "<group>"; };
+		7452B7411DE8354F008F76EB /* DailyDeliveryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DailyDeliveryViewController.m; sourceTree = "<group>"; };
+		7452B7441DE87E13008F76EB /* BangumiTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BangumiTableViewCell.h; sourceTree = "<group>"; };
+		7452B7451DE87E13008F76EB /* BangumiTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangumiTableViewCell.m; sourceTree = "<group>"; };
+		7452B7471DE912AD008F76EB /* BangumiDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BangumiDetailViewController.h; sourceTree = "<group>"; };
+		7452B7481DE912AD008F76EB /* BangumiDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangumiDetailViewController.m; sourceTree = "<group>"; };
+		745607EB1DE6E51C00D13E8E /* VerticalTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalTableView.h; sourceTree = "<group>"; };
+		745607EC1DE6E51C00D13E8E /* VerticalTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalTableView.m; sourceTree = "<group>"; };
+		746DAF111E0020AE001E6FF0 /* EpisodeButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EpisodeButtonCell.h; sourceTree = "<group>"; };
+		746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EpisodeButtonCell.m; sourceTree = "<group>"; };
+		746DAF3A1E005C11001E6FF0 /* RoundRectSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundRectSwitcher.h; sourceTree = "<group>"; };
+		746DAF3B1E005C11001E6FF0 /* RoundRectSwitcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoundRectSwitcher.m; sourceTree = "<group>"; };
+		747E827B1DEEB9A70089F83F /* IndicatorBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndicatorBarButton.h; sourceTree = "<group>"; };
+		747E827C1DEEB9A70089F83F /* IndicatorBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndicatorBarButton.m; sourceTree = "<group>"; };
+		747E82A71DEF65340089F83F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		747E82A81DEF65340089F83F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		74A4BE3F1DE4FFD700C34A57 /* AnimeGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnimeGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74A4BE431DE4FFD700C34A57 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		74A4BE451DE4FFD700C34A57 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		74A4BE461DE4FFD700C34A57 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		74A4BE481DE4FFD700C34A57 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		74A4BE491DE4FFD700C34A57 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		74A4BE4C1DE4FFD700C34A57 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		74A4BE4E1DE4FFD700C34A57 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		74A4BE511DE4FFD700C34A57 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		74A4BE531DE4FFD700C34A57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		74C2F6701E0B19390054271B /* OpenByWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenByWebViewController.h; sourceTree = "<group>"; };
+		74C2F6711E0B19390054271B /* OpenByWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenByWebViewController.m; sourceTree = "<group>"; };
+		74FEC1861DF27C9100892ADD /* EpisodeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EpisodeDetailViewController.h; sourceTree = "<group>"; };
+		74FEC1871DF27C9100892ADD /* EpisodeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EpisodeDetailViewController.m; sourceTree = "<group>"; };
+		74FEC18F1DF2E7FF00892ADD /* NSDate+Convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Convert.h"; sourceTree = "<group>"; };
+		74FEC1901DF2E7FF00892ADD /* NSDate+Convert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Convert.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		74A4BE3C1DE4FFD700C34A57 /* Frameworks */ = {
+		740829591DEA88AA001831D7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		74A4BE3C1DE4FFD700C34A57 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6014C42D6D876D42224B023E /* libPods-AnimeGo.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7405CE731DE9952900674FBC /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				741AAF171DF41864008C8AD5 /* NetworkWorker.h */,
+				74082A191DEBFBF8001831D7 /* NetworkWorker.m */,
+				740829C51DEB05EC001831D7 /* NetworkConstant.h */,
+				740829C31DEB05DD001831D7 /* NetworkConstant.m */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		7408295D1DEA88AA001831D7 /* AnimeGoTests */ = {
+			isa = PBXGroup;
+			children = (
+				7408295E1DEA88AA001831D7 /* AnimeGoTests.m */,
+				740829601DEA88AA001831D7 /* Info.plist */,
+			);
+			path = AnimeGoTests;
+			sourceTree = "<group>";
+		};
+		74082A4D1DED4D0A001831D7 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				74FEC18F1DF2E7FF00892ADD /* NSDate+Convert.h */,
+				74FEC1901DF2E7FF00892ADD /* NSDate+Convert.m */,
+				745233BC1E01E535005F1C1D /* UIColor+ExtraColor.h */,
+				745233BD1E01E535005F1C1D /* UIColor+ExtraColor.m */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
+		741AAF121DF3E1CD008C8AD5 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				741AAF181DF41898008C8AD5 /* Model.xcdatamodeld */,
+				740829C61DEB3F87001831D7 /* Bangumi+Create.h */,
+				74082A341DEC25A4001831D7 /* Bangumi+Create.m */,
+				740829C91DEB3F98001831D7 /* Schedule+Create.h */,
+				740829CA1DEB3F98001831D7 /* Schedule+Create.m */,
+				741AAF301DF5F01D008C8AD5 /* AppInstallURL+Create.h */,
+				741AAF311DF5F01D008C8AD5 /* AppInstallURL+Create.m */,
+			);
+			name = Storage;
+			sourceTree = "<group>";
+		};
+		741AAF161DF4154A008C8AD5 /* Application Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				74A4BE451DE4FFD700C34A57 /* AppDelegate.h */,
+				74A4BE461DE4FFD700C34A57 /* AppDelegate.m */,
+			);
+			name = "Application Delegate";
+			sourceTree = "<group>";
+		};
+		741AAF331DF6704D008C8AD5 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				741AAF341DF67266008C8AD5 /* NotificationManager.h */,
+				741AAF351DF67266008C8AD5 /* NotificationManager.m */,
+			);
+			name = Notification;
+			sourceTree = "<group>";
+		};
+		744F9A6A1DEA6AAF00876835 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				74A4BE4B1DE4FFD700C34A57 /* Main.storyboard */,
+				74A4BE501DE4FFD700C34A57 /* LaunchScreen.storyboard */,
+				741AAF151DF41182008C8AD5 /* LayoutConstant.h */,
+				741AAF131DF41175008C8AD5 /* LayoutConstant.m */,
+			);
+			name = Layout;
+			sourceTree = "<group>";
+		};
+		744F9A6B1DEA6AE700876835 /* View Controller */ = {
+			isa = PBXGroup;
+			children = (
+				741AAF271DF59217008C8AD5 /* FetcherViewController.h */,
+				741AAF281DF59217008C8AD5 /* FetcherViewController.m */,
+				74082A411DECA94E001831D7 /* MainViewController.h */,
+				74082A421DECA94E001831D7 /* MainViewController.m */,
+				7452B7401DE8354F008F76EB /* DailyDeliveryViewController.h */,
+				7452B7411DE8354F008F76EB /* DailyDeliveryViewController.m */,
+				74082A441DECA994001831D7 /* MyFavoriteViewController.h */,
+				74082A451DECA994001831D7 /* MyFavoriteViewController.m */,
+				7452B7471DE912AD008F76EB /* BangumiDetailViewController.h */,
+				7452B7481DE912AD008F76EB /* BangumiDetailViewController.m */,
+				74FEC1861DF27C9100892ADD /* EpisodeDetailViewController.h */,
+				74FEC1871DF27C9100892ADD /* EpisodeDetailViewController.m */,
+				74C2F6701E0B19390054271B /* OpenByWebViewController.h */,
+				74C2F6711E0B19390054271B /* OpenByWebViewController.m */,
+			);
+			name = "View Controller";
+			sourceTree = "<group>";
+		};
+		7452B7431DE83562008F76EB /* Custom View */ = {
+			isa = PBXGroup;
+			children = (
+				745233C21E01FCCA005F1C1D /* InsetsLabel.h */,
+				745233C31E01FCCA005F1C1D /* InsetsLabel.m */,
+				747E827B1DEEB9A70089F83F /* IndicatorBarButton.h */,
+				747E827C1DEEB9A70089F83F /* IndicatorBarButton.m */,
+				741AAF1B1DF43D0D008C8AD5 /* CustomBadge.h */,
+				741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */,
+				746DAF3A1E005C11001E6FF0 /* RoundRectSwitcher.h */,
+				746DAF3B1E005C11001E6FF0 /* RoundRectSwitcher.m */,
+				746DAF111E0020AE001E6FF0 /* EpisodeButtonCell.h */,
+				746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */,
+				7452B73D1DE82CA3008F76EB /* HorizontalTableView.h */,
+				7452B73E1DE82CA3008F76EB /* HorizontalTableView.m */,
+				745607EB1DE6E51C00D13E8E /* VerticalTableView.h */,
+				745607EC1DE6E51C00D13E8E /* VerticalTableView.m */,
+				7452B7441DE87E13008F76EB /* BangumiTableViewCell.h */,
+				7452B7451DE87E13008F76EB /* BangumiTableViewCell.m */,
+				74082A4A1DED4746001831D7 /* BangumiCollectionViewCell.h */,
+				74082A4B1DED4746001831D7 /* BangumiCollectionViewCell.m */,
+			);
+			name = "Custom View";
+			sourceTree = "<group>";
+		};
 		74A4BE361DE4FFD700C34A57 = {
 			isa = PBXGroup;
 			children = (
 				74A4BE411DE4FFD700C34A57 /* AnimeGo */,
+				7408295D1DEA88AA001831D7 /* AnimeGoTests */,
 				74A4BE401DE4FFD700C34A57 /* Products */,
+				DB32C5EAE6BFE43B9A91B518 /* Pods */,
+				8366E066DB8F8CFB46A69261 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -51,6 +277,7 @@
 			isa = PBXGroup;
 			children = (
 				74A4BE3F1DE4FFD700C34A57 /* AnimeGo.app */,
+				7408295C1DEA88AA001831D7 /* AnimeGoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -58,14 +285,14 @@
 		74A4BE411DE4FFD700C34A57 /* AnimeGo */ = {
 			isa = PBXGroup;
 			children = (
-				74A4BE451DE4FFD700C34A57 /* AppDelegate.h */,
-				74A4BE461DE4FFD700C34A57 /* AppDelegate.m */,
-				74A4BE481DE4FFD700C34A57 /* ViewController.h */,
-				74A4BE491DE4FFD700C34A57 /* ViewController.m */,
-				74A4BE4B1DE4FFD700C34A57 /* Main.storyboard */,
-				74A4BE4E1DE4FFD700C34A57 /* Assets.xcassets */,
-				74A4BE501DE4FFD700C34A57 /* LaunchScreen.storyboard */,
-				74A4BE531DE4FFD700C34A57 /* Info.plist */,
+				74082A4D1DED4D0A001831D7 /* Utility */,
+				741AAF331DF6704D008C8AD5 /* Notification */,
+				7405CE731DE9952900674FBC /* Network */,
+				741AAF121DF3E1CD008C8AD5 /* Storage */,
+				7452B7431DE83562008F76EB /* Custom View */,
+				744F9A6B1DEA6AE700876835 /* View Controller */,
+				741AAF161DF4154A008C8AD5 /* Application Delegate */,
+				744F9A6A1DEA6AAF00876835 /* Layout */,
 				74A4BE421DE4FFD700C34A57 /* Supporting Files */,
 			);
 			path = AnimeGo;
@@ -75,20 +302,61 @@
 			isa = PBXGroup;
 			children = (
 				74A4BE431DE4FFD700C34A57 /* main.m */,
+				74A4BE4E1DE4FFD700C34A57 /* Assets.xcassets */,
+				741AAF371DF67C0D008C8AD5 /* AnimeGo.entitlements */,
+				74A4BE531DE4FFD700C34A57 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8366E066DB8F8CFB46A69261 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B8EC260CCE5682EDFE818C3 /* libPods-AnimeGo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DB32C5EAE6BFE43B9A91B518 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				62E210D0C31610AF592E5ACC /* Pods-AnimeGo.debug.xcconfig */,
+				6AA8B050024AC34170F1B650 /* Pods-AnimeGo.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		7408295B1DEA88AA001831D7 /* AnimeGoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 740829651DEA88AA001831D7 /* Build configuration list for PBXNativeTarget "AnimeGoTests" */;
+			buildPhases = (
+				740829581DEA88AA001831D7 /* Sources */,
+				740829591DEA88AA001831D7 /* Frameworks */,
+				7408295A1DEA88AA001831D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				740829621DEA88AA001831D7 /* PBXTargetDependency */,
+			);
+			name = AnimeGoTests;
+			productName = AnimeGoTests;
+			productReference = 7408295C1DEA88AA001831D7 /* AnimeGoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		74A4BE3E1DE4FFD700C34A57 /* AnimeGo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 74A4BE561DE4FFD700C34A57 /* Build configuration list for PBXNativeTarget "AnimeGo" */;
 			buildPhases = (
+				2E43251DBD5CE49E53CFAD1B /* [CP] Check Pods Manifest.lock */,
 				74A4BE3B1DE4FFD700C34A57 /* Sources */,
 				74A4BE3C1DE4FFD700C34A57 /* Frameworks */,
 				74A4BE3D1DE4FFD700C34A57 /* Resources */,
+				023C2B1656B62EB3059731FB /* [CP] Embed Pods Frameworks */,
+				0452B98DD7E951CDB3E1F884 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -108,10 +376,21 @@
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Chaoran Li";
 				TargetAttributes = {
-					74A4BE3E1DE4FFD700C34A57 = {
+					7408295B1DEA88AA001831D7 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = W858HZ6HZ4;
 						ProvisioningStyle = Automatic;
+						TestTargetID = 74A4BE3E1DE4FFD700C34A57;
+					};
+					74A4BE3E1DE4FFD700C34A57 = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = W858HZ6HZ4;
+						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -129,11 +408,19 @@
 			projectRoot = "";
 			targets = (
 				74A4BE3E1DE4FFD700C34A57 /* AnimeGo */,
+				7408295B1DEA88AA001831D7 /* AnimeGoTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7408295A1DEA88AA001831D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		74A4BE3D1DE4FFD700C34A57 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -146,24 +433,114 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		023C2B1656B62EB3059731FB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AnimeGo/Pods-AnimeGo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0452B98DD7E951CDB3E1F884 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AnimeGo/Pods-AnimeGo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2E43251DBD5CE49E53CFAD1B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		740829581DEA88AA001831D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7408295F1DEA88AA001831D7 /* AnimeGoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		74A4BE3B1DE4FFD700C34A57 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74A4BE4A1DE4FFD700C34A57 /* ViewController.m in Sources */,
+				7452B7461DE87E13008F76EB /* BangumiTableViewCell.m in Sources */,
+				74082A461DECA994001831D7 /* MyFavoriteViewController.m in Sources */,
+				741AAF141DF41175008C8AD5 /* LayoutConstant.m in Sources */,
+				74082A361DEC25A4001831D7 /* Bangumi+Create.m in Sources */,
 				74A4BE471DE4FFD700C34A57 /* AppDelegate.m in Sources */,
+				740829C41DEB05DD001831D7 /* NetworkConstant.m in Sources */,
+				741AAF361DF67266008C8AD5 /* NotificationManager.m in Sources */,
+				74082A431DECA94E001831D7 /* MainViewController.m in Sources */,
+				7452B7491DE912AD008F76EB /* BangumiDetailViewController.m in Sources */,
+				746DAF131E0020AE001E6FF0 /* EpisodeButtonCell.m in Sources */,
+				747E827D1DEEB9A70089F83F /* IndicatorBarButton.m in Sources */,
+				74FEC1911DF2E7FF00892ADD /* NSDate+Convert.m in Sources */,
+				741AAF1A1DF41898008C8AD5 /* Model.xcdatamodeld in Sources */,
+				745233BE1E01E535005F1C1D /* UIColor+ExtraColor.m in Sources */,
+				745607ED1DE6E51C00D13E8E /* VerticalTableView.m in Sources */,
+				74FEC1881DF27C9100892ADD /* EpisodeDetailViewController.m in Sources */,
+				746DAF3C1E005C11001E6FF0 /* RoundRectSwitcher.m in Sources */,
+				74082A4C1DED4746001831D7 /* BangumiCollectionViewCell.m in Sources */,
+				74C2F6721E0B19390054271B /* OpenByWebViewController.m in Sources */,
+				741AAF1D1DF43D0D008C8AD5 /* CustomBadge.m in Sources */,
 				74A4BE441DE4FFD700C34A57 /* main.m in Sources */,
+				7452B73F1DE82CA3008F76EB /* HorizontalTableView.m in Sources */,
+				745233C41E01FCCA005F1C1D /* InsetsLabel.m in Sources */,
+				74082A1A1DEBFBF8001831D7 /* NetworkWorker.m in Sources */,
+				741AAF291DF59217008C8AD5 /* FetcherViewController.m in Sources */,
+				7452B7421DE8354F008F76EB /* DailyDeliveryViewController.m in Sources */,
+				740829CB1DEB3F98001831D7 /* Schedule+Create.m in Sources */,
+				741AAF321DF5F01D008C8AD5 /* AppInstallURL+Create.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		740829621DEA88AA001831D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 74A4BE3E1DE4FFD700C34A57 /* AnimeGo */;
+			targetProxy = 740829611DEA88AA001831D7 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		74A4BE4B1DE4FFD700C34A57 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				74A4BE4C1DE4FFD700C34A57 /* Base */,
+				747E82A71DEF65340089F83F /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -172,6 +549,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				74A4BE511DE4FFD700C34A57 /* Base */,
+				747E82A81DEF65340089F83F /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -179,10 +557,37 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		740829631DEA88AA001831D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = W858HZ6HZ4;
+				INFOPLIST_FILE = AnimeGoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = lain.AnimeGoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnimeGo.app/AnimeGo";
+			};
+			name = Debug;
+		};
+		740829641DEA88AA001831D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = W858HZ6HZ4;
+				INFOPLIST_FILE = AnimeGoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = lain.AnimeGoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnimeGo.app/AnimeGo";
+			};
+			name = Release;
+		};
 		74A4BE541DE4FFD700C34A57 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -197,10 +602,12 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Chaoran Li (A88SER68RA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Chaoran Li (A88SER68RA)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -219,7 +626,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -231,6 +638,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -245,10 +653,12 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Chaoran Li (W858HZ6HZ4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Chaoran Li (W858HZ6HZ4)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -261,7 +671,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -271,31 +681,52 @@
 		};
 		74A4BE571DE4FFD700C34A57 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 62E210D0C31610AF592E5ACC /* Pods-AnimeGo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AnimeGo/AnimeGo.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Chaoran Li (A88SER68RA)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Chaoran Li (A88SER68RA)";
 				DEVELOPMENT_TEAM = W858HZ6HZ4;
 				INFOPLIST_FILE = AnimeGo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = lain.AnimeGo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lainiwakura.AnimeGo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6f4c2058-c67a-4726-b9a7-449273c65f93";
+				PROVISIONING_PROFILE_SPECIFIER = "AnimeGo Development";
 			};
 			name = Debug;
 		};
 		74A4BE581DE4FFD700C34A57 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6AA8B050024AC34170F1B650 /* Pods-AnimeGo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AnimeGo/AnimeGo.entitlements;
 				DEVELOPMENT_TEAM = W858HZ6HZ4;
 				INFOPLIST_FILE = AnimeGo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = lain.AnimeGo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lainiwakura.AnimeGo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7e22bacf-4f74-4373-b9ed-5c1a37f6163c";
+				PROVISIONING_PROFILE_SPECIFIER = "AnimeGo Distribution";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		740829651DEA88AA001831D7 /* Build configuration list for PBXNativeTarget "AnimeGoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				740829631DEA88AA001831D7 /* Debug */,
+				740829641DEA88AA001831D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		74A4BE3A1DE4FFD700C34A57 /* Build configuration list for PBXProject "AnimeGo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -312,8 +743,22 @@
 				74A4BE581DE4FFD700C34A57 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		741AAF181DF41898008C8AD5 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				741AAF191DF41898008C8AD5 /* Model.xcdatamodel */,
+			);
+			currentVersion = 741AAF191DF41898008C8AD5 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 74A4BE371DE4FFD700C34A57 /* Project object */;
 }
