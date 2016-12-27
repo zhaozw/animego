@@ -32,8 +32,8 @@ static NSString *getAppName(NSString *url) {
     Schedule *schedule = [Schedule getScheduleWithIdentifier:identifier
                                       inManagedObjectContext:context];
     
-    if (schedule && deleted) {
-        [context deleteObject:schedule];
+    if (deleted) {
+        if (schedule) [context deleteObject:schedule];
         return nil;
     }
     

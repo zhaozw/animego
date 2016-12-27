@@ -33,6 +33,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     self.thirdPartyWebsiteLabel = [[InsetsLabel alloc] init];
     self.thirdPartyWebsiteLabel.insets = UIEdgeInsetsMake(LCPadding / 2, LCPadding, LCPadding / 2, LCPadding);
     self.thirdPartyWebsiteLabel.backgroundColor = [UIColor pinkColor];

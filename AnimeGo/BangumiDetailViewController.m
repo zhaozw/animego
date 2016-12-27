@@ -425,7 +425,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     NSInteger lastWatchedEpisode = (self.bangumi.lastwatchedepisode).integerValue;
     
     if (self.bangumi.status.integerValue == AGBangumiStatusOver) {
-        self.progressLabel.text = [NSString stringWithFormat:@"共%ld集 (已完结)", lastReleasedEpisode];
+        self.progressLabel.text = [NSString stringWithFormat:@"共%ld集 (已完结)", (long)lastReleasedEpisode];
     } else {
         NSString *releaseWeekdayString = @"";
         NSInteger releaseWeekday = (self.bangumi.releaseweekday).integerValue;

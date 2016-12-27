@@ -445,14 +445,11 @@ static const NSInteger kMinAlertTimeInerval = 60 * 5;
                 NSManagedObjectContext *privateMOC = self.privateMOC;
                 [privateMOC performBlock:^{
                     Bangumi *bangumi = [Bangumi getBangumiWithIdentifier:bangumiId
-                                                  inManagedObjectContext:self.privateMOC];
+                                                  inManagedObjectContext:privateMOC];
                     bangumi.isfavorite = isFavorite;
                     bangumi.lastwatchedepisode = lastWatchedEpisode;
+                    [bangumi updateScheduleInfo];
                     
-                    for (Schedule *schedule in bangumi.schedule) {
-                        schedule.bangumilastupdate = [[NSDate alloc] init];
-                    }
-
                     [self saveContent];
                 }];
                 if (success) success();
@@ -476,16 +473,14 @@ static const NSInteger kMinAlertTimeInerval = 60 * 5;
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kEntityNameBangumi];
                     request.predicate = [NSPredicate predicateWithFormat:@"isfavorite > 0"];
                     NSError *error = nil;
-                    NSArray *matches = [self.privateMOC executeFetchRequest:request error:&error];
+                    NSArray *matches = [privateMOC executeFetchRequest:request error:&error];
                     if (!matches || error) {
                         NSLog(@"Client database error.");
                     }
                     
                     for (Bangumi *bangumi in matches) {
                         bangumi.lastwatchedepisode = bangumi.lastreleasedepisode;
-                        for (Schedule *schedule in bangumi.schedule) {
-                            schedule.bangumilastupdate = [[NSDate alloc] init];
-                        }
+                        [bangumi updateScheduleInfo];
                     }
                     
                     [self saveContent];
@@ -527,6 +522,7 @@ static const NSInteger kMinAlertTimeInerval = 60 * 5;
     if (![privateMOC save:&error]) {
         NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
     }
+    
     [mainMOC performBlock:^{
         NSError *error = nil;
         if (![mainMOC save:&error]) {

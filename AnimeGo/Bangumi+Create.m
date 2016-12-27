@@ -7,6 +7,7 @@
 //
 
 #import "Bangumi+Create.h"
+#import "Schedule+Create.h"
 #import "NetworkConstant.h"
 
 NSString * const kEntityNameBangumi = @"Bangumi";
@@ -23,8 +24,8 @@ NSString * const kEntityNameBangumi = @"Bangumi";
     Bangumi *bangumi = [Bangumi getBangumiWithIdentifier:identifier
                                   inManagedObjectContext:context];
 
-    if (bangumi && deleted) {
-        [context deleteObject:bangumi];
+    if (deleted) {
+        if (bangumi) [context deleteObject:bangumi];
         return nil;
     }
     
@@ -52,6 +53,7 @@ NSString * const kEntityNameBangumi = @"Bangumi";
         bangumi.synopsis = [bangumiDictionary valueForKey:AGBangumiKeySynopsis];
     }
     
+    [bangumi updateScheduleInfo];
     return bangumi;
 }
 
@@ -75,6 +77,18 @@ NSString * const kEntityNameBangumi = @"Bangumi";
     }
     
     return bangumi;
+}
+
+- (void)updateScheduleInfo {
+    NSInteger priority = 0;
+    if (self.isfavorite.integerValue > 0) {
+        priority = (self.lastreleasedepisode > self.lastwatchedepisode) ? 2 : 1;
+    }
+    self.priority = @(priority);
+    
+    for (Schedule *schedule in self.schedule) {
+        schedule.bangumilastupdate = [[NSDate alloc] init];
+    }
 }
 
 @end

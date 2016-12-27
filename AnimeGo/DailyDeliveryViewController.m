@@ -57,9 +57,9 @@ static NSInteger kMinNormalFetchTimeInterval = 30 * 60;
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Schedule"];
         request.predicate = [NSPredicate predicateWithFormat:@"(releasedate == %@) AND (display > 0)", date];
         NSSortDescriptor *isReleased = [NSSortDescriptor sortDescriptorWithKey:@"status" ascending:NO];
-        NSSortDescriptor *isFavoriteSort = [NSSortDescriptor sortDescriptorWithKey:@"bangumi.isfavorite" ascending:NO];
+        NSSortDescriptor *prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"bangumi.priority" ascending:NO];
         NSSortDescriptor *hotSort = [NSSortDescriptor sortDescriptorWithKey:@"bangumi.hot" ascending:NO];
-        [request setSortDescriptors:@[isReleased, isFavoriteSort, hotSort]];
+        [request setSortDescriptors:@[isReleased, prioritySort, hotSort]];
 
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         NSManagedObjectContext *context = appDelegate.mainMOC;

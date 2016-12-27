@@ -15,6 +15,7 @@
         <attribute name="largeimageurl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastreleasedepisode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="lastwatchedepisode" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="priority" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="releaseweekday" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="stuff" optional="YES" attributeType="String" syncable="YES"/>
@@ -38,7 +39,7 @@
     </entity>
     <elements>
         <element name="AppInstallURL" positionX="4102" positionY="2763" width="128" height="88"/>
-        <element name="Bangumi" positionX="4437" positionY="2498" width="128" height="285"/>
+        <element name="Bangumi" positionX="4437" positionY="2498" width="128" height="300"/>
         <element name="Schedule" positionX="4104" positionY="2543" width="128" height="210"/>
     </elements>
 </model>

@@ -94,7 +94,7 @@
         _privateMOC = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [_privateMOC setParentContext:mainMOC];
     }
-    return _mainMOC;
+    return _privateMOC;
 }
 
 @end

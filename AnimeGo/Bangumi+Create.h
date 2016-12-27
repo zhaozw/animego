@@ -19,4 +19,6 @@ extern NSString * const kEntityNameBangumi;
 + (Bangumi *)getBangumiWithIdentifier:(NSNumber *)identifier
                inManagedObjectContext:(NSManagedObjectContext *)context;
 
+- (void)updateScheduleInfo;
+
 @end
