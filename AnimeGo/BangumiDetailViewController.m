@@ -430,39 +430,17 @@ static NSString * const kReuseIdentifier = @"Cell";
         NSString *releaseWeekdayString = @"";
         NSInteger releaseWeekday = (self.bangumi.releaseWeekday).integerValue;
         if (releaseWeekday > 0 && releaseWeekday < [[NSDate weekdayNameArray] count]) {
-            releaseWeekdayString = [NSString stringWithFormat:@"每周更新: %@", [NSDate weekdayNameArray][releaseWeekday]];
+            releaseWeekdayString = [NSString stringWithFormat:@"%@更新 ", [NSDate weekdayNameArray][releaseWeekday]];
         }
-        
-        NSString *copyrightString = @"";
-        for (Schedule *schedule in self.bangumi.schedule) {
-            NSString *appURL = [schedule suitableAppURL];
-            if (appURL) {
-                if ([appURL hasPrefix:@"bilibili://"]) {
-                    copyrightString = [NSString stringWithFormat:@", 版权: 哔哩哔哩"];
-                } else if ([appURL hasPrefix:@"youku://"]) {
-                    copyrightString = [NSString stringWithFormat:@", 版权: 优酷土豆"];
-                } else if ([appURL hasPrefix:@"youkuhd://"]) {
-                    copyrightString = [NSString stringWithFormat:@", 版权: 优酷土豆"];
-                } else if ([appURL hasPrefix:@"iqiyi://"]) {
-                    copyrightString = [NSString stringWithFormat:@", 版权: 爱奇艺"];
-                } else if ([appURL hasPrefix:@"letvclient://"]) {
-                    copyrightString = [NSString stringWithFormat:@", 版权: 乐视"];
-                } else if ([appURL hasPrefix:@"ipadletvclient://"]) {
-                    copyrightString = [NSString stringWithFormat:@", 版权: 乐视"];
-                }
-                break;
-            }
-        }
-        
         NSString *lastWatchedString = @"";
         if (lastWatchedEpisode >= firstReleasedEpisode) {
-            lastWatchedString = [NSString stringWithFormat:@", 上次看到第%ld集", (long)lastWatchedEpisode];
+            lastWatchedString = [NSString stringWithFormat:@"上次看到第%ld集 ", (long)lastWatchedEpisode];
         }
-        NSString *lastReleasedString = [NSString stringWithFormat:@", 已更新至第%ld集", (long)lastReleasedEpisode];
+        NSString *lastReleasedString = [NSString stringWithFormat:@"已更新至第%ld集", (long)lastReleasedEpisode];
         
         self.progressLabel.text =
-            [NSString stringWithFormat:@"%@%@%@%@",
-                releaseWeekdayString, copyrightString, lastWatchedString, lastReleasedString];
+            [NSString stringWithFormat:@"%@%@%@",
+                releaseWeekdayString, lastWatchedString, lastReleasedString];
     }
     
     [[NetworkWorker sharedNetworkWorker] setImageURL:self.bangumi.largeImageURL forImageView:self.largeImageView];

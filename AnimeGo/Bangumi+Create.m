@@ -79,15 +79,12 @@ NSString * const kEntityNameBangumi = @"Bangumi";
     return bangumi;
 }
 
-- (NSNumber *)priority {
+- (void)updateScheduleInfo {
     NSInteger priority = 0;
     if (self.isFavorite.integerValue > 0) {
         priority = (self.lastReleasedEpisode > self.lastWatchedEpisode) ? 2 : 1;
     }
-    return @(priority);
-}
-
-- (void)updateScheduleInfo {
+    self.priority = @(priority);
     for (Schedule *schedule in self.schedule) {
         schedule.bangumiLastUpdate = [[NSDate alloc] init];
     }
