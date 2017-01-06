@@ -99,14 +99,14 @@ static const NSTimeInterval kTimeoutInterval = 20;
     [finalParameters setValue:command forKey:@"command"];
     [finalParameters setValue:parameters forKey:@"args"];
     
-    NSLog(@"Request: %@", finalParameters);
+//    NSLog(@"Request: %@", finalParameters);
     
     self.isRequesting = YES;
     [manager POST:kRequestURL
        parameters:finalParameters
          progress:nil
           success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
-              NSLog(@"Response: %@", responseObject);
+//              NSLog(@"Response: %@", responseObject);
               if (![manager.tasks count]) {
                   self.isRequesting = NO;
               }

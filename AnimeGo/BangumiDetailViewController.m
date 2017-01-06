@@ -260,7 +260,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     [super viewWillAppear:animated];
     NSSet *episodesSet = self.bangumi.schedule;
     for (Schedule *schedule in episodesSet) {
-        [self.episodeDict setObject:schedule.title forKey:@(schedule.episodenumber.integerValue)];
+        [self.episodeDict setObject:schedule.title forKey:@(schedule.episodeNumber.integerValue)];
     }
     [self updateUI];
     [self fetchListAllEpisodesWithBangumiId:self.bangumi.identifier
@@ -296,8 +296,8 @@ static NSString * const kReuseIdentifier = @"Cell";
 #pragma mark <UICollectionViewDataSource>
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    NSInteger totalEpisodes = (self.bangumi.totalepisodes).integerValue;
-    NSInteger firstReleasedEpisoed = (self.bangumi.firstreleasedepisode).integerValue;
+    NSInteger totalEpisodes = (self.bangumi.totalEpisodes).integerValue;
+    NSInteger firstReleasedEpisoed = (self.bangumi.firstReleasedEpisode).integerValue;
     if (totalEpisodes <= 0) return 0;
     return totalEpisodes - firstReleasedEpisoed + 1;
 }
@@ -310,9 +310,9 @@ static NSString * const kReuseIdentifier = @"Cell";
     
     if ([cell isKindOfClass:[EpisodeButtonCell class]]) {
         EpisodeButtonCell *episodeButtonCell = (EpisodeButtonCell *)cell;
-        NSInteger firstReleasedEpisode = (self.bangumi.firstreleasedepisode).integerValue;
-        NSInteger lastReleasedEpisode = (self.bangumi.lastreleasedepisode).integerValue;
-        NSInteger lastWatchedEpisode = (self.bangumi.lastwatchedepisode).integerValue;
+        NSInteger firstReleasedEpisode = (self.bangumi.firstReleasedEpisode).integerValue;
+        NSInteger lastReleasedEpisode = (self.bangumi.lastReleasedEpisode).integerValue;
+        NSInteger lastWatchedEpisode = (self.bangumi.lastWatchedEpisode).integerValue;
         NSInteger episodeNumber = indexPath.row + firstReleasedEpisode;
         NSString *title = [NSString stringWithFormat:@"%ld", (long)episodeNumber];
         if (self.showEpisodeTitleButton.status) {
@@ -339,7 +339,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     if ([cell isKindOfClass:[EpisodeButtonCell class]]) {
         EpisodeButtonCell *episodeButtonCell = (EpisodeButtonCell *)cell;
-        NSInteger episodeNumber = indexPath.row + self.bangumi.firstreleasedepisode.integerValue;
+        NSInteger episodeNumber = indexPath.row + self.bangumi.firstReleasedEpisode.integerValue;
         [self fetchEpisodeDetailWithBangumiId:self.bangumi.identifier
                                 episodeNumber:@(episodeNumber)
                                       success:nil
@@ -380,7 +380,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     if (self.bangumi.status.integerValue == AGBangumiStatusOver) {
         self.captionLabel.text = @"动画已完结";
     } else {
-        if ([self.bangumi.isfavorite isEqual:@(YES)]) {
+        if ([self.bangumi.isFavorite isEqual:@(YES)]) {
             if ([NotificationManager sharedNotificationManager].enable) {
                 self.captionLabel.text = @"动画已收藏, 新的集数一旦更新, 将会立即推送给您";
             } else {
@@ -403,13 +403,13 @@ static NSString * const kReuseIdentifier = @"Cell";
     if (self.bangumi.stuff) {
         self.stuffLabel.text = [NSString stringWithFormat:@"制作人员: %@", self.bangumi.stuff];
     }
-    if (self.bangumi.charactervoice) {
-        self.cvLabel.text = [NSString stringWithFormat:@"主要声优: %@", self.bangumi.charactervoice];
+    if (self.bangumi.characterVoice) {
+        self.cvLabel.text = [NSString stringWithFormat:@"主要声优: %@", self.bangumi.characterVoice];
     }
     if (self.bangumi.synopsis) {
         self.synopsisLabel.text = self.bangumi.synopsis;
     }
-    self.favoriteButton.status = [self.bangumi.isfavorite isEqual:@(YES)];
+    self.favoriteButton.status = [self.bangumi.isFavorite isEqual:@(YES)];
     
     UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
     if (deviceType == UIUserInterfaceIdiomPad) {
@@ -420,28 +420,52 @@ static NSString * const kReuseIdentifier = @"Cell";
         }];
     }
     
-    NSInteger firstReleasedEpisode = (self.bangumi.firstreleasedepisode).integerValue;
-    NSInteger lastReleasedEpisode = (self.bangumi.lastreleasedepisode).integerValue;
-    NSInteger lastWatchedEpisode = (self.bangumi.lastwatchedepisode).integerValue;
+    NSInteger firstReleasedEpisode = (self.bangumi.firstReleasedEpisode).integerValue;
+    NSInteger lastReleasedEpisode = (self.bangumi.lastReleasedEpisode).integerValue;
+    NSInteger lastWatchedEpisode = (self.bangumi.lastWatchedEpisode).integerValue;
     
     if (self.bangumi.status.integerValue == AGBangumiStatusOver) {
         self.progressLabel.text = [NSString stringWithFormat:@"共%ld集 (已完结)", (long)lastReleasedEpisode];
     } else {
         NSString *releaseWeekdayString = @"";
-        NSInteger releaseWeekday = (self.bangumi.releaseweekday).integerValue;
+        NSInteger releaseWeekday = (self.bangumi.releaseWeekday).integerValue;
         if (releaseWeekday > 0 && releaseWeekday < [[NSDate weekdayNameArray] count]) {
-            releaseWeekdayString = [NSString stringWithFormat:@"每周更新: %@, ", [NSDate weekdayNameArray][releaseWeekday]];
+            releaseWeekdayString = [NSString stringWithFormat:@"每周更新: %@", [NSDate weekdayNameArray][releaseWeekday]];
         }
+        
+        NSString *copyrightString = @"";
+        for (Schedule *schedule in self.bangumi.schedule) {
+            NSString *appURL = [schedule suitableAppURL];
+            if (appURL) {
+                if ([appURL hasPrefix:@"bilibili://"]) {
+                    copyrightString = [NSString stringWithFormat:@", 版权: 哔哩哔哩"];
+                } else if ([appURL hasPrefix:@"youku://"]) {
+                    copyrightString = [NSString stringWithFormat:@", 版权: 优酷土豆"];
+                } else if ([appURL hasPrefix:@"youkuhd://"]) {
+                    copyrightString = [NSString stringWithFormat:@", 版权: 优酷土豆"];
+                } else if ([appURL hasPrefix:@"iqiyi://"]) {
+                    copyrightString = [NSString stringWithFormat:@", 版权: 爱奇艺"];
+                } else if ([appURL hasPrefix:@"letvclient://"]) {
+                    copyrightString = [NSString stringWithFormat:@", 版权: 乐视"];
+                } else if ([appURL hasPrefix:@"ipadletvclient://"]) {
+                    copyrightString = [NSString stringWithFormat:@", 版权: 乐视"];
+                }
+                break;
+            }
+        }
+        
         NSString *lastWatchedString = @"";
         if (lastWatchedEpisode >= firstReleasedEpisode) {
-            lastWatchedString = [NSString stringWithFormat:@"上次看到第%ld集, ", (long)lastWatchedEpisode];
+            lastWatchedString = [NSString stringWithFormat:@", 上次看到第%ld集", (long)lastWatchedEpisode];
         }
-        NSString *lastReleasedString = [NSString stringWithFormat:@"已更新至第%ld集", (long)lastReleasedEpisode];
+        NSString *lastReleasedString = [NSString stringWithFormat:@", 已更新至第%ld集", (long)lastReleasedEpisode];
+        
         self.progressLabel.text =
-            [NSString stringWithFormat:@"%@%@%@", releaseWeekdayString, lastWatchedString, lastReleasedString];
+            [NSString stringWithFormat:@"%@%@%@%@",
+                releaseWeekdayString, copyrightString, lastWatchedString, lastReleasedString];
     }
     
-    [[NetworkWorker sharedNetworkWorker] setImageURL:self.bangumi.largeimageurl forImageView:self.largeImageView];
+    [[NetworkWorker sharedNetworkWorker] setImageURL:self.bangumi.largeImageURL forImageView:self.largeImageView];
 }
 
 - (NSFetchRequest *)fetchRequest {
@@ -512,7 +536,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     NSNumber *isFavorite = self.favoriteButton.status ? @1 : @0;
     [self updateMyProgressWithBangumiId:self.bangumiIdentifier
                              isFavorite:isFavorite
-                     lastWatchedEpisode:self.bangumi.lastwatchedepisode
+                     lastWatchedEpisode:self.bangumi.lastWatchedEpisode
                                 success:nil
                         connectionError:nil
                             serverError:nil];

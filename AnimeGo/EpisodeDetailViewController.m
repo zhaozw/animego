@@ -9,12 +9,10 @@
 #import "EpisodeDetailViewController.h"
 #import "Bangumi+Create.h"
 #import "Schedule+Create.h"
-#import "AppInstallURL+Create.h"
 #import "NetworkConstant.h"
 #import "NSDate+Convert.h"
 #import "LayoutConstant.h"
 #import "NotificationManager.h"
-#import "OpenByWebViewController.h"
 
 #define MAS_SHORTHAND
 #import "Masonry.h"
@@ -186,68 +184,25 @@
 
 - (void)updateWatchedEpisodes {
     [self updateMyProgressWithBangumiId:self.schedule.bangumi.identifier
-                             isFavorite:self.schedule.bangumi.isfavorite
-                     lastWatchedEpisode:self.schedule.episodenumber
+                             isFavorite:self.schedule.bangumi.isFavorite
+                     lastWatchedEpisode:self.schedule.episodeNumber
                                 success:nil
                         connectionError:nil
                             serverError:nil];
 }
 
 - (void)touchopenByBrowserButton {
-    [self updateWatchedEpisodes];
-    UIViewController *presentingVC = self.presentingViewController;
+    NSString *url = self.schedule.webURL;
     [self dismissViewControllerAnimated:NO completion:nil];
-    if ([presentingVC isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *navigationController = (UINavigationController *)presentingVC;
-        NSString *urlString = self.schedule.weburl;
-        OpenByWebViewController *safariVC = [[OpenByWebViewController alloc] initWithURL:[NSURL URLWithString:urlString]];
-        safariVC.navigationController.navigationBarHidden = YES;
-        safariVC.modalPresentationStyle = UIModalPresentationFullScreen;
-        safariVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        UIViewController *bangumiDetailVC = navigationController.topViewController;
-        [bangumiDetailVC.navigationController pushViewController:safariVC animated:YES];
-    }
+    [self updateWatchedEpisodes];
+    [self openURL:url];
 }
 
 - (void)touchopenByAppButton {
-    UIViewController *presentingVC = self.presentingViewController;
-    
-    NSString *url = [self convertAppUrl:self.schedule.appurl];
+    NSString *url = [self.schedule suitableAppURL];
     [self dismissViewControllerAnimated:NO completion:nil];
-    if (![[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]]){
-        NSString *installURL = self.schedule.appinstallurl.installurl;
-        if (installURL && ![installURL isEqualToString:@""]
-            && [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:installURL]]) {
-            
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该应用尚未安装"
-                                                                           message:@"现在可以跳转至 App Store 进行安装"
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction *installAction = [UIAlertAction actionWithTitle:@"安装"
-                                                                    style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {
-                                                                      [self openURL:installURL];
-                                                                  }];
-            [alert addAction:installAction];
-            
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) { }];
-            [alert addAction:cancelAction];
-            
-            [presentingVC presentViewController:alert animated:YES completion:nil];
-        } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该应用尚未安装"
-                                                                           message:@"请选择其他在线观看方式"
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleDefault
-                                                                 handler:^(UIAlertAction * action) { }];
-            [alert addAction:defaultAction];
-            [presentingVC presentViewController:alert animated:YES completion:nil];
-        }
-    } else {
-        [self updateWatchedEpisodes];
-        [self openURL:url];
-    }
+    [self updateWatchedEpisodes];
+    [self openURL:url];
 }
 
 - (void)openURL:(NSString *)url {
@@ -265,7 +220,7 @@
 
 - (NSFetchRequest *)fetchRequest {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Schedule"];
-    request.predicate = [NSPredicate predicateWithFormat:@"(bangumi.identifier == %@) AND (episodenumber == %@)",
+    request.predicate = [NSPredicate predicateWithFormat:@"(bangumi.identifier == %@) AND (episodeNumber == %@)",
                          self.bangumiIdentifier, self.episodeNumber];
     NSSortDescriptor *identifierSort = [NSSortDescriptor sortDescriptorWithKey:@"identifier" ascending:NO];
     [request setSortDescriptors:@[identifierSort]];
@@ -278,18 +233,18 @@
     self.schedule = (Schedule *)object;
     
     if (self.schedule.title) {
-        self.titleLabel.text = [NSString stringWithFormat:@"第%@集 %@", self.schedule.episodenumber, self.schedule.title];
+        self.titleLabel.text = [NSString stringWithFormat:@"第%@集 %@", self.schedule.episodeNumber, self.schedule.title];
     } else {
-        self.titleLabel.text = [NSString stringWithFormat:@"第%@集", self.schedule.episodenumber];
+        self.titleLabel.text = [NSString stringWithFormat:@"第%@集", self.schedule.episodeNumber];
     }
     
     if (self.schedule) {
         switch (self.schedule.status.integerValue) {
             case AGScheduleStatusNotReleased:
-                self.statusLabel.text = [NSString stringWithFormat:@"将于 %@ 更新", [self.schedule.releasedate toString]];
+                self.statusLabel.text = [NSString stringWithFormat:@"将于 %@ 更新", [self.schedule.releaseDate toString]];
                 break;
             case AGScheduleStatusReleased:
-                self.statusLabel.text = [NSString stringWithFormat:@"已于 %@ 更新", [self.schedule.releasedate toString]];
+                self.statusLabel.text = [NSString stringWithFormat:@"已于 %@ 更新", [self.schedule.releaseDate toString]];
                 break;
             case AGScheduleStatusCanceled:
                 ;
@@ -297,21 +252,21 @@
                 ;
         }
         
-        BOOL hasBrowserURL = self.schedule.weburl && ![self.schedule.weburl isEqualToString:@""];
-        BOOL hasAppURL = self.schedule.appurl && ![self.schedule.appurl isEqualToString:@""];
-        [self showCaptionLabel:(hasBrowserURL || hasAppURL)];
+        BOOL hasBrowserURL = self.schedule.webURL && ![self.schedule.webURL isEqualToString:@""];
+        NSString *appURL = [self.schedule suitableAppURL];
+        BOOL canOpenApp = appURL && [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appURL]];
+        [self showCaptionLabel:(hasBrowserURL || canOpenApp)];
         [self showOpenByBrowserButton:hasBrowserURL];
-        [self showOpenByAppButton:hasAppURL];
+        [self showOpenByAppButton:canOpenApp];
         
         if (hasBrowserURL) {
             self.openByBrowserLabel.text = @"浏览器";
             [self.openByBrowserButton setBackgroundImage:[UIImage imageNamed:@"web"] forState:UIControlStateNormal];
         }
         
-        if (hasAppURL) {
-            NSString *appURL = [self convertAppUrl:self.schedule.appurl];
+        if (canOpenApp) {
             if ([appURL hasPrefix:@"bilibili://"]) {
-                self.openByAppLabel.text = @"bilibili";
+                self.openByAppLabel.text = @"哔哩哔哩动画";
                 [self.openByAppButton setBackgroundImage:[UIImage imageNamed:@"bilibili"] forState:UIControlStateNormal];
             } else if ([appURL hasPrefix:@"youku://"]) {
                 self.openByAppLabel.text = @"优酷";
@@ -340,22 +295,7 @@
 #pragma mask - Public Properties
 
 - (NSString *)url {
-    return self.schedule.weburl;
-}
-
-- (NSString *)convertAppUrl:(NSString *)url {
-    UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
-    
-    if ([url hasPrefix:@"youku://"]) {
-        if (deviceType == UIUserInterfaceIdiomPad) {
-            url = [url stringByReplacingOccurrencesOfString:@"youku://" withString:@"youkuhd://"];
-        }
-    } else if ([url hasPrefix:@"letvclient://"]) {
-        if (deviceType == UIUserInterfaceIdiomPad) {
-            url = [url stringByReplacingOccurrencesOfString:@"letvclient://" withString:@"ipadletvclient://"];
-        }
-    }
-    return url;
+    return self.schedule.webURL;
 }
 
 @end

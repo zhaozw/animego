@@ -36,20 +36,20 @@ NSString * const kEntityNameBangumi = @"Bangumi";
     bangumi.identifier = identifier;
     bangumi.title = [bangumiDictionary valueForKey:AGBangumiKeyTitle];
     bangumi.hot = [bangumiDictionary valueForKey:AGBangumiKeyHot];
-    bangumi.coverimageurl = [bangumiDictionary valueForKey:AGBangumiKeyCoverImageURL];
-    bangumi.isfavorite = [bangumiDictionary valueForKey:AGBangumiKeyIsFavorite];
-    bangumi.releaseweekday = [bangumiDictionary valueForKey:AGBangumiKeyReleaseWeekdays];
-    bangumi.totalepisodes = [bangumiDictionary valueForKey:AGBangumiKeyTotalEpisodes];
-    bangumi.firstreleasedepisode = [bangumiDictionary valueForKey:AGBangumiKeyFirstReleasedEpisode];
-    bangumi.lastreleasedepisode = [bangumiDictionary valueForKey:AGBangumiKeyLastReleasedEpisode];
-    bangumi.lastwatchedepisode = [bangumiDictionary valueForKey:AGBangumiKeyLastWatchedEpisode];
+    bangumi.coverImageURL = [bangumiDictionary valueForKey:AGBangumiKeyCoverImageURL];
+    bangumi.isFavorite = [bangumiDictionary valueForKey:AGBangumiKeyIsFavorite];
+    bangumi.releaseWeekday = [bangumiDictionary valueForKey:AGBangumiKeyReleaseWeekdays];
+    bangumi.totalEpisodes = [bangumiDictionary valueForKey:AGBangumiKeyTotalEpisodes];
+    bangumi.firstReleasedEpisode = [bangumiDictionary valueForKey:AGBangumiKeyFirstReleasedEpisode];
+    bangumi.lastReleasedEpisode = [bangumiDictionary valueForKey:AGBangumiKeyLastReleasedEpisode];
+    bangumi.lastWatchedEpisode = [bangumiDictionary valueForKey:AGBangumiKeyLastWatchedEpisode];
     
     bangumi.status = [bangumiDictionary valueForKey:AGBangumiKeyStatus];
     
     if (detail) {
-        bangumi.largeimageurl = [bangumiDictionary valueForKey:AGBangumiKeyLargeImageURL];
+        bangumi.largeImageURL = [bangumiDictionary valueForKey:AGBangumiKeyLargeImageURL];
         bangumi.stuff = [bangumiDictionary valueForKey:AGBangumiKeyStuff];
-        bangumi.charactervoice = [bangumiDictionary valueForKey:AGBangumiKeyCharacterVoice];
+        bangumi.characterVoice = [bangumiDictionary valueForKey:AGBangumiKeyCharacterVoice];
         bangumi.synopsis = [bangumiDictionary valueForKey:AGBangumiKeySynopsis];
     }
     
@@ -79,15 +79,17 @@ NSString * const kEntityNameBangumi = @"Bangumi";
     return bangumi;
 }
 
-- (void)updateScheduleInfo {
+- (NSNumber *)priority {
     NSInteger priority = 0;
-    if (self.isfavorite.integerValue > 0) {
-        priority = (self.lastreleasedepisode > self.lastwatchedepisode) ? 2 : 1;
+    if (self.isFavorite.integerValue > 0) {
+        priority = (self.lastReleasedEpisode > self.lastWatchedEpisode) ? 2 : 1;
     }
-    self.priority = @(priority);
-    
+    return @(priority);
+}
+
+- (void)updateScheduleInfo {
     for (Schedule *schedule in self.schedule) {
-        schedule.bangumilastupdate = [[NSDate alloc] init];
+        schedule.bangumiLastUpdate = [[NSDate alloc] init];
     }
 }
 

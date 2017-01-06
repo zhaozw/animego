@@ -55,7 +55,7 @@ static NSInteger kMinNormalFetchTimeInterval = 30 * 60;
         tableCell.date = date;
 
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Schedule"];
-        request.predicate = [NSPredicate predicateWithFormat:@"(releasedate == %@) AND (display > 0)", date];
+        request.predicate = [NSPredicate predicateWithFormat:@"(releaseDate == %@) AND (display > 0)", date];
         NSSortDescriptor *isReleased = [NSSortDescriptor sortDescriptorWithKey:@"status" ascending:NO];
         NSSortDescriptor *prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"bangumi.priority" ascending:NO];
         NSSortDescriptor *hotSort = [NSSortDescriptor sortDescriptorWithKey:@"bangumi.hot" ascending:NO];

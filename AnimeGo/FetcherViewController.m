@@ -446,8 +446,8 @@ static const NSInteger kMinAlertTimeInerval = 60 * 5;
                 [privateMOC performBlock:^{
                     Bangumi *bangumi = [Bangumi getBangumiWithIdentifier:bangumiId
                                                   inManagedObjectContext:privateMOC];
-                    bangumi.isfavorite = isFavorite;
-                    bangumi.lastwatchedepisode = lastWatchedEpisode;
+                    bangumi.isFavorite = isFavorite;
+                    bangumi.lastWatchedEpisode = lastWatchedEpisode;
                     [bangumi updateScheduleInfo];
                     
                     [self saveContent];
@@ -471,7 +471,7 @@ static const NSInteger kMinAlertTimeInerval = 60 * 5;
                 NSManagedObjectContext *privateMOC = self.privateMOC;
                 [privateMOC performBlock:^{
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kEntityNameBangumi];
-                    request.predicate = [NSPredicate predicateWithFormat:@"isfavorite > 0"];
+                    request.predicate = [NSPredicate predicateWithFormat:@"isFavorite > 0"];
                     NSError *error = nil;
                     NSArray *matches = [privateMOC executeFetchRequest:request error:&error];
                     if (!matches || error) {
@@ -479,7 +479,7 @@ static const NSInteger kMinAlertTimeInerval = 60 * 5;
                     }
                     
                     for (Bangumi *bangumi in matches) {
-                        bangumi.lastwatchedepisode = bangumi.lastreleasedepisode;
+                        bangumi.lastWatchedEpisode = bangumi.lastReleasedEpisode;
                         [bangumi updateScheduleInfo];
                     }
                     

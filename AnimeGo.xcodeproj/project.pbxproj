@@ -17,10 +17,8 @@
 		74082A461DECA994001831D7 /* MyFavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A451DECA994001831D7 /* MyFavoriteViewController.m */; };
 		74082A4C1DED4746001831D7 /* BangumiCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A4B1DED4746001831D7 /* BangumiCollectionViewCell.m */; };
 		741AAF141DF41175008C8AD5 /* LayoutConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF131DF41175008C8AD5 /* LayoutConstant.m */; };
-		741AAF1A1DF41898008C8AD5 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF181DF41898008C8AD5 /* Model.xcdatamodeld */; };
 		741AAF1D1DF43D0D008C8AD5 /* CustomBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */; };
 		741AAF291DF59217008C8AD5 /* FetcherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF281DF59217008C8AD5 /* FetcherViewController.m */; };
-		741AAF321DF5F01D008C8AD5 /* AppInstallURL+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF311DF5F01D008C8AD5 /* AppInstallURL+Create.m */; };
 		741AAF361DF67266008C8AD5 /* NotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF351DF67266008C8AD5 /* NotificationManager.m */; };
 		745233BE1E01E535005F1C1D /* UIColor+ExtraColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 745233BD1E01E535005F1C1D /* UIColor+ExtraColor.m */; };
 		745233C41E01FCCA005F1C1D /* InsetsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 745233C31E01FCCA005F1C1D /* InsetsLabel.m */; };
@@ -31,13 +29,13 @@
 		745607ED1DE6E51C00D13E8E /* VerticalTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 745607EC1DE6E51C00D13E8E /* VerticalTableView.m */; };
 		746DAF131E0020AE001E6FF0 /* EpisodeButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */; };
 		746DAF3C1E005C11001E6FF0 /* RoundRectSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 746DAF3B1E005C11001E6FF0 /* RoundRectSwitcher.m */; };
+		7472CB401E1F2EDD009E3F97 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7472CB3E1E1F2EDD009E3F97 /* Model.xcdatamodeld */; };
 		747E827D1DEEB9A70089F83F /* IndicatorBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 747E827C1DEEB9A70089F83F /* IndicatorBarButton.m */; };
 		74A4BE441DE4FFD700C34A57 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A4BE431DE4FFD700C34A57 /* main.m */; };
 		74A4BE471DE4FFD700C34A57 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A4BE461DE4FFD700C34A57 /* AppDelegate.m */; };
 		74A4BE4D1DE4FFD700C34A57 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A4BE4B1DE4FFD700C34A57 /* Main.storyboard */; };
 		74A4BE4F1DE4FFD700C34A57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74A4BE4E1DE4FFD700C34A57 /* Assets.xcassets */; };
 		74A4BE521DE4FFD700C34A57 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A4BE501DE4FFD700C34A57 /* LaunchScreen.storyboard */; };
-		74C2F6721E0B19390054271B /* OpenByWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C2F6711E0B19390054271B /* OpenByWebViewController.m */; };
 		74FEC1881DF27C9100892ADD /* EpisodeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC1871DF27C9100892ADD /* EpisodeDetailViewController.m */; };
 		74FEC1911DF2E7FF00892ADD /* NSDate+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC1901DF2E7FF00892ADD /* NSDate+Convert.m */; };
 /* End PBXBuildFile section */
@@ -75,13 +73,10 @@
 		741AAF131DF41175008C8AD5 /* LayoutConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutConstant.m; sourceTree = "<group>"; };
 		741AAF151DF41182008C8AD5 /* LayoutConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutConstant.h; sourceTree = "<group>"; };
 		741AAF171DF41864008C8AD5 /* NetworkWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkWorker.h; sourceTree = "<group>"; };
-		741AAF191DF41898008C8AD5 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		741AAF1B1DF43D0D008C8AD5 /* CustomBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomBadge.h; sourceTree = "<group>"; };
 		741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomBadge.m; sourceTree = "<group>"; };
 		741AAF271DF59217008C8AD5 /* FetcherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetcherViewController.h; sourceTree = "<group>"; };
 		741AAF281DF59217008C8AD5 /* FetcherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetcherViewController.m; sourceTree = "<group>"; };
-		741AAF301DF5F01D008C8AD5 /* AppInstallURL+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppInstallURL+Create.h"; sourceTree = "<group>"; };
-		741AAF311DF5F01D008C8AD5 /* AppInstallURL+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppInstallURL+Create.m"; sourceTree = "<group>"; };
 		741AAF341DF67266008C8AD5 /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationManager.h; sourceTree = "<group>"; };
 		741AAF351DF67266008C8AD5 /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationManager.m; sourceTree = "<group>"; };
 		741AAF371DF67C0D008C8AD5 /* AnimeGo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AnimeGo.entitlements; sourceTree = "<group>"; };
@@ -103,6 +98,7 @@
 		746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EpisodeButtonCell.m; sourceTree = "<group>"; };
 		746DAF3A1E005C11001E6FF0 /* RoundRectSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundRectSwitcher.h; sourceTree = "<group>"; };
 		746DAF3B1E005C11001E6FF0 /* RoundRectSwitcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoundRectSwitcher.m; sourceTree = "<group>"; };
+		7472CB3F1E1F2EDD009E3F97 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		747E827B1DEEB9A70089F83F /* IndicatorBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndicatorBarButton.h; sourceTree = "<group>"; };
 		747E827C1DEEB9A70089F83F /* IndicatorBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndicatorBarButton.m; sourceTree = "<group>"; };
 		747E82A71DEF65340089F83F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -115,8 +111,6 @@
 		74A4BE4E1DE4FFD700C34A57 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		74A4BE511DE4FFD700C34A57 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		74A4BE531DE4FFD700C34A57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		74C2F6701E0B19390054271B /* OpenByWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenByWebViewController.h; sourceTree = "<group>"; };
-		74C2F6711E0B19390054271B /* OpenByWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenByWebViewController.m; sourceTree = "<group>"; };
 		74FEC1861DF27C9100892ADD /* EpisodeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EpisodeDetailViewController.h; sourceTree = "<group>"; };
 		74FEC1871DF27C9100892ADD /* EpisodeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EpisodeDetailViewController.m; sourceTree = "<group>"; };
 		74FEC18F1DF2E7FF00892ADD /* NSDate+Convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Convert.h"; sourceTree = "<group>"; };
@@ -176,13 +170,11 @@
 		741AAF121DF3E1CD008C8AD5 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				741AAF181DF41898008C8AD5 /* Model.xcdatamodeld */,
+				7472CB3E1E1F2EDD009E3F97 /* Model.xcdatamodeld */,
 				740829C61DEB3F87001831D7 /* Bangumi+Create.h */,
 				74082A341DEC25A4001831D7 /* Bangumi+Create.m */,
 				740829C91DEB3F98001831D7 /* Schedule+Create.h */,
 				740829CA1DEB3F98001831D7 /* Schedule+Create.m */,
-				741AAF301DF5F01D008C8AD5 /* AppInstallURL+Create.h */,
-				741AAF311DF5F01D008C8AD5 /* AppInstallURL+Create.m */,
 			);
 			name = Storage;
 			sourceTree = "<group>";
@@ -231,8 +223,6 @@
 				7452B7481DE912AD008F76EB /* BangumiDetailViewController.m */,
 				74FEC1861DF27C9100892ADD /* EpisodeDetailViewController.h */,
 				74FEC1871DF27C9100892ADD /* EpisodeDetailViewController.m */,
-				74C2F6701E0B19390054271B /* OpenByWebViewController.h */,
-				74C2F6711E0B19390054271B /* OpenByWebViewController.m */,
 			);
 			name = "View Controller";
 			sourceTree = "<group>";
@@ -497,6 +487,7 @@
 				7452B7461DE87E13008F76EB /* BangumiTableViewCell.m in Sources */,
 				74082A461DECA994001831D7 /* MyFavoriteViewController.m in Sources */,
 				741AAF141DF41175008C8AD5 /* LayoutConstant.m in Sources */,
+				7472CB401E1F2EDD009E3F97 /* Model.xcdatamodeld in Sources */,
 				74082A361DEC25A4001831D7 /* Bangumi+Create.m in Sources */,
 				74A4BE471DE4FFD700C34A57 /* AppDelegate.m in Sources */,
 				740829C41DEB05DD001831D7 /* NetworkConstant.m in Sources */,
@@ -506,13 +497,11 @@
 				746DAF131E0020AE001E6FF0 /* EpisodeButtonCell.m in Sources */,
 				747E827D1DEEB9A70089F83F /* IndicatorBarButton.m in Sources */,
 				74FEC1911DF2E7FF00892ADD /* NSDate+Convert.m in Sources */,
-				741AAF1A1DF41898008C8AD5 /* Model.xcdatamodeld in Sources */,
 				745233BE1E01E535005F1C1D /* UIColor+ExtraColor.m in Sources */,
 				745607ED1DE6E51C00D13E8E /* VerticalTableView.m in Sources */,
 				74FEC1881DF27C9100892ADD /* EpisodeDetailViewController.m in Sources */,
 				746DAF3C1E005C11001E6FF0 /* RoundRectSwitcher.m in Sources */,
 				74082A4C1DED4746001831D7 /* BangumiCollectionViewCell.m in Sources */,
-				74C2F6721E0B19390054271B /* OpenByWebViewController.m in Sources */,
 				741AAF1D1DF43D0D008C8AD5 /* CustomBadge.m in Sources */,
 				74A4BE441DE4FFD700C34A57 /* main.m in Sources */,
 				7452B73F1DE82CA3008F76EB /* HorizontalTableView.m in Sources */,
@@ -521,7 +510,6 @@
 				741AAF291DF59217008C8AD5 /* FetcherViewController.m in Sources */,
 				7452B7421DE8354F008F76EB /* DailyDeliveryViewController.m in Sources */,
 				740829CB1DEB3F98001831D7 /* Schedule+Create.m in Sources */,
-				741AAF321DF5F01D008C8AD5 /* AppInstallURL+Create.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,12 +736,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		741AAF181DF41898008C8AD5 /* Model.xcdatamodeld */ = {
+		7472CB3E1E1F2EDD009E3F97 /* Model.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				741AAF191DF41898008C8AD5 /* Model.xcdatamodel */,
+				7472CB3F1E1F2EDD009E3F97 /* Model.xcdatamodel */,
 			);
-			currentVersion = 741AAF191DF41898008C8AD5 /* Model.xcdatamodel */;
+			currentVersion = 7472CB3F1E1F2EDD009E3F97 /* Model.xcdatamodel */;
 			path = Model.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

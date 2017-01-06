@@ -158,7 +158,7 @@
     self.titleLabel.text = bangumi.title;
     switch (schedule.status.integerValue) {
         case AGScheduleStatusNotReleased:
-            self.progressLabel.text = [NSString stringWithFormat:@"第%@话 (未更新)", schedule.episodenumber];
+            self.progressLabel.text = [NSString stringWithFormat:@"第%@话 (未更新)", schedule.episodeNumber];
             break;
         case AGScheduleStatusReleased:
             self.titleLabel.textColor = [UIColor darkTextColor];
@@ -169,15 +169,15 @@
                     break;
                 case AGBangumiStatusReleased:
                     self.progressLabel.text =
-                        [NSString stringWithFormat:@"第%@话 %@", schedule.episodenumber, schedule.title];
+                        [NSString stringWithFormat:@"第%@话 %@", schedule.episodeNumber, schedule.title];
                     break;
                 case AGBangumiStatusOver:
-                    if (schedule.episodenumber >= schedule.bangumi.totalepisodes) {
+                    if (schedule.episodeNumber >= schedule.bangumi.totalEpisodes) {
                         self.progressLabel.text =
-                            [NSString stringWithFormat:@"第%@话 %@ (已完结)", schedule.episodenumber, schedule.title];
+                            [NSString stringWithFormat:@"第%@话 %@ (已完结)", schedule.episodeNumber, schedule.title];
                     } else {
                         self.progressLabel.text =
-                            [NSString stringWithFormat:@"第%@话 %@", schedule.episodenumber, schedule.title];
+                            [NSString stringWithFormat:@"第%@话 %@", schedule.episodeNumber, schedule.title];
                     }
                     break;
                 default:
@@ -199,11 +199,11 @@
     self.titleLabel.textColor = labelColor;
     self.progressLabel.textColor = labelColor;
     
-    [[NetworkWorker sharedNetworkWorker] setImageURL:bangumi.coverimageurl forImageView:self.coverImageView];
+    [[NetworkWorker sharedNetworkWorker] setImageURL:bangumi.coverImageURL forImageView:self.coverImageView];
     
-    self.indicator.isFavorite = schedule.bangumi.isfavorite.boolValue;
-    NSInteger releasedEpisodes = schedule.bangumi.lastreleasedepisode.integerValue;
-    NSInteger watchedEpisodes = schedule.bangumi.lastwatchedepisode.integerValue;
+    self.indicator.isFavorite = schedule.bangumi.isFavorite.boolValue;
+    NSInteger releasedEpisodes = schedule.bangumi.lastReleasedEpisode.integerValue;
+    NSInteger watchedEpisodes = schedule.bangumi.lastWatchedEpisode.integerValue;
     self.indicator.eventCount = releasedEpisodes - watchedEpisodes;
 }
 

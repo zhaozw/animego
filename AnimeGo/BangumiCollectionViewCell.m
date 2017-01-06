@@ -107,24 +107,24 @@
 
 - (void)setBangumi:(Bangumi *)bangumi {
     _bangumi = bangumi;
-    [[NetworkWorker sharedNetworkWorker] setImageURL:bangumi.coverimageurl forImageView:self.coverImageView];
+    [[NetworkWorker sharedNetworkWorker] setImageURL:bangumi.coverImageURL forImageView:self.coverImageView];
     self.titleLabel.text = bangumi.title;
     switch (bangumi.status.integerValue) {
         case AGBangumiStatusNotReleased:
             self.statusLabel.text = [NSString stringWithFormat:@"尚未开播"];
             break;
         case AGBangumiStatusReleased:
-            self.statusLabel.text = [NSString stringWithFormat:@"已连载至第%@话", bangumi.lastreleasedepisode];
+            self.statusLabel.text = [NSString stringWithFormat:@"已连载至第%@话", bangumi.lastReleasedEpisode];
             break;
         case AGBangumiStatusOver:
-            self.statusLabel.text = [NSString stringWithFormat:@"共%@话 (已完结)", bangumi.lastreleasedepisode];
+            self.statusLabel.text = [NSString stringWithFormat:@"共%@话 (已完结)", bangumi.lastReleasedEpisode];
             break;
         default:
             ;
     }
-    self.indicator.isFavorite = bangumi.isfavorite.boolValue;
-    NSInteger releasedEpisodes = bangumi.lastreleasedepisode.integerValue;
-    NSInteger watchedEpisodes = bangumi.lastwatchedepisode.integerValue;
+    self.indicator.isFavorite = bangumi.isFavorite.boolValue;
+    NSInteger releasedEpisodes = bangumi.lastReleasedEpisode.integerValue;
+    NSInteger watchedEpisodes = bangumi.lastWatchedEpisode.integerValue;
     self.indicator.eventCount = releasedEpisodes - watchedEpisodes;
 }
 

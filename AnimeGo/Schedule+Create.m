@@ -7,18 +7,12 @@
 //
 
 #import "Schedule+Create.h"
-#import "AppInstallURL+Create.h"
+#import <UIKit/UIKit.h>
 #import "NetworkConstant.h"
 #import "Bangumi+Create.h"
 #import "NSDate+Convert.h"
 
 NSString * const kEntityNameSchedule = @"Schedule";
-
-static NSString *getAppName(NSString *url) {
-    NSRange range = [url rangeOfString:@"://"];
-    if (range.location == NSNotFound) return nil;
-    return [url substringToIndex:range.location];
-}
 
 @implementation Schedule (Create)
 
@@ -41,27 +35,19 @@ static NSString *getAppName(NSString *url) {
         schedule = [NSEntityDescription insertNewObjectForEntityForName:kEntityNameSchedule inManagedObjectContext:context];
     }
  
-    schedule.bangumilastupdate = [[NSDate alloc] init];
+    schedule.bangumiLastUpdate = [[NSDate alloc] init];
     
     schedule.identifier = identifier;
     schedule.title = [scheduleDictionary valueForKey:AGScheduleKeyTitle];
     schedule.display = [scheduleDictionary valueForKey:AGScheduleKeyDisplay];
-    schedule.releasedate = [NSDate dateFromString:[scheduleDictionary valueForKey:AGScheduleKeyReleaseDate]];
+    schedule.releaseDate = [NSDate dateFromString:[scheduleDictionary valueForKey:AGScheduleKeyReleaseDate]];
     schedule.status = [scheduleDictionary valueForKey:AGScheduleKeyStatus];
-    schedule.episodenumber = [scheduleDictionary valueForKey:AGScheduleKeyEpisodeNumber];
+    schedule.episodeNumber = [scheduleDictionary valueForKey:AGScheduleKeyEpisodeNumber];
     
     if (scheduleInDetail) {
-        schedule.weburl = [scheduleDictionary valueForKey:AGScheduleKeyWebURL];
-        schedule.appurl = [scheduleDictionary valueForKey:AGScheduleKeyAppURL];
-        NSString *appInstallURL = [scheduleDictionary valueForKey:AGScheduleKeyAppInstallURL];
-        if (appInstallURL && ![appInstallURL isEqualToString:@""]) {
-            NSString *appName = getAppName(appInstallURL);
-            NSDictionary *appInstallURLDictionary = @{ AGAppInstallURLKeyName: appName,
-                                                       AGAppInstallURLKeyInstallURL: appInstallURL };
-            AppInstallURL *appInstallURLItem = [AppInstallURL createAppInstallURLWithDictionary:appInstallURLDictionary
-                                                                         inManagedObjectContext:context];
-            schedule.appinstallurl = appInstallURLItem;
-        }
+        schedule.webURL = [scheduleDictionary valueForKey:AGScheduleKeyWebURL];
+        schedule.phoneAppURL = [scheduleDictionary valueForKey:AGScheduleKeyPhoneAppURL];
+        schedule.padAppURL = [scheduleDictionary valueForKey:AGScheduleKeyPadAppURL];
     }
     
     if (bangumiInDetail) {
@@ -101,6 +87,11 @@ static NSString *getAppName(NSString *url) {
     }
     
     return schedule;
+}
+
+- (NSString *)suitableAppURL {
+    UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
+    return (deviceType == UIUserInterfaceIdiomPad) ? self.padAppURL : self.phoneAppURL;
 }
 
 @end

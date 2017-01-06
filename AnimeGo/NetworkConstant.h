@@ -61,10 +61,12 @@ extern NSString * const AGScheduleKeyEpisodeNumber;
 extern NSString * const AGScheduleKeyBangumi;
 extern NSString * const AGScheduleKeyDeleted;
 extern NSString * const AGScheduleKeyWebURL;
-extern NSString * const AGScheduleKeyAppURL;
+extern NSString * const AGScheduleKeyPhoneAppURL;
+extern NSString * const AGScheduleKeyPadAppURL;
 extern NSString * const AGScheduleKeyAppInstallURL;
 
 extern NSString * const AGAppInstallURLKeyName;
-extern NSString * const AGAppInstallURLKeyInstallURL;
+extern NSString * const AGAppInstallURLKeyPhoneInstallURL;
+extern NSString * const AGAppInstallURLKeyPadInstallURL;
 
 #endif /* NetworkConstant_h */

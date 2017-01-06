@@ -20,4 +20,6 @@ extern NSString * const kEntityNameSchedule;
 + (Schedule *)getScheduleWithIdentifier:(NSNumber *)identifier
                  inManagedObjectContext:(NSManagedObjectContext *)context;
 
+@property (readonly, nonatomic) NSString *suitableAppURL;
+
 @end

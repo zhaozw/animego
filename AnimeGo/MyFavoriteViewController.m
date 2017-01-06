@@ -133,7 +133,7 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
 
 - (NSFetchRequest *)fetchRequest {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Bangumi"];
-    request.predicate = [NSPredicate predicateWithFormat:@"isfavorite == TRUE"];
+    request.predicate = [NSPredicate predicateWithFormat:@"isFavorite == TRUE"];
     NSSortDescriptor *prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
     NSSortDescriptor *hotSort = [NSSortDescriptor sortDescriptorWithKey:@"hot" ascending:NO];
     [request setSortDescriptors:@[prioritySort, hotSort]];

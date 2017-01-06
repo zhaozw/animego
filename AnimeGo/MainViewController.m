@@ -115,7 +115,7 @@ NSString * const kSegueIdentifier = @"Show Detail";
 
 - (NSFetchRequest *)fetchRequest {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Bangumi"];
-    request.predicate = [NSPredicate predicateWithFormat:@"isfavorite == TRUE"];
+    request.predicate = [NSPredicate predicateWithFormat:@"isFavorite == TRUE"];
     NSSortDescriptor *identifierSort = [NSSortDescriptor sortDescriptorWithKey:@"identifier" ascending:NO];
     [request setSortDescriptors:@[identifierSort]];
     return request;
@@ -139,7 +139,7 @@ NSString * const kSegueIdentifier = @"Show Detail";
     NSArray *matches = [self.fetchedResultsController fetchedObjects];
     NSInteger count = 0;
     for (Bangumi *bangumi in matches) {
-        if (bangumi.lastreleasedepisode.integerValue > bangumi.lastwatchedepisode.integerValue) ++count;
+        if (bangumi.lastReleasedEpisode.integerValue > bangumi.lastWatchedEpisode.integerValue) ++count;
     }
     CustomBadge *badge = (CustomBadge *)self.badge.customView;
     badge.isFavorite = (count > 0);
