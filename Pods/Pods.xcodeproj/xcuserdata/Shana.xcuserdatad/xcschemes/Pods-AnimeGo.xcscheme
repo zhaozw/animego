@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'E3A032CE18F601A014BA1E8EC0068D6F'
+               BlueprintIdentifier = '2FC43DA7D95578BCEC0D06BD0A69A0FB'
                BlueprintName = 'Pods-AnimeGo'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libPods-AnimeGo.a'>
