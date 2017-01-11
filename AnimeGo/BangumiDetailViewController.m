@@ -16,6 +16,8 @@
 #import "EpisodeButtonCell.h"
 #import "NSDate+Convert.h"
 #import "Schedule+Create.h"
+#import "UIColor+ExtraColor.h"
+#import "NSString+Append.h"
 
 #define MAS_SHORTHAND
 #import "Masonry.h"
@@ -42,6 +44,10 @@ static NSString * const kReuseIdentifier = @"Cell";
 @property (strong, nonatomic) RoundRectSwitcher *favoriteButton;
 
 @property (strong, nonatomic) NSMutableDictionary *episodeDict;
+@property (nonatomic) NSInteger firstReleasedEpisode;
+@property (nonatomic) NSInteger lastReleasedEpisode;
+@property (nonatomic) NSInteger lastWatchedEpisode;
+@property (nonatomic) NSInteger totalEpisodes;
 
 @end
 
@@ -57,6 +63,10 @@ static NSString * const kReuseIdentifier = @"Cell";
     CGFloat padding = LCPadding;
     CGFloat paddingLarge = (deviceType == UIUserInterfaceIdiomPad) ? LCPaddingLarge : LCPadding;
     
+    self.firstReleasedEpisode = -1;
+    self.lastReleasedEpisode = -1;
+    self.totalEpisodes = -1;
+    
     self.largeImageView = [[UIImageView alloc] init];
     self.largeImageView.layer.cornerRadius = 10;
     self.largeImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -71,21 +81,21 @@ static NSString * const kReuseIdentifier = @"Cell";
     self.favoriteButton.delegate = self;
     [superView addSubview:self.favoriteButton];
     
-    if (deviceType == UIUserInterfaceIdiomPad) {
-        self.captionLabel = [[UILabel alloc] init];
-        self.captionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-        self.captionLabel.numberOfLines = 0;
-        [self.captionLabel setLineBreakMode:NSLineBreakByWordWrapping];
-        [superView addSubview:self.captionLabel];
-    }
+    self.captionLabel = [[UILabel alloc] init];
+    self.captionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    self.captionLabel.numberOfLines = 0;
+    [self.captionLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    [superView addSubview:self.captionLabel];
     
-    self.showDetailButton = [[RoundRectSwitcher alloc] init];
-    self.showDetailButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    self.showDetailButton.titleOn = @"隐藏番剧信息";
-    self.showDetailButton.titleOff = @"显示番剧信息";
-    self.showDetailButton.status = YES;
-    self.showDetailButton.delegate = self;
-    [superView addSubview:self.showDetailButton];
+    if (deviceType == UIUserInterfaceIdiomPad) {
+        self.showDetailButton = [[RoundRectSwitcher alloc] init];
+        self.showDetailButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+        self.showDetailButton.titleOn = @"隐藏番剧信息";
+        self.showDetailButton.titleOff = @"显示番剧信息";
+        self.showDetailButton.status = YES;
+        self.showDetailButton.delegate = self;
+        [superView addSubview:self.showDetailButton];
+    }
 
     self.titleLabel = [[UILabel alloc] init];
     UIFont *titleLabelFont = (deviceType == UIUserInterfaceIdiomPad)
@@ -146,8 +156,8 @@ static NSString * const kReuseIdentifier = @"Cell";
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     UIButton *testButton = [UIButton buttonWithType:UIButtonTypeSystem];
     layout.estimatedItemSize = CGSizeMake(LCMinEpisodeButtonWidth, testButton.intrinsicContentSize.height);
-    layout.minimumLineSpacing = padding;
     layout.minimumInteritemSpacing = padding;
+    layout.minimumLineSpacing = padding;
     self.episodeButtonsView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
     self.episodeButtonsView.backgroundColor = [UIColor whiteColor];
     self.episodeButtonsView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
@@ -160,43 +170,42 @@ static NSString * const kReuseIdentifier = @"Cell";
         make.top.equalTo(self.mas_topLayoutGuide).with.offset(paddingLarge);
         make.right.equalTo(@(-paddingLarge));
         make.width.equalTo(superView).multipliedBy(LCLargeImageSpaceOccupiyRatio);
-        if (deviceType == UIUserInterfaceIdiomPad) {
-            make.height.equalTo(self.largeImageView.width).multipliedBy(LCLargeImageAspectRatio);
-        }
+        make.height.equalTo(self.largeImageView.width).multipliedBy(LCLargeImageAspectRatio);
     }];
     
     [self.favoriteButton makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.largeImageView.bottom).with.offset(paddingLarge);
         make.left.equalTo(self.largeImageView);
         make.right.equalTo(self.largeImageView);
-        if (deviceType != UIUserInterfaceIdiomPad) {
-            make.bottom.equalTo(self.mas_bottomLayoutGuide).with.offset(-paddingLarge);
-        }
     }];
     [self.favoriteButton setContentCompressionResistancePriority:UILayoutPriorityRequired
                                                          forAxis:UILayoutConstraintAxisHorizontal];
     [self.favoriteButton setContentCompressionResistancePriority:UILayoutPriorityRequired
                                                          forAxis:UILayoutConstraintAxisVertical];
     
-    if (deviceType == UIUserInterfaceIdiomPad) {
-        [self.captionLabel makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.favoriteButton.bottom).with.offset(padding);
-            make.left.equalTo(self.largeImageView);
-            make.right.equalTo(self.largeImageView);
-        }];
-    }
-    
-    [self.showDetailButton makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.titleLabel);
-        make.right.equalTo(self.largeImageView.left).with.offset(-paddingLarge * 2);
+    [self.captionLabel makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.favoriteButton.bottom).with.offset(padding);
+        make.left.equalTo(self.largeImageView);
+        make.right.equalTo(self.largeImageView);
     }];
-    [self.showDetailButton setContentHuggingPriority:UILayoutPriorityRequired
-                                             forAxis:UILayoutConstraintAxisHorizontal];
+    
+    if (deviceType == UIUserInterfaceIdiomPad) {
+        [self.showDetailButton makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.titleLabel);
+            make.right.equalTo(self.largeImageView.left).with.offset(-paddingLarge * 2);
+        }];
+        [self.showDetailButton setContentHuggingPriority:UILayoutPriorityRequired
+                                                 forAxis:UILayoutConstraintAxisHorizontal];
+    }
     
     [self.titleLabel makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide).with.offset(paddingLarge);
         make.left.equalTo(@(paddingLarge));
-        make.right.equalTo(self.showDetailButton.left).with.offset(-paddingLarge);
+        if (deviceType == UIUserInterfaceIdiomPad) {
+            make.right.equalTo(self.showDetailButton.left).with.offset(-paddingLarge);
+        } else {
+            make.right.equalTo(self.largeImageView.left).with.offset(-paddingLarge * 2);
+        }
     }];
     
     CGFloat detailOccupiyRatio = (deviceType == UIUserInterfaceIdiomPad)
@@ -230,17 +239,21 @@ static NSString * const kReuseIdentifier = @"Cell";
 
     [self.separationLine makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.detailView.bottom).with.offset(padding);
-        make.left.equalTo(@(paddingLarge));
-        make.right.equalTo(self.largeImageView.left).with.offset(-paddingLarge * 2);
         make.height.equalTo(@1);
+        make.left.equalTo(@(paddingLarge));
+        if (deviceType == UIUserInterfaceIdiomPad) {
+            make.right.equalTo(self.largeImageView.left).with.offset(-paddingLarge * 2);
+        } else {
+            make.right.equalTo(@(-paddingLarge));
+        }
     }];
     
     [self.showEpisodeTitleButton makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.separationLine.bottom).with.offset(padding);
-        make.right.equalTo(self.largeImageView.left).with.offset(-paddingLarge * 2);
+        make.right.equalTo(self.separationLine);
     }];
     [self.showEpisodeTitleButton setContentHuggingPriority:UILayoutPriorityRequired
-                                             forAxis:UILayoutConstraintAxisHorizontal];
+                                                   forAxis:UILayoutConstraintAxisHorizontal];
     
     [self.progressLabel makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.showEpisodeTitleButton);
@@ -251,7 +264,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     [self.episodeButtonsView makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.showEpisodeTitleButton.bottom).with.offset(padding);
         make.left.equalTo(@(paddingLarge));
-        make.right.equalTo(self.largeImageView.left).with.offset(-paddingLarge * 2);
+        make.right.equalTo(self.separationLine);
         make.bottom.equalTo(@(-padding));
     }];
 }
@@ -275,6 +288,11 @@ static NSString * const kReuseIdentifier = @"Cell";
                                     }
                             connectionError:nil
                                 serverError:nil];
+}
+
+- (void)didBecomeActive {
+    [super didBecomeActive];
+    [self.episodeButtonsView reloadData];
 }
 
 - (void)doJumpToEpisode {
@@ -317,7 +335,7 @@ static NSString * const kReuseIdentifier = @"Cell";
         NSString *title = [NSString stringWithFormat:@"%ld", (long)episodeNumber];
         if (self.showEpisodeTitleButton.status) {
             NSString *episodeTitle = self.episodeDict[@(episodeNumber)];
-            if (episodeTitle) {
+            if (episodeTitle && ![episodeTitle isEqualToString:@""]) {
                 title = [NSString stringWithFormat:@"%@ %@", title, episodeTitle];
             }
         }
@@ -349,6 +367,7 @@ static NSString * const kReuseIdentifier = @"Cell";
         EpisodeDetailViewController *episodeDetailVC = [[EpisodeDetailViewController alloc] init];
         episodeDetailVC.modalPresentationStyle = UIModalPresentationPopover;
         UIPopoverPresentationController *popoverPC = episodeDetailVC.popoverPresentationController;
+        popoverPC.backgroundColor = [UIColor lightGrayColor];
         popoverPC.sourceView = episodeButtonCell;
         popoverPC.sourceRect = episodeButtonCell.contentView.bounds;
         popoverPC.delegate = self;
@@ -361,6 +380,12 @@ static NSString * const kReuseIdentifier = @"Cell";
 }
 
 #pragma mark - <UIPopoverPresentControllerDelegate>
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
+                                                               traitCollection:(UITraitCollection *)traitCollection {
+    
+    return UIModalPresentationNone;
+}
 
 - (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller {
     return UIModalPresentationNone;
@@ -384,7 +409,7 @@ static NSString * const kReuseIdentifier = @"Cell";
             if ([NotificationManager sharedNotificationManager].enable) {
                 self.captionLabel.text = @"动画已收藏, 新的集数一旦更新, 将会立即推送给您";
             } else {
-                self.captionLabel.text = @"动画已收藏, 但您未允许番剧助手进行推送, 您可以修改系统设置, 来允许番剧助手向您推送消息";
+                self.captionLabel.text = @"动画已收藏, 但您未允许番剧助手进行推送";
             }
         } else {
             self.captionLabel.text = @"动画尚未收藏, 相关更新信息不会推送到您的设备";
@@ -411,39 +436,64 @@ static NSString * const kReuseIdentifier = @"Cell";
     }
     self.favoriteButton.status = [self.bangumi.isFavorite isEqual:@(YES)];
     
-    UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
-    if (deviceType == UIUserInterfaceIdiomPad) {
-        [[NotificationManager sharedNotificationManager] getNotificationSettingsWithCompletionHandler:^(BOOL granted) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateCaptionLabel];
-            });
-        }];
-    }
+    [[NotificationManager sharedNotificationManager] getNotificationSettingsWithCompletionHandler:^(BOOL granted) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateCaptionLabel];
+        });
+    }];
     
     NSInteger firstReleasedEpisode = (self.bangumi.firstReleasedEpisode).integerValue;
     NSInteger lastReleasedEpisode = (self.bangumi.lastReleasedEpisode).integerValue;
     NSInteger lastWatchedEpisode = (self.bangumi.lastWatchedEpisode).integerValue;
+    NSInteger totalEpisodes = (self.bangumi.totalEpisodes).integerValue;
     
     if (self.bangumi.status.integerValue == AGBangumiStatusOver) {
         self.progressLabel.text = [NSString stringWithFormat:@"共%ld集 (已完结)", (long)lastReleasedEpisode];
     } else {
+        NSString *progressLabelText = @"";
+        
         NSString *releaseWeekdayString = @"";
         NSInteger releaseWeekday = (self.bangumi.releaseWeekday).integerValue;
         if (releaseWeekday > 0 && releaseWeekday < [[NSDate weekdayNameArray] count]) {
-            releaseWeekdayString = [NSString stringWithFormat:@"%@更新 ", [NSDate weekdayNameArray][releaseWeekday]];
+            releaseWeekdayString = [NSString stringWithFormat:@"%@更新", [NSDate weekdayNameArray][releaseWeekday]];
         }
+        progressLabelText = [progressLabelText stringByAppendingStringWithComma:releaseWeekdayString];
+        
         NSString *lastWatchedString = @"";
         if (lastWatchedEpisode >= firstReleasedEpisode) {
-            lastWatchedString = [NSString stringWithFormat:@"上次看到第%ld集 ", (long)lastWatchedEpisode];
+            lastWatchedString = [NSString stringWithFormat:@"上次看到第%ld集", (long)lastWatchedEpisode];
         }
-        NSString *lastReleasedString = [NSString stringWithFormat:@"已更新至第%ld集", (long)lastReleasedEpisode];
+        progressLabelText = [progressLabelText stringByAppendingStringWithComma:lastWatchedString];
         
-        self.progressLabel.text =
-            [NSString stringWithFormat:@"%@%@%@",
-                releaseWeekdayString, lastWatchedString, lastReleasedString];
+        NSString *lastReleasedString = [NSString stringWithFormat:@"已更新至第%ld集", (long)lastReleasedEpisode];
+        if (lastReleasedEpisode == 0) {
+            lastReleasedString = @"尚未开播";
+            for (Schedule *episode in self.bangumi.schedule) {
+                if (episode.episodeNumber.integerValue == firstReleasedEpisode) {
+                    lastReleasedString = [NSString stringWithFormat:@"%@开播", [episode.releaseDate toString]];
+                    break;
+                }
+            }
+        }
+        progressLabelText = [progressLabelText stringByAppendingStringWithComma:lastReleasedString];
+        
+        self.progressLabel.text = progressLabelText;
     }
     
     [[NetworkWorker sharedNetworkWorker] setImageURL:self.bangumi.largeImageURL forImageView:self.largeImageView];
+    
+    if ((self.firstReleasedEpisode > 0 && self.firstReleasedEpisode != firstReleasedEpisode)
+        || (self.lastReleasedEpisode > 0 && self.lastReleasedEpisode != lastReleasedEpisode)
+        || (self.lastWatchedEpisode > 0 && self.lastWatchedEpisode != lastWatchedEpisode)
+        || (self.totalEpisodes > 0 && self.totalEpisodes != totalEpisodes)) {
+        
+        [self.episodeButtonsView reloadData];
+    }
+    
+    self.firstReleasedEpisode = firstReleasedEpisode;
+    self.lastReleasedEpisode = lastReleasedEpisode;
+    self.lastWatchedEpisode = lastWatchedEpisode;
+    self.totalEpisodes = totalEpisodes;
 }
 
 - (NSFetchRequest *)fetchRequest {

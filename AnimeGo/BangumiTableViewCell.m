@@ -35,17 +35,12 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
-        if (deviceType == UIUserInterfaceIdiomPad) {
-            [self initSubViewPad];
-        } else {
-            [self initSubViewPhone];
-        }
+        [self initSubView];
     }
     return self;
 }
 
-- (void)initSubViewPad {
+- (void)initSubView {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     UIView *superView = self.contentView;
     
@@ -70,8 +65,8 @@
     [superView addSubview:self.progressLabel];
     
     [self.coverImageView remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(LCPadding / 2));
-        make.right.equalTo(@(-LCPadding / 2));
+        make.left.equalTo(@0);
+        make.right.equalTo(@0);
         make.top.equalTo(@(LCPadding / 2));
         make.bottom.equalTo(@(-LCPadding / 2));
     }];
@@ -91,62 +86,6 @@
         make.bottom.equalTo(self.progressLabel.top);
         make.left.equalTo(self.coverImageView);
         make.right.equalTo(self.coverImageView);
-    }];
-}
-
-- (void)initSubViewPhone {
-    UIView *superView = self.contentView;
-    UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
-    
-    self.coverImageView = [[UIImageView alloc] init];
-    self.coverImageView.layer.cornerRadius = 5;
-    self.coverImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.coverImageView.clipsToBounds = YES;
-    [superView addSubview:self.coverImageView];
-    
-    self.indicator = [[CustomBadge alloc] init];
-    [superView insertSubview:self.indicator aboveSubview:self.coverImageView];
-    
-    self.stackView = [[UIStackView alloc] initWithArrangedSubviews:@[]];
-    self.stackView.axis = UILayoutConstraintAxisVertical;
-    self.stackView.distribution = UIStackViewDistributionFillEqually;
-    [superView addSubview:self.stackView];
-    
-    self.titleLabel = [[InsetsLabel alloc] init];
-    self.titleLabel.insets = UIEdgeInsetsZero;
-    UIFont *titleLabelFont = (deviceType == UIUserInterfaceIdiomPad)
-        ? [UIFont preferredFontForTextStyle:UIFontTextStyleBody]
-        : [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    self.titleLabel.font = titleLabelFont;
-    self.titleLabel.numberOfLines = 0;
-    [self.titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
-    [self.stackView addArrangedSubview:self.titleLabel];
-    
-    self.progressLabel = [[InsetsLabel alloc] init];
-    self.progressLabel.insets = UIEdgeInsetsZero;
-    UIFont *progressLabelFont = (deviceType == UIUserInterfaceIdiomPad)
-        ? [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
-        : [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-    self.progressLabel.font = progressLabelFont;
-    [self.stackView addArrangedSubview:self.progressLabel];
-    
-    [self.coverImageView makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(LCPadding / 2));
-        make.top.equalTo(@(LCPadding / 2));
-        make.bottom.equalTo(@(-LCPadding / 2));
-        make.width.equalTo(self.coverImageView.height).multipliedBy(LCCoverImageAspectRatio);
-    }];
-    
-    [self.indicator makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.coverImageView.top).with.offset(LCPadding / 2);
-        make.left.equalTo(self.coverImageView.left).with.offset(LCPadding / 2);
-    }];
-    
-    [self.stackView makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.coverImageView.right).with.offset(LCPadding);
-        make.right.equalTo(@(-LCPadding));
-        make.top.equalTo(@(LCPadding));
-        make.bottom.equalTo(@(-LCPadding));
     }];
 }
 
@@ -192,12 +131,9 @@
         default:
             ;
     }
-    
-    UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
-    UIColor *labelColor = (deviceType == UIUserInterfaceIdiomPad) ? [UIColor whiteColor] : [UIColor blackColor];
 
-    self.titleLabel.textColor = labelColor;
-    self.progressLabel.textColor = labelColor;
+    self.titleLabel.textColor = [UIColor whiteColor];
+    self.progressLabel.textColor = [UIColor whiteColor];
     
     [[NetworkWorker sharedNetworkWorker] setImageURL:bangumi.coverImageURL forImageView:self.coverImageView];
     

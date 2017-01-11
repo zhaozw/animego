@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -45,7 +44,6 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="Lfh-Zr-VTI" kind="presentation" identifier="Episode Detail" id="Tng-xt-RWX"/>
                         <segue destination="cbw-bp-sML" kind="unwind" identifier="Back" unwindAction="jumpUnwindAction:" id="zEz-f5-AcF"/>
                     </connections>
                 </viewController>
@@ -53,28 +51,6 @@
                 <exit id="cbw-bp-sML" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-672.41379310344837" y="1749.5999999999999"/>
-        </scene>
-        <!--Episode Detail View Controller-->
-        <scene sceneID="Gjf-p8-F5E">
-            <objects>
-                <viewController modalPresentationStyle="formSheet" id="Lfh-Zr-VTI" customClass="EpisodeDetailViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="aCL-2C-dHY"/>
-                        <viewControllerLayoutGuide type="bottom" id="kPb-5S-gBt"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="T6h-0A-KMd">
-                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <connections>
-                        <segue destination="vmr-FW-wkm" kind="unwind" identifier="Back" unwindAction="jumpUnwindAction:" id="ITa-Rg-1Ia"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Kxu-fW-NB2" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="vmr-FW-wkm" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="-672" y="2566"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="R7E-Ty-6KD">

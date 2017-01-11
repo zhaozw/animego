@@ -254,7 +254,8 @@
         
         BOOL hasBrowserURL = self.schedule.webURL && ![self.schedule.webURL isEqualToString:@""];
         NSString *appURL = [self.schedule suitableAppURL];
-        BOOL canOpenApp = appURL && [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appURL]];
+        BOOL canOpenApp = appURL && ![appURL isEqualToString:@""]
+            && [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appURL]];
         [self showCaptionLabel:(hasBrowserURL || canOpenApp)];
         [self showOpenByBrowserButton:hasBrowserURL];
         [self showOpenByAppButton:canOpenApp];

@@ -96,7 +96,7 @@ NSString * const kSegueIdentifier = @"Show Detail";
     [badge addGestureRecognizer:badgeGestureRecognizer];
     self.badge = [[UIBarButtonItem alloc] initWithCustomView:badge];
     
-    self.navigationItem.title = @"番剧助手";
+    self.navigationItem.title = (deviceType == UIUserInterfaceIdiomPad) ? @"番剧助手" : @"";
     self.navigationItem.leftBarButtonItems = @[self.dailyDeliveryButton, self.myFavoriteButton, self.badge];
     
     self.currentVC = self.dailyDeliveryVC;
@@ -164,6 +164,9 @@ NSString * const kSegueIdentifier = @"Show Detail";
 }
 
 - (void)touchBadge {
+    CustomBadge *badge = (CustomBadge *)self.badge.customView;
+    if (!badge.isFavorite) return;
+    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"全部标记为已看"
                                                                    message:@"确定要将所有未看剧集标记为已看吗?"
                                                             preferredStyle:UIAlertControllerStyleAlert];

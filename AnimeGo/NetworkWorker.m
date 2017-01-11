@@ -37,9 +37,9 @@ static const NSTimeInterval kTimeoutInterval = 20;
         sharedNetworkWorker = [[NetworkWorker alloc] init];
         sharedNetworkWorker.placeholderImage = [UIImage imageNamed:@"placeholder"];
         sharedNetworkWorker.networkStatus = [AFNetworkReachabilityManager sharedManager].networkReachabilityStatus;
-    
+
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-            if (sharedNetworkWorker.networkStatus <= 0 && status > 0) {
+            if (sharedNetworkWorker.networkStatus != status) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:ContentNeedUpdateNofification
                                                                     object:self];
             }

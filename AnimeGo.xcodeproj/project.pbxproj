@@ -16,6 +16,7 @@
 		74082A431DECA94E001831D7 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A421DECA94E001831D7 /* MainViewController.m */; };
 		74082A461DECA994001831D7 /* MyFavoriteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A451DECA994001831D7 /* MyFavoriteViewController.m */; };
 		74082A4C1DED4746001831D7 /* BangumiCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A4B1DED4746001831D7 /* BangumiCollectionViewCell.m */; };
+		741413181E23944B00539249 /* NSString+Append.m in Sources */ = {isa = PBXBuildFile; fileRef = 741413171E23944B00539249 /* NSString+Append.m */; };
 		741AAF141DF41175008C8AD5 /* LayoutConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF131DF41175008C8AD5 /* LayoutConstant.m */; };
 		741AAF1D1DF43D0D008C8AD5 /* CustomBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */; };
 		741AAF291DF59217008C8AD5 /* FetcherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF281DF59217008C8AD5 /* FetcherViewController.m */; };
@@ -70,6 +71,8 @@
 		74082A451DECA994001831D7 /* MyFavoriteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyFavoriteViewController.m; sourceTree = "<group>"; };
 		74082A4A1DED4746001831D7 /* BangumiCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BangumiCollectionViewCell.h; sourceTree = "<group>"; };
 		74082A4B1DED4746001831D7 /* BangumiCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangumiCollectionViewCell.m; sourceTree = "<group>"; };
+		741413161E23944B00539249 /* NSString+Append.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Append.h"; sourceTree = "<group>"; };
+		741413171E23944B00539249 /* NSString+Append.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Append.m"; sourceTree = "<group>"; };
 		741AAF131DF41175008C8AD5 /* LayoutConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutConstant.m; sourceTree = "<group>"; };
 		741AAF151DF41182008C8AD5 /* LayoutConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutConstant.h; sourceTree = "<group>"; };
 		741AAF171DF41864008C8AD5 /* NetworkWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkWorker.h; sourceTree = "<group>"; };
@@ -163,6 +166,8 @@
 				74FEC1901DF2E7FF00892ADD /* NSDate+Convert.m */,
 				745233BC1E01E535005F1C1D /* UIColor+ExtraColor.h */,
 				745233BD1E01E535005F1C1D /* UIColor+ExtraColor.m */,
+				741413161E23944B00539249 /* NSString+Append.h */,
+				741413171E23944B00539249 /* NSString+Append.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -377,6 +382,9 @@
 						DevelopmentTeam = W858HZ6HZ4;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -501,6 +509,7 @@
 				745607ED1DE6E51C00D13E8E /* VerticalTableView.m in Sources */,
 				74FEC1881DF27C9100892ADD /* EpisodeDetailViewController.m in Sources */,
 				746DAF3C1E005C11001E6FF0 /* RoundRectSwitcher.m in Sources */,
+				741413181E23944B00539249 /* NSString+Append.m in Sources */,
 				74082A4C1DED4746001831D7 /* BangumiCollectionViewCell.m in Sources */,
 				741AAF1D1DF43D0D008C8AD5 /* CustomBadge.m in Sources */,
 				74A4BE441DE4FFD700C34A57 /* main.m in Sources */,

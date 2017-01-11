@@ -60,16 +60,17 @@
         NSManagedObjectModel *model = self.managedObjectModel;
         _persistentStoreCorrdinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
         NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Model.sqlite"];
+        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 @YES, NSMigratePersistentStoresAutomaticallyOption,
+                                 @YES, NSInferMappingModelAutomaticallyOption, nil];
         NSError *error = nil;
-        
         NSPersistentStore *persistentStore = [_persistentStoreCorrdinator addPersistentStoreWithType:NSSQLiteStoreType
                                                                                        configuration:nil
                                                                                                  URL:storeURL
-                                                                                             options:nil
+                                                                                             options:options
                                                                                                error:&error];
         
         if (!persistentStore) {
-            // TODO
             NSLog(@"Error initializing PersistentStoreCorrdinator: %@\n%@", [error localizedDescription], [error userInfo]);
             return nil;
         }

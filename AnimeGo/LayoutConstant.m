@@ -28,11 +28,12 @@ const CGFloat LCDetailSpaceOccupiyRatio = 0.4;
 const CGFloat LCMinEpisodeButtonWidth = 60;
 const CGFloat LCAppIconLength = 60;
 
-const CGFloat LCHeaderHeightPhone = 45;
+const CGFloat LCHeaderHeightPhone = 40;
 const CGFloat LCMinTableCellWidthPhone = 150;
-const CGFloat LCTableCellAspectRatioPhone = 0.4;
+const CGFloat LCTableCellAspectRatioPhone = 0.645;
 const CGFloat LCMinCollectionCellWidthPhone = 100;
 const CGFloat LCCustomBadgeHeightPhone = 16;
 const CGFloat LCMaxCustomBadgeWidthPhone = 60;
 const CGFloat LCMinEpisodeButtonWidthPhone = 40;
-const CGFloat LCDetailSpaceOccupiyRatioPhone = 0.36;
+const CGFloat LCDetailSpaceOccupiyRatioPhone = 0.4;
+

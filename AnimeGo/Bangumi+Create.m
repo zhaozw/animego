@@ -85,8 +85,10 @@ NSString * const kEntityNameBangumi = @"Bangumi";
         priority = (self.lastReleasedEpisode > self.lastWatchedEpisode) ? 2 : 1;
     }
     self.priority = @(priority);
+    
+    NSDate *now = [[NSDate alloc] init];
     for (Schedule *schedule in self.schedule) {
-        schedule.bangumiLastUpdate = [[NSDate alloc] init];
+        schedule.bangumiLastUpdate = now;
     }
 }
 

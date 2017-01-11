@@ -10,8 +10,12 @@
 
 @implementation UIColor (ExtraColor)
 
++ (UIColor *)colorWith256Red:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue alpha:(CGFloat)alpha {
+    return [UIColor colorWithRed:(CGFloat)red/255 green:(CGFloat)green/255 blue:(CGFloat)blue/255 alpha:alpha];
+}
+
 + (UIColor *)colorWith256Red:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue {
-    return [UIColor colorWithRed:(CGFloat)red/255 green:(CGFloat)green/255 blue:(CGFloat)blue/255 alpha:1.0];
+    return [UIColor colorWith256Red:red green:green blue:blue alpha:1.0];
 }
 
 + (UIColor *)pinkColor {

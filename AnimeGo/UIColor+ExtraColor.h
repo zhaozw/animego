@@ -10,7 +10,9 @@
 
 @interface UIColor (ExtraColor)
 
++ (UIColor *)colorWith256Red:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue alpha:(CGFloat)alpha;
 + (UIColor *)colorWith256Red:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue;
+
 + (UIColor *)pinkColor;
 + (UIColor *)translucentBlackColor;
 

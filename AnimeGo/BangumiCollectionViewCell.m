@@ -34,7 +34,7 @@
     testCell.titleLabel.text = @"title";
     testCell.statusLabel.text = @"status";
     [testCell.coverImageView makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(@(width));
+        make.width.equalTo(@(width - 2 * LCPadding));
     }];
     return [testCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
@@ -43,7 +43,7 @@
 
 - (void)initSubview {
     UIView *superView = self.contentView;
-    superView.backgroundColor = [UIColor whiteColor];
+    superView.backgroundColor = nil;
     UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
     
     self.coverImageView = [[UIImageView alloc] init];
