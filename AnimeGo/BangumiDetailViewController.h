@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "FetcherViewController.h"
 #import "Bangumi+Create.h"
-#import "RoundRectSwitcher.h"
 
 @interface BangumiDetailViewController : FetcherViewController
-<UICollectionViewDelegate, UICollectionViewDataSource, RoundRectSwitcherDelegate, UIPopoverPresentationControllerDelegate>
+<UICollectionViewDelegate, UICollectionViewDataSource, UIPopoverPresentationControllerDelegate>
 
-@property (strong, nonatomic) NSNumber *bangumiIdentifier;
+@property (nonatomic, strong) NSNumber *bangumiIdentifier;
 
 @end

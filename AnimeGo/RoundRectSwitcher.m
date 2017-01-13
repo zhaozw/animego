@@ -7,26 +7,35 @@
 //
 
 #import "RoundRectSwitcher.h"
+
+#import <ReactiveObjC.h>
 #import "LayoutConstant.h"
 #import "UIColor+ExtraColor.h"
 
 @interface RoundRectSwitcher ()
 
-@property (nonatomic, nonatomic) SEL eventAction;
-@property (weak, nonatomic) id eventTarget;
-
 @end
 
 @implementation RoundRectSwitcher
 
+#pragma mark - UIButton (super class)
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
-    if (self) {
-        self.titleEdgeInsets = UIEdgeInsetsMake(0, LCPadding, 0, LCPadding);
-        self.layer.cornerRadius = 10;
-        self.status = NO;
-        [self addTarget:self action:@selector(touchEvent) forControlEvents:UIControlEventTouchUpInside];
-    }
+    if (!self) return nil;
+    
+    [[[RACSignal merge:@[ RACObserve(self, status),
+                          RACObserve(self, titleOn), RACObserve(self, titleOff),
+                          RACObserve(self, imageOn), RACObserve(self, imageOff) ]]
+      deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(id  _Nullable x) {
+         
+         [self p_updateUI];
+     }];
+    
+    self.layer.cornerRadius = 10;
+    self.titleEdgeInsets = UIEdgeInsetsMake(0, LCPadding, 0, LCPadding);
+    self.status = NO;
     return self;
 }
 
@@ -35,39 +44,40 @@
     return CGSizeMake(size.width + 2 * LCPadding, size.height);
 }
 
-- (void)updateUI {
+#pragma mark - Public Methods
+
+- (RACSignal *)touchSignal {
+    return [[self rac_signalForControlEvents:UIControlEventTouchUpInside]
+            doNext:^(__kindof UIControl * _Nullable x) {
+                self.status = !self.status;
+            }];
+}
+
+#pragma mark - Private Methods
+
+- (void)p_updateUI {
     if (self.status) {
-        self.layer.borderWidth = 0;
-        self.backgroundColor = [UIColor pinkColor];
-        [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        if (self.imageOn) {
+            self.layer.borderWidth = 0;
+            [self setBackgroundImage:self.imageOn forState:UIControlStateNormal];
+        } else {
+            self.layer.borderWidth = 0;
+            self.backgroundColor = [UIColor ag_pinkColor];
+        }
         [self setTitle:self.titleOn forState:UIControlStateNormal];
+        [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     } else {
-        self.layer.borderWidth = 1;
-        self.layer.borderColor = [UIColor pinkColor].CGColor;
-        self.backgroundColor = [UIColor whiteColor];
-        [self setTitleColor:[UIColor pinkColor] forState:UIControlStateNormal];
+        if (self.imageOn) {
+            self.layer.borderWidth = 0;
+            [self setBackgroundImage:self.imageOff forState:UIControlStateNormal];
+        } else {
+            self.layer.borderWidth = 1;
+            self.layer.borderColor = [UIColor ag_pinkColor].CGColor;
+            self.backgroundColor = [UIColor whiteColor];
+        }
         [self setTitle:self.titleOff forState:UIControlStateNormal];
+        [self setTitleColor:[UIColor ag_pinkColor] forState:UIControlStateNormal];
     }
-}
-
-- (void)setStatus:(BOOL)status {
-    _status = status;
-    [self updateUI];
-}
-
-- (void)setTitleOn:(NSString *)titleOn {
-    _titleOn = titleOn;
-    [self updateUI];
-}
-
-- (void)setTitleOff:(NSString *)titleOff {
-    _titleOff = titleOff;
-    [self updateUI];
-}
-
-- (void)touchEvent {
-    self.status = !self.status;
-    [self.delegate switcherView:self statusChanged:self.status];
 }
 
 @end

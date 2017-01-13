@@ -11,55 +11,20 @@
 
 @interface FetcherViewController : UIViewController <NSFetchedResultsControllerDelegate>
 
-@property (strong, readonly, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (weak, nonatomic) NSManagedObjectContext *mainMOC;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, weak) NSManagedObjectContext *mainMOC;
 
 - (NSFetchRequest *)fetchRequest;
 - (NSTimeInterval)autoRefreshTimeInterval;
 - (BOOL)hasRefreshButton;
 - (void)fetchRemoteData;
 - (void)updateUI;
-- (BOOL)alertNetworkError;
+- (void)alertConnectionError;
 
 - (void)touchRefreshButton;
 - (void)didBecomeActive;
 - (void)willResignActive;
 - (void)contentNeedUpdateNofification;
 - (void)doJumpToEpisode;
-
-- (BOOL)fetchDailyDeliveryForWeek:(NSInteger)week
-                          success:(void (^)())success
-                  connectionError:(void (^)(NSError *error))connectionError
-                      serverError:(void (^)(NSInteger error))serverError;
-
-- (BOOL)fetchMyFavoriteSuccess:(void (^)())success
-               connectionError:(void (^)(NSError *error))connectionError
-                   serverError:(void (^)(NSInteger error))serverError;
-
-- (BOOL)fetchBangumiDetailWithBangumiId:(NSNumber *)bangumiId
-                                success:(void (^)())success
-                        connectionError:(void (^)(NSError *error))connectionError
-                            serverError:(void (^)(NSInteger error))serverError;
-
-- (BOOL)fetchListAllEpisodesWithBangumiId:(NSNumber *)bangumiId
-                                  success:(void (^)(NSArray *data))success
-                          connectionError:(void (^)(NSError *error))connectionError
-                              serverError:(void (^)(NSInteger error))serverError;
-
-- (BOOL)fetchEpisodeDetailWithBangumiId:(NSNumber *)bangumiId
-                          episodeNumber:(NSNumber *)episodeNumber
-                                success:(void (^)())success
-                        connectionError:(void (^)(NSError *error))connectionError
-                            serverError:(void (^)(NSInteger error))serverError;
-- (BOOL)updateMyProgressWithBangumiId:(NSNumber *)bangumiId
-                           isFavorite:(NSNumber *)isFavorite
-                   lastWatchedEpisode:(NSNumber *)lastWatchedEpisode
-                              success:(void (^)())success
-                      connectionError:(void (^)(NSError *error))connectionError
-                          serverError:(void (^)(NSInteger error))serverError;
-
-- (BOOL)markAllEpisodesWatchedSuccess:(void (^)())success
-                      connectionError:(void (^)(NSError *error))connectionError
-                          serverError:(void (^)(NSInteger error))serverError;
 
 @end

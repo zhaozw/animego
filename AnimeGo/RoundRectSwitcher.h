@@ -7,20 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <ReactiveObjC.h>
 
 @class RoundRectSwitcher;
 
-@protocol RoundRectSwitcherDelegate <NSObject>
-
-- (void)switcherView:(RoundRectSwitcher *)switcherView statusChanged:(BOOL)status;
-
-@end
-
 @interface RoundRectSwitcher : UIButton
 
-@property (strong, nonatomic) NSString *titleOn;
-@property (strong, nonatomic) NSString *titleOff;
-@property (nonatomic) BOOL status;
-@property (weak, nonatomic) id<RoundRectSwitcherDelegate> delegate;
+@property (nonatomic, strong) NSString *titleOn;
+@property (nonatomic, strong) NSString *titleOff;
+@property (nonatomic, strong) UIImage *imageOn;
+@property (nonatomic, strong) UIImage *imageOff;
+@property (nonatomic, assign) BOOL status;
+@property (nonatomic, readonly) RACSignal *touchSignal;
 
 @end

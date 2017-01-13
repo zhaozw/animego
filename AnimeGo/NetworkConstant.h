@@ -6,19 +6,27 @@
 //  Copyright © 2016年 Chaoran Li. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 #ifndef NetworkConstant_h
 #define NetworkConstant_h
 
-typedef NS_ENUM(NSInteger, AGError) {
-    AGErrorOk                   = 0,
-    AGErrorBadCommand           = 1,
-    AGErrorIllegalArgument      = 2,
-    AGErrorRecordNotFound       = 3,
-    AGErrorRecordExisted        = 4,
-    AGErrorWrongPassword        = 5,
-    AGErrorNotAllowed           = 6,
-    AGErrorDatabaseError        = 7,
-    AGErrorUnknownError         = 8
+typedef NS_ENUM(NSInteger, AGErrorCode) {
+    // Server error
+    AGErrorServerOk                   = 0,
+    AGErrorServerBadCommand           = 1,
+    AGErrorServerIllegalArgument      = 2,
+    AGErrorServerRecordNotFound       = 3,
+    AGErrorServerRecordExisted        = 4,
+    AGErrorServerWrongPassword        = 5,
+    AGErrorServerNotAllowed           = 6,
+    AGErrorServerDatabaseError        = 7,
+    AGErrorServerUnknownError         = 8,
+    
+    // Client error
+    AGErrorClientDuplicateRequest     = 101,
+    AGErrorClientNetworkUnavailable   = 102,
+    AGErrorClientNotRegistered        = 103
 };
 
 typedef NS_ENUM(NSInteger, AGScheduleStatus) {
@@ -33,7 +41,8 @@ typedef NS_ENUM(NSInteger, AGBangumiStatus) {
     AGBangumiStatusOver         = 2,
 };
 
-extern NSString * const ContentNeedUpdateNofification;
+extern NSString * const AGErrorDomain;
+extern NSString * const AGContentNeedUpdateNofification;
 
 extern NSString * const AGBangumiKeyId;
 extern NSString * const AGBangumiKeyTitle;

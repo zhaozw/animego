@@ -9,20 +9,25 @@
 #import <Foundation/Foundation.h>
 #import <UserNotifications/UserNotifications.h>
 
-extern NSString * const JumpToEpisodeNotification;
+typedef NS_ENUM(NSInteger, AGJumpByNotaficationStatus) {
+    AGJumpByNotaficationStatusUntreated = 1,
+    AGJumpByNotaficationStatusHandling  = 2,
+    AGJumpByNotaficationStatusCompleted = 3
+};
+
+extern NSString * const AGJumpToEpisodeNotification;
 
 @interface NotificationManager : NSObject <UNUserNotificationCenterDelegate>
 
-@property (nonatomic) BOOL isJumpToEpisodeNotificationHandled;
-@property (nonatomic) NSNumber *jumpToEpisodeNotificationDestinationBangumiIdentifier;
-@property (nonatomic, readonly) BOOL enable;
+@property (nonatomic, assign) AGJumpByNotaficationStatus jumpStatus;
+@property (nonatomic, strong) NSNumber *jumpDestinationBangumiIdentifier;
+@property (nonatomic, assign, readonly) BOOL enable;
 
 + (NotificationManager *)sharedNotificationManager;
 
 - (void)requestAuthorization;
-- (void)setDeviceToken:(NSData *)token;
 - (void)getNotificationSettingsWithCompletionHandler:(void (^)(BOOL granted))handler;
-
+- (void)setDeviceToken:(NSData *)token;
 - (void)handleNotification:(NSDictionary *)notification;
 
 @end

@@ -18,7 +18,7 @@
 		74082A4C1DED4746001831D7 /* BangumiCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74082A4B1DED4746001831D7 /* BangumiCollectionViewCell.m */; };
 		741413181E23944B00539249 /* NSString+Append.m in Sources */ = {isa = PBXBuildFile; fileRef = 741413171E23944B00539249 /* NSString+Append.m */; };
 		741AAF141DF41175008C8AD5 /* LayoutConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF131DF41175008C8AD5 /* LayoutConstant.m */; };
-		741AAF1D1DF43D0D008C8AD5 /* CustomBadge.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */; };
+		741AAF1D1DF43D0D008C8AD5 /* CustomBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF1C1DF43D0D008C8AD5 /* CustomBadgeView.m */; };
 		741AAF291DF59217008C8AD5 /* FetcherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF281DF59217008C8AD5 /* FetcherViewController.m */; };
 		741AAF361DF67266008C8AD5 /* NotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 741AAF351DF67266008C8AD5 /* NotificationManager.m */; };
 		745233BE1E01E535005F1C1D /* UIColor+ExtraColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 745233BD1E01E535005F1C1D /* UIColor+ExtraColor.m */; };
@@ -27,9 +27,11 @@
 		7452B7421DE8354F008F76EB /* DailyDeliveryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7452B7411DE8354F008F76EB /* DailyDeliveryViewController.m */; };
 		7452B7461DE87E13008F76EB /* BangumiTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7452B7451DE87E13008F76EB /* BangumiTableViewCell.m */; };
 		7452B7491DE912AD008F76EB /* BangumiDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7452B7481DE912AD008F76EB /* BangumiDetailViewController.m */; };
+		7454C4581E26594600815FDD /* AGRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7454C4571E26594600815FDD /* AGRequest.m */; };
 		745607ED1DE6E51C00D13E8E /* VerticalTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 745607EC1DE6E51C00D13E8E /* VerticalTableView.m */; };
 		746DAF131E0020AE001E6FF0 /* EpisodeButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */; };
 		746DAF3C1E005C11001E6FF0 /* RoundRectSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 746DAF3B1E005C11001E6FF0 /* RoundRectSwitcher.m */; };
+		746FD7A21E2931DB008F85F7 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 746FD7A11E2931DB008F85F7 /* SearchViewController.m */; };
 		7472CB401E1F2EDD009E3F97 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7472CB3E1E1F2EDD009E3F97 /* Model.xcdatamodeld */; };
 		747E827D1DEEB9A70089F83F /* IndicatorBarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 747E827C1DEEB9A70089F83F /* IndicatorBarButton.m */; };
 		74A4BE441DE4FFD700C34A57 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A4BE431DE4FFD700C34A57 /* main.m */; };
@@ -38,7 +40,7 @@
 		74A4BE4F1DE4FFD700C34A57 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74A4BE4E1DE4FFD700C34A57 /* Assets.xcassets */; };
 		74A4BE521DE4FFD700C34A57 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74A4BE501DE4FFD700C34A57 /* LaunchScreen.storyboard */; };
 		74FEC1881DF27C9100892ADD /* EpisodeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC1871DF27C9100892ADD /* EpisodeDetailViewController.m */; };
-		74FEC1911DF2E7FF00892ADD /* NSDate+Convert.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC1901DF2E7FF00892ADD /* NSDate+Convert.m */; };
+		74FEC1911DF2E7FF00892ADD /* NSDate+Format.m in Sources */ = {isa = PBXBuildFile; fileRef = 74FEC1901DF2E7FF00892ADD /* NSDate+Format.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,8 +78,8 @@
 		741AAF131DF41175008C8AD5 /* LayoutConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutConstant.m; sourceTree = "<group>"; };
 		741AAF151DF41182008C8AD5 /* LayoutConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LayoutConstant.h; sourceTree = "<group>"; };
 		741AAF171DF41864008C8AD5 /* NetworkWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkWorker.h; sourceTree = "<group>"; };
-		741AAF1B1DF43D0D008C8AD5 /* CustomBadge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomBadge.h; sourceTree = "<group>"; };
-		741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomBadge.m; sourceTree = "<group>"; };
+		741AAF1B1DF43D0D008C8AD5 /* CustomBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomBadgeView.h; sourceTree = "<group>"; };
+		741AAF1C1DF43D0D008C8AD5 /* CustomBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomBadgeView.m; sourceTree = "<group>"; };
 		741AAF271DF59217008C8AD5 /* FetcherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FetcherViewController.h; sourceTree = "<group>"; };
 		741AAF281DF59217008C8AD5 /* FetcherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FetcherViewController.m; sourceTree = "<group>"; };
 		741AAF341DF67266008C8AD5 /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationManager.h; sourceTree = "<group>"; };
@@ -95,12 +97,16 @@
 		7452B7451DE87E13008F76EB /* BangumiTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangumiTableViewCell.m; sourceTree = "<group>"; };
 		7452B7471DE912AD008F76EB /* BangumiDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BangumiDetailViewController.h; sourceTree = "<group>"; };
 		7452B7481DE912AD008F76EB /* BangumiDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangumiDetailViewController.m; sourceTree = "<group>"; };
+		7454C4561E26594600815FDD /* AGRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AGRequest.h; sourceTree = "<group>"; };
+		7454C4571E26594600815FDD /* AGRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AGRequest.m; sourceTree = "<group>"; };
 		745607EB1DE6E51C00D13E8E /* VerticalTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalTableView.h; sourceTree = "<group>"; };
 		745607EC1DE6E51C00D13E8E /* VerticalTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalTableView.m; sourceTree = "<group>"; };
 		746DAF111E0020AE001E6FF0 /* EpisodeButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EpisodeButtonCell.h; sourceTree = "<group>"; };
 		746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EpisodeButtonCell.m; sourceTree = "<group>"; };
 		746DAF3A1E005C11001E6FF0 /* RoundRectSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundRectSwitcher.h; sourceTree = "<group>"; };
 		746DAF3B1E005C11001E6FF0 /* RoundRectSwitcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoundRectSwitcher.m; sourceTree = "<group>"; };
+		746FD7A01E2931DB008F85F7 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		746FD7A11E2931DB008F85F7 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		7472CB3F1E1F2EDD009E3F97 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		747E827B1DEEB9A70089F83F /* IndicatorBarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndicatorBarButton.h; sourceTree = "<group>"; };
 		747E827C1DEEB9A70089F83F /* IndicatorBarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndicatorBarButton.m; sourceTree = "<group>"; };
@@ -116,8 +122,8 @@
 		74A4BE531DE4FFD700C34A57 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74FEC1861DF27C9100892ADD /* EpisodeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EpisodeDetailViewController.h; sourceTree = "<group>"; };
 		74FEC1871DF27C9100892ADD /* EpisodeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EpisodeDetailViewController.m; sourceTree = "<group>"; };
-		74FEC18F1DF2E7FF00892ADD /* NSDate+Convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Convert.h"; sourceTree = "<group>"; };
-		74FEC1901DF2E7FF00892ADD /* NSDate+Convert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Convert.m"; sourceTree = "<group>"; };
+		74FEC18F1DF2E7FF00892ADD /* NSDate+Format.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Format.h"; sourceTree = "<group>"; };
+		74FEC1901DF2E7FF00892ADD /* NSDate+Format.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Format.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,15 +145,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7405CE731DE9952900674FBC /* Network */ = {
+		7405CE731DE9952900674FBC /* Network Request */ = {
 			isa = PBXGroup;
 			children = (
 				741AAF171DF41864008C8AD5 /* NetworkWorker.h */,
 				74082A191DEBFBF8001831D7 /* NetworkWorker.m */,
 				740829C51DEB05EC001831D7 /* NetworkConstant.h */,
 				740829C31DEB05DD001831D7 /* NetworkConstant.m */,
+				7454C4561E26594600815FDD /* AGRequest.h */,
+				7454C4571E26594600815FDD /* AGRequest.m */,
 			);
-			name = Network;
+			name = "Network Request";
 			sourceTree = "<group>";
 		};
 		7408295D1DEA88AA001831D7 /* AnimeGoTests */ = {
@@ -162,8 +170,8 @@
 		74082A4D1DED4D0A001831D7 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				74FEC18F1DF2E7FF00892ADD /* NSDate+Convert.h */,
-				74FEC1901DF2E7FF00892ADD /* NSDate+Convert.m */,
+				74FEC18F1DF2E7FF00892ADD /* NSDate+Format.h */,
+				74FEC1901DF2E7FF00892ADD /* NSDate+Format.m */,
 				745233BC1E01E535005F1C1D /* UIColor+ExtraColor.h */,
 				745233BD1E01E535005F1C1D /* UIColor+ExtraColor.m */,
 				741413161E23944B00539249 /* NSString+Append.h */,
@@ -172,7 +180,7 @@
 			name = Utility;
 			sourceTree = "<group>";
 		};
-		741AAF121DF3E1CD008C8AD5 /* Storage */ = {
+		741AAF121DF3E1CD008C8AD5 /* Storage (Core Data) */ = {
 			isa = PBXGroup;
 			children = (
 				7472CB3E1E1F2EDD009E3F97 /* Model.xcdatamodeld */,
@@ -181,7 +189,7 @@
 				740829C91DEB3F98001831D7 /* Schedule+Create.h */,
 				740829CA1DEB3F98001831D7 /* Schedule+Create.m */,
 			);
-			name = Storage;
+			name = "Storage (Core Data)";
 			sourceTree = "<group>";
 		};
 		741AAF161DF4154A008C8AD5 /* Application Delegate */ = {
@@ -193,13 +201,13 @@
 			name = "Application Delegate";
 			sourceTree = "<group>";
 		};
-		741AAF331DF6704D008C8AD5 /* Notification */ = {
+		741AAF331DF6704D008C8AD5 /* Push Notification */ = {
 			isa = PBXGroup;
 			children = (
 				741AAF341DF67266008C8AD5 /* NotificationManager.h */,
 				741AAF351DF67266008C8AD5 /* NotificationManager.m */,
 			);
-			name = Notification;
+			name = "Push Notification";
 			sourceTree = "<group>";
 		};
 		744F9A6A1DEA6AAF00876835 /* Layout */ = {
@@ -220,6 +228,8 @@
 				741AAF281DF59217008C8AD5 /* FetcherViewController.m */,
 				74082A411DECA94E001831D7 /* MainViewController.h */,
 				74082A421DECA94E001831D7 /* MainViewController.m */,
+				746FD7A01E2931DB008F85F7 /* SearchViewController.h */,
+				746FD7A11E2931DB008F85F7 /* SearchViewController.m */,
 				7452B7401DE8354F008F76EB /* DailyDeliveryViewController.h */,
 				7452B7411DE8354F008F76EB /* DailyDeliveryViewController.m */,
 				74082A441DECA994001831D7 /* MyFavoriteViewController.h */,
@@ -239,22 +249,29 @@
 				745233C31E01FCCA005F1C1D /* InsetsLabel.m */,
 				747E827B1DEEB9A70089F83F /* IndicatorBarButton.h */,
 				747E827C1DEEB9A70089F83F /* IndicatorBarButton.m */,
-				741AAF1B1DF43D0D008C8AD5 /* CustomBadge.h */,
-				741AAF1C1DF43D0D008C8AD5 /* CustomBadge.m */,
+				741AAF1B1DF43D0D008C8AD5 /* CustomBadgeView.h */,
+				741AAF1C1DF43D0D008C8AD5 /* CustomBadgeView.m */,
 				746DAF3A1E005C11001E6FF0 /* RoundRectSwitcher.h */,
 				746DAF3B1E005C11001E6FF0 /* RoundRectSwitcher.m */,
-				746DAF111E0020AE001E6FF0 /* EpisodeButtonCell.h */,
-				746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */,
 				7452B73D1DE82CA3008F76EB /* HorizontalTableView.h */,
 				7452B73E1DE82CA3008F76EB /* HorizontalTableView.m */,
 				745607EB1DE6E51C00D13E8E /* VerticalTableView.h */,
 				745607EC1DE6E51C00D13E8E /* VerticalTableView.m */,
+			);
+			name = "Custom View";
+			sourceTree = "<group>";
+		};
+		746FD79C1E28D2FB008F85F7 /* Custom Cell */ = {
+			isa = PBXGroup;
+			children = (
 				7452B7441DE87E13008F76EB /* BangumiTableViewCell.h */,
 				7452B7451DE87E13008F76EB /* BangumiTableViewCell.m */,
 				74082A4A1DED4746001831D7 /* BangumiCollectionViewCell.h */,
 				74082A4B1DED4746001831D7 /* BangumiCollectionViewCell.m */,
+				746DAF111E0020AE001E6FF0 /* EpisodeButtonCell.h */,
+				746DAF121E0020AE001E6FF0 /* EpisodeButtonCell.m */,
 			);
-			name = "Custom View";
+			name = "Custom Cell";
 			sourceTree = "<group>";
 		};
 		74A4BE361DE4FFD700C34A57 = {
@@ -281,10 +298,11 @@
 			isa = PBXGroup;
 			children = (
 				74082A4D1DED4D0A001831D7 /* Utility */,
-				741AAF331DF6704D008C8AD5 /* Notification */,
-				7405CE731DE9952900674FBC /* Network */,
-				741AAF121DF3E1CD008C8AD5 /* Storage */,
+				741AAF331DF6704D008C8AD5 /* Push Notification */,
+				7405CE731DE9952900674FBC /* Network Request */,
+				741AAF121DF3E1CD008C8AD5 /* Storage (Core Data) */,
 				7452B7431DE83562008F76EB /* Custom View */,
+				746FD79C1E28D2FB008F85F7 /* Custom Cell */,
 				744F9A6B1DEA6AE700876835 /* View Controller */,
 				741AAF161DF4154A008C8AD5 /* Application Delegate */,
 				744F9A6A1DEA6AAF00876835 /* Layout */,
@@ -496,6 +514,7 @@
 				74082A461DECA994001831D7 /* MyFavoriteViewController.m in Sources */,
 				741AAF141DF41175008C8AD5 /* LayoutConstant.m in Sources */,
 				7472CB401E1F2EDD009E3F97 /* Model.xcdatamodeld in Sources */,
+				746FD7A21E2931DB008F85F7 /* SearchViewController.m in Sources */,
 				74082A361DEC25A4001831D7 /* Bangumi+Create.m in Sources */,
 				74A4BE471DE4FFD700C34A57 /* AppDelegate.m in Sources */,
 				740829C41DEB05DD001831D7 /* NetworkConstant.m in Sources */,
@@ -504,20 +523,21 @@
 				7452B7491DE912AD008F76EB /* BangumiDetailViewController.m in Sources */,
 				746DAF131E0020AE001E6FF0 /* EpisodeButtonCell.m in Sources */,
 				747E827D1DEEB9A70089F83F /* IndicatorBarButton.m in Sources */,
-				74FEC1911DF2E7FF00892ADD /* NSDate+Convert.m in Sources */,
+				74FEC1911DF2E7FF00892ADD /* NSDate+Format.m in Sources */,
 				745233BE1E01E535005F1C1D /* UIColor+ExtraColor.m in Sources */,
 				745607ED1DE6E51C00D13E8E /* VerticalTableView.m in Sources */,
 				74FEC1881DF27C9100892ADD /* EpisodeDetailViewController.m in Sources */,
 				746DAF3C1E005C11001E6FF0 /* RoundRectSwitcher.m in Sources */,
 				741413181E23944B00539249 /* NSString+Append.m in Sources */,
 				74082A4C1DED4746001831D7 /* BangumiCollectionViewCell.m in Sources */,
-				741AAF1D1DF43D0D008C8AD5 /* CustomBadge.m in Sources */,
+				741AAF1D1DF43D0D008C8AD5 /* CustomBadgeView.m in Sources */,
 				74A4BE441DE4FFD700C34A57 /* main.m in Sources */,
 				7452B73F1DE82CA3008F76EB /* HorizontalTableView.m in Sources */,
 				745233C41E01FCCA005F1C1D /* InsetsLabel.m in Sources */,
 				74082A1A1DEBFBF8001831D7 /* NetworkWorker.m in Sources */,
 				741AAF291DF59217008C8AD5 /* FetcherViewController.m in Sources */,
 				7452B7421DE8354F008F76EB /* DailyDeliveryViewController.m in Sources */,
+				7454C4581E26594600815FDD /* AGRequest.m in Sources */,
 				740829CB1DEB3F98001831D7 /* Schedule+Create.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

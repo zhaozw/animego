@@ -10,6 +10,6 @@
 
 @interface InsetsLabel : UILabel
 
-@property (nonatomic) UIEdgeInsets insets;
+@property (nonatomic, assign) UIEdgeInsets insets;
 
 @end

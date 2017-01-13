@@ -7,6 +7,7 @@
 //
 
 #import "RoundRectSwitcher.h"
+
 #import "EpisodeButtonCell.h"
 #import "LayoutConstant.h"
 #import "UIColor+ExtraColor.h"
@@ -16,24 +17,35 @@
 
 @interface EpisodeButtonCell ()
 
-@property (strong, nonatomic) RoundRectSwitcher *button;
+@property (nonatomic, strong) RoundRectSwitcher *button;
 
 @end
 
 @implementation EpisodeButtonCell
 
-#pragma mark - Calculate Size
+#pragma mark - Class Methods
 
 + (CGSize)calcSize {
     EpisodeButtonCell *testCell = [[EpisodeButtonCell alloc] initWithFrame:CGRectZero];
-    [testCell initSubview];
+    [testCell p_initSubview];
     [testCell.button setTitle:@"00" forState:UIControlStateNormal];
     return [testCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
-#pragma mark - Initialize Methods
+#pragma mark - UICollectionViewCell (super class)
 
-- (void)initSubview {
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self p_initSubview];
+        self.status = EpisodeButtonCellStatusNotReleased;
+    }
+    return self;
+}
+
+#pragma mark - Privates Methods
+
+- (void)p_initSubview {
     self.button = [[RoundRectSwitcher alloc] init];
     self.button.enabled = NO;
     
@@ -42,7 +54,7 @@
         ? [UIFont systemFontOfSize:[UIFont systemFontSize]]
         : [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
     self.button.titleLabel.font = buttonFont;
-    self.button.backgroundColor = [UIColor pinkColor];
+    self.button.backgroundColor = [UIColor ag_pinkColor];
     [self.button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.contentView addSubview:self.button];
     
@@ -59,16 +71,7 @@
                                                  forAxis:UILayoutConstraintAxisVertical];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self initSubview];
-        self.status = EpisodeButtonCellStatusNotReleased;
-    }
-    return self;
-}
-
-#pragma mark Public Property
+#pragma mark - Public Methods
 
 - (void)setTitle:(NSString *)title {
     _title = title;
@@ -85,17 +88,15 @@
             [self.button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
             break;
         case EpisodeButtonCellStatusReleased:
-            self.button.layer.borderColor = [UIColor pinkColor].CGColor;
+            self.button.layer.borderColor = [UIColor ag_pinkColor].CGColor;
             self.button.layer.borderWidth = 1;
             self.button.backgroundColor = [UIColor whiteColor];
-            [self.button setTitleColor:[UIColor pinkColor] forState:UIControlStateNormal];
+            [self.button setTitleColor:[UIColor ag_pinkColor] forState:UIControlStateNormal];
             break;
         case EpisodeButtonCellStatusWatched:
             self.button.layer.borderWidth = 0;
-            self.button.backgroundColor = [UIColor pinkColor];
+            self.button.backgroundColor = [UIColor ag_pinkColor];
             [self.button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        default:
-            ;
     }
 }
 

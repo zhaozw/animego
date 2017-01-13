@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FetcherViewController.h"
 
-extern NSString * const kSegueIdentifier;
+extern NSString * const AGShowDetailSegueIdentifier;
 
 @interface MainViewController : FetcherViewController
 

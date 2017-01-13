@@ -23,7 +23,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
   - Masonry
-  - ReactiveObjC (~> 2.1.0)
+  - ReactiveObjC (~> 2.1.2)
   - SDWebImage (~> 3.8)
 
 SPEC CHECKSUMS:
@@ -32,6 +32,6 @@ SPEC CHECKSUMS:
   ReactiveObjC: 7b6782ae39f9ac0f57205c3b0c0b69b9dd7048c0
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: d78ed780c78edf50d4e106dc7acfa2c96396cd67
+PODFILE CHECKSUM: 77fe8b582d4cf7ae57a68189f36fc8e3ed336494
 
 COCOAPODS: 1.1.1

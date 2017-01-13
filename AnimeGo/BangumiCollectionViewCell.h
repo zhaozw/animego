@@ -11,7 +11,7 @@
 
 @interface BangumiCollectionViewCell : UICollectionViewCell
 
-@property (strong, nonatomic) Bangumi *bangumi;
+@property (nonatomic, strong) Bangumi *bangumi;
 
 + (CGSize)calcSizeWithWidth:(CGFloat)width;
 

@@ -9,16 +9,21 @@
 #import "AppDelegate.h"
 #import "NotificationManager.h"
 
+#import <ReactiveObjC.h>
+
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
-#pragma mark - Life Cycle Methods
+#pragma mark - Application Life Cycle Methods
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [[NotificationManager sharedNotificationManager] requestAuthorization];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[NotificationManager sharedNotificationManager] requestAuthorization];
     return YES;
 }
 
@@ -30,9 +35,8 @@
     [[NotificationManager sharedNotificationManager] setDeviceToken:nil];
 }
 
-#pragma mark - Push Notifacation (iOS 9)
-
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
+    // iOS 9 only
     [[NotificationManager sharedNotificationManager] handleNotification:userInfo];
 }
 
@@ -42,10 +46,6 @@
 @synthesize persistentStoreCorrdinator = _persistentStoreCorrdinator;
 @synthesize mainMOC = _mainMOC;
 @synthesize privateMOC = _privateMOC;
-
-- (NSURL *)applicationDocumentsDirectory {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
-}
 
 - (NSManagedObjectModel *)managedObjectModel {
     if (!_managedObjectModel) {
@@ -59,7 +59,9 @@
     if (!_persistentStoreCorrdinator) {
         NSManagedObjectModel *model = self.managedObjectModel;
         _persistentStoreCorrdinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
-        NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Model.sqlite"];
+        NSURL *applicationDocumentsDirectory =
+            [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+        NSURL *storeURL = [applicationDocumentsDirectory URLByAppendingPathComponent:@"Model.sqlite"];
         NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
                                  @YES, NSMigratePersistentStoresAutomaticallyOption,
                                  @YES, NSInferMappingModelAutomaticallyOption, nil];

@@ -7,111 +7,71 @@
 //
 
 #import "MainViewController.h"
+
+#import "SearchViewController.h"
 #import "DailyDeliveryViewController.h"
 #import "MyFavoriteViewController.h"
 #import "BangumiDetailViewController.h"
+#import "IndicatorBarButton.h"
+#import "CustomBadgeView.h"
+#import "LayoutConstant.h"
+
+#import "AGRequest.h"
+#import "NetworkConstant.h"
 #import "Bangumi+Create.h"
 #import "Schedule+Create.h"
-#import "IndicatorBarButton.h"
-#import "CustomBadge.h"
-#import "LayoutConstant.h"
 #import "NotificationManager.h"
-#import "LayoutConstant.h"
-#import "NetworkConstant.h"
+#import "UIColor+ExtraColor.h"
 
 #define MAS_SHORTHAND
 #import "Masonry.h"
 
-NSString * const kSegueIdentifier = @"Show Detail";
+NSString * const AGShowDetailSegueIdentifier = @"Show Detail";
 
 @interface MainViewController ()
 
-@property (strong, nonatomic) DailyDeliveryViewController *dailyDeliveryVC;
-@property (strong, nonatomic) MyFavoriteViewController *myFavoriteVC;
-@property (strong, nonatomic) UIViewController *currentVC;
-@property (nonatomic) BOOL isJumpToEpisodeHandling;
+@property (nonatomic, strong) SearchViewController *searchVC;
+@property (nonatomic, strong) DailyDeliveryViewController *dailyDeliveryVC;
+@property (nonatomic, strong) MyFavoriteViewController *myFavoriteVC;
+@property (nonatomic, strong) UIViewController *currentVC;
 
-@property (strong, nonatomic) UIBarButtonItem *dailyDeliveryButton;
-@property (strong, nonatomic) UIBarButtonItem *myFavoriteButton;
-@property (strong, nonatomic) UIBarButtonItem *badge;
+@property (nonatomic, strong) UIBarButtonItem *searchButton;
+@property (nonatomic, strong) UIBarButtonItem *dailyDeliveryButton;
+@property (nonatomic, strong) UIBarButtonItem *myFavoriteButton;
+@property (nonatomic, strong) UIBarButtonItem *badge;
 
 @end
 
 @implementation MainViewController
 
-#pragma mark - Private Properties
-
-- (DailyDeliveryViewController *)dailyDeliveryVC {
-    if (!_dailyDeliveryVC) {
-        _dailyDeliveryVC = [[DailyDeliveryViewController alloc] init];
-    }
-    return _dailyDeliveryVC;
-}
-
-- (MyFavoriteViewController *)myFavoriteVC {
-    if (!_myFavoriteVC) {
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.scrollDirection = UICollectionViewScrollDirectionVertical;
-        layout.itemSize = CGSizeMake(100, 100);
-        _myFavoriteVC = [[MyFavoriteViewController alloc] init];
-    }
-    return _myFavoriteVC;
-}
-
-#pragma mark - Life Cycle Methods
+#pragma mark - UIViewController (super class)
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.barTintColor = [UIColor darkGrayColor];
-    self.navigationController.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName: [UIColor whiteColor] };
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self p_setupNavigationBar];
     
-    self.isJumpToEpisodeHandling = NO;
-    [self dailyDeliveryVC];
-    [self myFavoriteVC];
-    
-    IndicatorBarButton *dailyDeliveryIB = [[IndicatorBarButton alloc] initWithTitle:@"每日放送"
-                                                                     indicatorColor:self.view.tintColor
-                                                                             target:self
-                                                                             action:@selector(touchDailyDeliveryButton)];
-    IndicatorBarButton *myFavoriteIB = [[IndicatorBarButton alloc] initWithTitle:@"我的收藏"
-                                                                  indicatorColor:self.view.tintColor
-                                                                     target:self
-                                                                     action:@selector(touchMyFavoriteButton)];
-    dailyDeliveryIB.indicator = YES;
-    myFavoriteIB.indicator = NO;
-    
-    self.dailyDeliveryButton = [[UIBarButtonItem alloc] initWithCustomView:dailyDeliveryIB];
-    self.myFavoriteButton = [[UIBarButtonItem alloc] initWithCustomView:myFavoriteIB];
-    
-    UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
-    CGFloat badgeWidth = (deviceType == UIUserInterfaceIdiomPad) ? LCMaxCustomBadgeWidth : LCMaxCustomBadgeWidthPhone;
-    CGFloat badgeHeight = (deviceType == UIUserInterfaceIdiomPad) ? LCCustomBadgeHeight : LCCustomBadgeHeightPhone;
-    CGRect badgeFrame = CGRectMake(0, 0, badgeWidth, badgeHeight);
-    CustomBadge *badge = [[CustomBadge alloc] initWithFrame:badgeFrame];
-    badge.userInteractionEnabled = YES;
-    UITapGestureRecognizer *badgeGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self
-                                                                                            action:@selector(touchBadge)];
-    [badge addGestureRecognizer:badgeGestureRecognizer];
-    self.badge = [[UIBarButtonItem alloc] initWithCustomView:badge];
-    
-    self.navigationItem.title = (deviceType == UIUserInterfaceIdiomPad) ? @"番剧助手" : @"";
-    self.navigationItem.leftBarButtonItems = @[self.dailyDeliveryButton, self.myFavoriteButton, self.badge];
-    
+    self.searchVC = [[SearchViewController alloc] init];
+    self.dailyDeliveryVC = [[DailyDeliveryViewController alloc] init];
+    self.myFavoriteVC = [[MyFavoriteViewController alloc] init];
     self.currentVC = self.dailyDeliveryVC;
-    [self displayContentController:self.currentVC];
+    [self p_displayContentController:self.currentVC];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    if (self.isJumpToEpisodeHandling) {
-        self.isJumpToEpisodeHandling = NO;
+    NotificationManager *manager = [NotificationManager sharedNotificationManager];
+    if (manager.jumpStatus == AGJumpByNotaficationStatusHandling) {
+        manager.jumpStatus = AGJumpByNotaficationStatusCompleted;
         [self doJumpToEpisode];
     }
 }
 
-#pragma mark - Protected Methods
+- (UIViewController *)childViewControllerForStatusBarStyle {
+    return self.currentVC;
+}
+
+#pragma mark - FetcherViewController (super class)
 
 - (NSFetchRequest *)fetchRequest {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Bangumi"];
@@ -130,9 +90,8 @@ NSString * const kSegueIdentifier = @"Show Detail";
 }
 
 - (void)fetchRemoteData {
-    [self fetchMyFavoriteSuccess:nil
-                 connectionError:nil
-                     serverError:nil];
+    AGRequest *request = [[AGRequest alloc] init];
+    [[request fetchMyFavorite] subscribeCompleted:^{ }];
 }
 
 - (void)updateUI {
@@ -141,88 +100,144 @@ NSString * const kSegueIdentifier = @"Show Detail";
     for (Bangumi *bangumi in matches) {
         if (bangumi.lastReleasedEpisode.integerValue > bangumi.lastWatchedEpisode.integerValue) ++count;
     }
-    CustomBadge *badge = (CustomBadge *)self.badge.customView;
-    badge.isFavorite = (count > 0);
+    CustomBadgeView *badge = (CustomBadgeView *)self.badge.customView;
+    badge.favorite = (count > 0);
     badge.eventCount = count;
     [UIApplication sharedApplication].applicationIconBadgeNumber = count;
 }
 
+- (void)doJumpToEpisode {
+    NotificationManager *manager = [NotificationManager sharedNotificationManager];
+    NSNumber *bangumiIdentifier = manager.jumpDestinationBangumiIdentifier;
+    [self performSegueWithIdentifier:AGShowDetailSegueIdentifier sender:bangumiIdentifier];
+}
+
 #pragma mark - Private Methods
 
-- (void)touchDailyDeliveryButton {
+- (void)p_setupNavigationBar {
+    self.navigationController.navigationBar.barTintColor = [UIColor darkGrayColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{ NSForegroundColorAttributeName: [UIColor whiteColor] };
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    self.searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
+                                                                      target:self
+                                                                      action:@selector(p_touchSearchButton)];
+    
+    IndicatorBarButton *dailyDeliveryIB = [[IndicatorBarButton alloc] initWithTitle:@"每日放送"
+                                                                              color:self.view.tintColor];
+    dailyDeliveryIB.indicator = YES;
+    [[dailyDeliveryIB.touchSignal
+      deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(id  _Nullable x) {
+         [self p_touchDailyDeliveryButton];
+     }];
+    self.dailyDeliveryButton = [[UIBarButtonItem alloc] initWithCustomView:dailyDeliveryIB];
+    
+    IndicatorBarButton *myFavoriteIB = [[IndicatorBarButton alloc] initWithTitle:@"我的收藏"
+                                                                           color:self.view.tintColor];
+    myFavoriteIB.indicator = NO;
+    [[myFavoriteIB.touchSignal
+      deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(id  _Nullable x) {
+         [self p_touchMyFavoriteButton];
+     }];
+    self.myFavoriteButton = [[UIBarButtonItem alloc] initWithCustomView:myFavoriteIB];
+    
+    UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
+    CGFloat badgeWidth = (deviceType == UIUserInterfaceIdiomPad) ? LCMaxCustomBadgeWidth : LCMaxCustomBadgeWidthPhone;
+    CGFloat badgeHeight = (deviceType == UIUserInterfaceIdiomPad) ? LCCustomBadgeHeight : LCCustomBadgeHeightPhone;
+    CGRect badgeFrame = CGRectMake(0, 0, badgeWidth, badgeHeight);
+    CustomBadgeView *badge = [[CustomBadgeView alloc] initWithFrame:badgeFrame];
+    badge.userInteractionEnabled = YES;
+    UITapGestureRecognizer *badgeGestureRecognizer = [[UITapGestureRecognizer alloc] init];
+    
+    [[badgeGestureRecognizer.rac_gestureSignal
+      deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(__kindof UIGestureRecognizer * _Nullable x) {
+         [self p_touchBadgeView];
+     }];
+    
+    [badge addGestureRecognizer:badgeGestureRecognizer];
+    self.badge = [[UIBarButtonItem alloc] initWithCustomView:badge];
+    
+    self.navigationItem.title = (deviceType == UIUserInterfaceIdiomPad) ? @"番剧助手" : @"";
+    self.navigationItem.leftBarButtonItems = @[ self.searchButton,
+                                                self.dailyDeliveryButton, self.myFavoriteButton,
+                                                self.badge ];
+}
+
+- (void)p_touchSearchButton {
+    if (self.currentVC == self.searchVC) return;
+    self.searchButton.tintColor = [UIColor ag_pinkColor];
+    ((IndicatorBarButton *)self.dailyDeliveryButton.customView).indicator = NO;
+    ((IndicatorBarButton *)self.myFavoriteButton.customView).indicator = NO;
+    [self p_replaceViewController:self.currentVC withViewController:self.searchVC];
+}
+
+- (void)p_touchDailyDeliveryButton {
     if (self.currentVC == self.dailyDeliveryVC) return;
+    self.searchButton.tintColor = self.navigationController.navigationBar.tintColor;
     ((IndicatorBarButton *)self.dailyDeliveryButton.customView).indicator = YES;
     ((IndicatorBarButton *)self.myFavoriteButton.customView).indicator = NO;
-    [self replaceViewController:self.currentVC withViewController:self.dailyDeliveryVC];
+    [self p_replaceViewController:self.currentVC withViewController:self.dailyDeliveryVC];
 }
 
-- (void)touchMyFavoriteButton {
+- (void)p_touchMyFavoriteButton {
     if (self.currentVC == self.myFavoriteVC) return;
+    self.searchButton.tintColor = self.navigationController.navigationBar.tintColor;
     ((IndicatorBarButton *)self.myFavoriteButton.customView).indicator = YES;
     ((IndicatorBarButton *)self.dailyDeliveryButton.customView).indicator = NO;
-    [self replaceViewController:self.currentVC withViewController:self.myFavoriteVC];
+    [self p_replaceViewController:self.currentVC withViewController:self.myFavoriteVC];
 }
 
-- (void)touchBadge {
-    CustomBadge *badge = (CustomBadge *)self.badge.customView;
-    if (!badge.isFavorite) return;
+- (void)p_touchBadgeView {
+    CustomBadgeView *badge = (CustomBadgeView *)self.badge.customView;
+    if (!badge.favorite) return;
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"全部标记为已看"
                                                                    message:@"确定要将所有未看剧集标记为已看吗?"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *yesAction = [UIAlertAction actionWithTitle:@"是" style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {
-                                                              [self markAllEpisodesWatched];
-                                                          }];
+                                                      handler:^(UIAlertAction * action) {
+                                                          [self p_markAllEpisodesWatched];
+                                                      }];
     UIAlertAction *noAction = [UIAlertAction actionWithTitle:@"否" style:UIAlertActionStyleCancel
-                                                          handler:^(UIAlertAction * action) { }];
-
-
+                                                     handler:^(UIAlertAction * action) { }];
+    
+    
     [alert addAction:yesAction];
     [alert addAction:noAction];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (UIViewController *)childViewControllerForStatusBarStyle {
-    return self.currentVC;
+- (void)p_markAllEpisodesWatched {
+    AGRequest *request = [[AGRequest alloc] init];
+    [[request markAllEpisodesWatched] subscribeCompleted:^{ }];
 }
 
-- (void)markAllEpisodesWatched {
-    [self markAllEpisodesWatchedSuccess:nil
-                        connectionError:nil
-                            serverError:nil];
-}
-
-- (void)displayContentController:(UIViewController*)content {
+- (void)p_displayContentController:(UIViewController *)content {
     [self addChildViewController:content];
     content.view.frame = self.view.bounds;
     [self.view addSubview:content.view];
     [content didMoveToParentViewController:self];
 }
 
-- (void)hideContentController:(UIViewController*)content {
+- (void)p_hideContentController:(UIViewController *)content {
     [content willMoveToParentViewController:nil];
     [content.view removeFromSuperview];
     [content removeFromParentViewController];
 }
 
-
-- (void)replaceViewController:(UIViewController *)oldVC withViewController:(UIViewController *)newVC {
-    [self hideContentController:oldVC];
-    [self displayContentController:newVC];
+- (void)p_replaceViewController:(UIViewController *)oldVC withViewController:(UIViewController *)newVC {
+    [self p_hideContentController:oldVC];
+    [self p_displayContentController:newVC];
     self.currentVC = newVC;
-}
-
-- (void)doJumpToEpisode {
-    NotificationManager *manager = [NotificationManager sharedNotificationManager];
-    NSNumber *bangumiIdentifier = manager.jumpToEpisodeNotificationDestinationBangumiIdentifier;
-    [self performSegueWithIdentifier:kSegueIdentifier sender:bangumiIdentifier];
 }
 
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:kSegueIdentifier]) {
+    if ([segue.identifier isEqualToString:AGShowDetailSegueIdentifier]) {
         if ([segue.destinationViewController isKindOfClass:[BangumiDetailViewController class]]
             && [sender isKindOfClass:[NSNumber class]]) {
             BangumiDetailViewController *detailVC = (BangumiDetailViewController *) segue.destinationViewController;
@@ -232,8 +247,6 @@ NSString * const kSegueIdentifier = @"Show Detail";
     }
 }
 
-- (IBAction)jumpUnwindAction:(UIStoryboardSegue*)unwindSegue {
-    self.isJumpToEpisodeHandling = YES;
-}
+- (IBAction)jumpUnwindAction:(UIStoryboardSegue*)unwindSegue { }
 
 @end

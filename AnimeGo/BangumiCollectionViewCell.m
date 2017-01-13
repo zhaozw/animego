@@ -7,30 +7,31 @@
 //
 
 #import "BangumiCollectionViewCell.h"
+
 #import "NetworkWorker.h"
 #import "LayoutConstant.h"
 #import "NetworkConstant.h"
-#import "CustomBadge.h"
+#import "CustomBadgeView.h"
 
 #define MAS_SHORTHAND
 #import "Masonry.h"
 
 @interface BangumiCollectionViewCell ()
 
-@property (strong, nonatomic) UIImageView *coverImageView;
-@property (strong, nonatomic) CustomBadge *indicator;
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *statusLabel;
+@property (nonatomic, strong) UIImageView *coverImageView;
+@property (nonatomic, strong) CustomBadgeView *indicator;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *statusLabel;
 
 @end
 
 @implementation BangumiCollectionViewCell
 
-#pragma mark - Calculate Size
+#pragma mark - Class Methods
 
 + (CGSize)calcSizeWithWidth:(CGFloat)width {
     BangumiCollectionViewCell *testCell = [[BangumiCollectionViewCell alloc] initWithFrame:CGRectZero];
-    [testCell initSubview];
+    [testCell p_initSubview];
     testCell.titleLabel.text = @"title";
     testCell.statusLabel.text = @"status";
     [testCell.coverImageView makeConstraints:^(MASConstraintMaker *make) {
@@ -39,9 +40,42 @@
     return [testCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
-#pragma mark - Initialize Method
+#pragma mark - UICollectionViewCell (super view)
 
-- (void)initSubview {
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self p_initSubview];
+    }
+    return self;
+}
+
+#pragma mark - Public Methods
+
+- (void)setBangumi:(Bangumi *)bangumi {
+    _bangumi = bangumi;
+    [[NetworkWorker sharedNetworkWorker] setImageURL:bangumi.coverImageURL forImageView:self.coverImageView];
+    self.titleLabel.text = bangumi.title;
+    switch (bangumi.status.integerValue) {
+        case AGBangumiStatusNotReleased:
+            self.statusLabel.text = [NSString stringWithFormat:@"尚未开播"];
+            break;
+        case AGBangumiStatusReleased:
+            self.statusLabel.text = [NSString stringWithFormat:@"已连载至第%@话", bangumi.lastReleasedEpisode];
+            break;
+        case AGBangumiStatusOver:
+            self.statusLabel.text = [NSString stringWithFormat:@"共%@话 (已完结)", bangumi.lastReleasedEpisode];
+            break;
+    }
+    self.indicator.favorite = bangumi.isFavorite.boolValue;
+    NSInteger releasedEpisodes = bangumi.lastReleasedEpisode.integerValue;
+    NSInteger watchedEpisodes = bangumi.lastWatchedEpisode.integerValue;
+    self.indicator.eventCount = releasedEpisodes - watchedEpisodes;
+}
+
+#pragma mark - Private Methods
+
+- (void)p_initSubview {
     UIView *superView = self.contentView;
     superView.backgroundColor = nil;
     UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
@@ -52,23 +86,23 @@
     self.coverImageView.clipsToBounds = YES;
     [superView addSubview:self.coverImageView];
     
-    self.indicator = [[CustomBadge alloc] init];
+    self.indicator = [[CustomBadgeView alloc] init];
     [superView insertSubview:self.indicator aboveSubview:self.coverImageView];
-
+    
     self.titleLabel = [[UILabel alloc] init];
     UIFont *titleLabelFont = (deviceType == UIUserInterfaceIdiomPad)
-        ? [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
-        : [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    ? [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
+    : [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     self.titleLabel.font = titleLabelFont;
     [superView addSubview:self.titleLabel];
     
     self.statusLabel = [[UILabel alloc] init];
     UIFont *statusLabelFont = (deviceType == UIUserInterfaceIdiomPad)
-        ? [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
-        : [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    ? [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
+    : [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
     self.statusLabel.font = statusLabelFont;
     [superView addSubview:self.statusLabel];
-
+    
     [self.coverImageView makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(@(LCPadding));
         make.left.equalTo(@(LCPadding));
@@ -93,39 +127,6 @@
         make.right.equalTo(@(-LCPadding));
         make.bottom.equalTo(@(-LCPadding));
     }];
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self initSubview];
-    }
-    return self;
-}
-
-#pragma mark Public Property
-
-- (void)setBangumi:(Bangumi *)bangumi {
-    _bangumi = bangumi;
-    [[NetworkWorker sharedNetworkWorker] setImageURL:bangumi.coverImageURL forImageView:self.coverImageView];
-    self.titleLabel.text = bangumi.title;
-    switch (bangumi.status.integerValue) {
-        case AGBangumiStatusNotReleased:
-            self.statusLabel.text = [NSString stringWithFormat:@"尚未开播"];
-            break;
-        case AGBangumiStatusReleased:
-            self.statusLabel.text = [NSString stringWithFormat:@"已连载至第%@话", bangumi.lastReleasedEpisode];
-            break;
-        case AGBangumiStatusOver:
-            self.statusLabel.text = [NSString stringWithFormat:@"共%@话 (已完结)", bangumi.lastReleasedEpisode];
-            break;
-        default:
-            ;
-    }
-    self.indicator.isFavorite = bangumi.isFavorite.boolValue;
-    NSInteger releasedEpisodes = bangumi.lastReleasedEpisode.integerValue;
-    NSInteger watchedEpisodes = bangumi.lastWatchedEpisode.integerValue;
-    self.indicator.eventCount = releasedEpisodes - watchedEpisodes;
 }
 
 @end

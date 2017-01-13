@@ -7,6 +7,7 @@
 //
 
 #import "HorizontalTableView.h"
+
 #import "LayoutConstant.h"
 
 #define MAS_SHORTHAND
@@ -17,18 +18,18 @@ static const NSInteger kCacheSize = 5;
 
 @interface HorizontalTableView()
 
-@property (strong, nonatomic) UIScrollView *scrollView;
+@property (nonatomic, strong) UIScrollView *scrollView;
 
-@property (strong, nonatomic) NSMutableArray<__kindof UIView *> *reusableCellArray;
-@property (strong, readwrite, nonatomic) NSMutableArray<__kindof UIView *> *displayCellArray;
-@property (nonatomic) Class cellClass;
+@property (nonatomic, strong) NSMutableArray<__kindof UIView *> *reusableCellArray;
+@property (nonatomic, strong, readwrite) NSMutableArray<__kindof UIView *> *displayCellArray;
+@property (nonatomic, assign) Class cellClass;
 
-@property (nonatomic) CGSize tableSize;   // include padding
-@property (nonatomic) NSInteger tableDisplayCount;
+@property (nonatomic, assign) CGSize tableSize;   // include padding
+@property (nonatomic, assign) NSInteger tableDisplayCount;
 
-@property (nonatomic) NSInteger scrollingDirection;
-@property (nonatomic) BOOL isScrolling;
-@property (nonatomic) BOOL isInitialized;
+@property (nonatomic, assign) NSInteger scrollingDirection;
+@property (nonatomic, assign) BOOL isScrolling;
+@property (nonatomic, assign) BOOL isInitialized;
 
 @end
 
@@ -36,27 +37,27 @@ static const NSInteger kCacheSize = 5;
 
 @synthesize currentIndex = _currentIndex;
 
+#pragma mark - UIView (super class)
+
 + (BOOL)requiresConstraintBasedLayout {
     return YES;
 }
 
-#pragma mark Initialize & UI Layout
-
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
-    if (self) {
-        self.scrollingDirection = 0;
-        self.isInitialized = NO;
-        self.isScrolling = NO;
-        self.backgroundColor = [UIColor groupTableViewBackgroundColor];
-        
-        self.scrollView = [[UIScrollView alloc] init];
-        self.scrollView.delegate = self;
-        self.scrollView.scrollsToTop = NO;
-        self.scrollView.showsVerticalScrollIndicator = NO;
-        self.scrollView.showsHorizontalScrollIndicator = NO;
-        [self addSubview:self.scrollView];
-    }
+    if (!self) return nil;
+    
+    self.scrollingDirection = 0;
+    self.isInitialized = NO;
+    self.isScrolling = NO;
+    self.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    
+    self.scrollView = [[UIScrollView alloc] init];
+    self.scrollView.delegate = self;
+    self.scrollView.scrollsToTop = NO;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    [self addSubview:self.scrollView];
     return self;
 }
 
@@ -72,20 +73,6 @@ static const NSInteger kCacheSize = 5;
     
     [super updateConstraints];
 }
-
-- (void)positionCell:(UIView *)cell {
-    NSInteger index = cell.tag - 100;
-    CGFloat offsetX = index * self.tableSize.width;
-    cell.frame = CGRectMake(offsetX + LCPadding / 2, 0, self.tableSize.width - LCPadding, self.tableSize.height);
-//    [cell remakeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(@0);
-//        make.left.equalTo(@(offsetX + LCPadding / 2));
-//        make.width.equalTo(@(self.tableSize.width - LCPadding));
-//        make.height.equalTo(@(self.tableSize.height));
-//    }];
-}
-
-#pragma mark UI Event
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -103,7 +90,7 @@ static const NSInteger kCacheSize = 5;
     
     if (tableSizeChanged) {
         for (UIView *cellIter in self.displayCellArray) {
-            [self positionCell:cellIter];
+            [self p_positionCell:cellIter];
             [cellIter setNeedsUpdateConstraints];
         }
     }
@@ -116,6 +103,8 @@ static const NSInteger kCacheSize = 5;
     }
 }
 
+#pragma mark - <UIScrollViewDelegate>
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     static NSInteger oldOffset = 0;
     if (self.scrollView.contentOffset.x > oldOffset) {
@@ -127,9 +116,9 @@ static const NSInteger kCacheSize = 5;
     }
     oldOffset = self.scrollView.contentOffset.x;
     if (!self.isInitialized) return;
-    NSInteger index = [self indexForOffsetX:scrollView.contentOffset.x] + (self.tableDisplayCount - 1) / 2;
+    NSInteger index = [self p_indexForOffsetX:scrollView.contentOffset.x] + (self.tableDisplayCount - 1) / 2;
     if (index != self.currentIndex) {
-        [self prepareForCellAtIndex:index];
+        [self p_prepareForCellAtIndex:index];
         [self setCurrentIndex:index correctOffset:NO];
     }
 }
@@ -146,7 +135,7 @@ static const NSInteger kCacheSize = 5;
     self.isScrolling = NO;
 }
 
-#pragma mark Private Property
+#pragma mark - Private Methods
 
 - (NSMutableArray *)displayCellArray {
     if (!_displayCellArray) _displayCellArray = [[NSMutableArray alloc] init];
@@ -158,47 +147,15 @@ static const NSInteger kCacheSize = 5;
     return _reusableCellArray;
 }
 
-#pragma mark Public Property
-
-- (NSInteger)currentIndex {
-    return self.isInitialized ? _currentIndex : self.initIndex;
-}
-
-- (void)setCurrentIndex:(NSInteger)currentIndex {
-    [self setCurrentIndex:currentIndex correctOffset:YES];
-}
-
-- (void)setCurrentIndex:(NSInteger)currentIndex correctOffset:(BOOL)correctOffset {
-    NSInteger minIndex = (self.tableDisplayCount - 1) / 2;
-    NSInteger maxIndex = kTableCount - self.tableDisplayCount / 2 - 1;
-    if (currentIndex > maxIndex) currentIndex = maxIndex;
-    if (currentIndex < minIndex) currentIndex = minIndex;
-    BOOL isChanged = (_currentIndex != currentIndex);
-    _currentIndex = currentIndex;
-
-    if (isChanged && !self.isScrolling) {
-        [self.delegate horizontalTableView:self scrollToIndex:currentIndex];
-    }
-    
-    CGFloat newOffset = self.tableSize.width * (currentIndex - (self.tableDisplayCount - 1) / 2);
-    [self prepareForCellAtIndex:currentIndex];
-    if (correctOffset) {
-        [self.scrollView setContentOffset:CGPointMake(newOffset, 0) animated:YES];
-        self.isScrolling = YES;
-    }
-}
-
-#pragma mark Private Methods
-
-- (NSInteger)indexForOffsetX:(CGFloat)offsetX {
+- (NSInteger)p_indexForOffsetX:(CGFloat)offsetX {
     return (offsetX + self.tableSize.width / 2) / self.tableSize.width;
 }
 
-- (NSInteger)indexForCell:(__kindof UIView *)cell {
-    return [self indexForOffsetX:cell.frame.origin.x];
+- (NSInteger)p_indexForCell:(__kindof UIView *)cell {
+    return [self p_indexForOffsetX:cell.frame.origin.x];
 }
 
-- (void)prepareForCellAtIndex:(NSInteger)index {
+- (void)p_prepareForCellAtIndex:(NSInteger)index {
     NSInteger indexBegin = index - (self.tableDisplayCount - 1) / 2 - kCacheSize;
     NSInteger indexEnd = index + self.tableDisplayCount / 2 + 1 + kCacheSize;
     if (indexBegin < 0) indexBegin = 0;
@@ -207,7 +164,7 @@ static const NSInteger kCacheSize = 5;
     int i = 0;
     while (i < [self.displayCellArray count]) {
         UIView *cell = self.displayCellArray[i];
-        NSInteger iterIndex = [self indexForCell:cell];
+        NSInteger iterIndex = [self p_indexForCell:cell];
         if (iterIndex < indexBegin - 1 || iterIndex > indexEnd + 1) {
             [self.reusableCellArray addObject:cell];
             [self.displayCellArray removeObject:cell];
@@ -230,11 +187,45 @@ static const NSInteger kCacheSize = 5;
             [self.displayCellArray addObject:cell];
             [self.scrollView addSubview:cell];
         }
-        [self positionCell:cell];
+        [self p_positionCell:cell];
     }
 }
 
-#pragma mark Public Methods
+- (void)p_positionCell:(UIView *)cell {
+    NSInteger index = cell.tag - 100;
+    CGFloat offsetX = index * self.tableSize.width;
+    cell.frame = CGRectMake(offsetX + LCPadding / 2, 0, self.tableSize.width - LCPadding, self.tableSize.height);
+}
+
+#pragma mark - Public Methods
+
+- (NSInteger)currentIndex {
+    return self.isInitialized ? _currentIndex : self.initIndex;
+}
+
+- (void)setCurrentIndex:(NSInteger)currentIndex {
+    [self setCurrentIndex:currentIndex correctOffset:YES];
+}
+
+- (void)setCurrentIndex:(NSInteger)currentIndex correctOffset:(BOOL)correctOffset {
+    NSInteger minIndex = (self.tableDisplayCount - 1) / 2;
+    NSInteger maxIndex = kTableCount - self.tableDisplayCount / 2 - 1;
+    if (currentIndex > maxIndex) currentIndex = maxIndex;
+    if (currentIndex < minIndex) currentIndex = minIndex;
+    BOOL isChanged = (_currentIndex != currentIndex);
+    _currentIndex = currentIndex;
+    
+    if (isChanged && !self.isScrolling) {
+        [self.delegate horizontalTableView:self scrollToIndex:currentIndex];
+    }
+    
+    CGFloat newOffset = self.tableSize.width * (currentIndex - (self.tableDisplayCount - 1) / 2);
+    [self p_prepareForCellAtIndex:currentIndex];
+    if (correctOffset) {
+        [self.scrollView setContentOffset:CGPointMake(newOffset, 0) animated:YES];
+        self.isScrolling = YES;
+    }
+}
 
 - (void)registerClass:(Class)cellClass {
     self.cellClass = cellClass;

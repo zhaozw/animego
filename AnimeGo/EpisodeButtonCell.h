@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, EpisodeButtonCellStatus) {
 
 @interface EpisodeButtonCell : UICollectionViewCell
 
-@property (strong, nonatomic) NSString *title;
-@property (nonatomic) EpisodeButtonCellStatus status;
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, assign) EpisodeButtonCellStatus status;
 
 @end

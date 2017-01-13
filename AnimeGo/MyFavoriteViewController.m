@@ -11,6 +11,8 @@
 #import "MainViewController.h"
 #import "LayoutConstant.h"
 
+#import "AGRequest.h"
+
 #define MAS_SHORTHAND
 #import "Masonry.h"
 
@@ -19,17 +21,14 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
 
 @interface MyFavoriteViewController ()
 
-@property (strong, nonatomic) UICollectionView *collectionView;
-@property (strong, nonatomic) NSBlockOperation *blockOperation;
-@property (nonatomic) BOOL shouldReloadCollectionView;
-@property (nonatomic) BOOL isFirstTimeAppear;
-@property (nonatomic) BOOL isVisible;
+@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, assign) BOOL isFirstTimeAppear;
 
 @end
 
 @implementation MyFavoriteViewController
 
-#pragma mark - Life Cycle Methods
+#pragma mark - UIViewController (super class)
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -57,8 +56,8 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
     [self.collectionView makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.mas_topLayoutGuide);
         make.bottom.equalTo(self.mas_bottomLayoutGuide);
-        make.left.equalTo(self.view.left);
-        make.right.equalTo(self.view.right);
+        make.left.equalTo(@0);
+        make.right.equalTo(@0);
     }];
 }
 
@@ -79,6 +78,8 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
     self.parentViewController.navigationItem.rightBarButtonItem = nil;
 }
 
+#pragma mark - FetcherViewController (super class)
+
 - (void)contentNeedUpdateNofification {
     // Need not to fetch data here
     // MainViewController will fetch data
@@ -91,7 +92,29 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
     [self updateUI];
 }
 
-#pragma mark <UICollectionViewDataSource>
+- (NSFetchRequest *)fetchRequest {
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Bangumi"];
+    request.predicate = [NSPredicate predicateWithFormat:@"isFavorite == TRUE"];
+    NSSortDescriptor *prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
+    NSSortDescriptor *hotSort = [NSSortDescriptor sortDescriptorWithKey:@"hot" ascending:NO];
+    [request setSortDescriptors:@[prioritySort, hotSort]];
+    return request;
+}
+
+- (NSTimeInterval)autoRefreshTimeInterval {
+    return kAutoRefreshTimeInterval;
+}
+
+- (void)updateUI {
+    [self.collectionView reloadData];
+}
+
+- (void)fetchRemoteData {
+    AGRequest *request = [[AGRequest alloc] init];
+    [[request fetchMyFavorite] subscribeCompleted:^{ }];
+}
+
+#pragma mark - <UICollectionViewDataSource>
 
 - (void)configureCell:(id)cell atIndexPath:(NSIndexPath*)indexPath {
     id object = [self.fetchedResultsController objectAtIndexPath:indexPath];
@@ -119,41 +142,14 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
     return cell;
 }
 
-#pragma mark <UICollectionViewDelegate>
+#pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     id object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     if ([object isKindOfClass:[Bangumi class]]) {
         Bangumi *bangumi = (Bangumi *)object;
-        [self.parentViewController performSegueWithIdentifier:kSegueIdentifier sender:bangumi.identifier];
+        [self.parentViewController performSegueWithIdentifier:AGShowDetailSegueIdentifier sender:bangumi.identifier];
     }
-}
-
-#pragma mark - Protected Methods
-
-- (NSFetchRequest *)fetchRequest {
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Bangumi"];
-    request.predicate = [NSPredicate predicateWithFormat:@"isFavorite == TRUE"];
-    NSSortDescriptor *prioritySort = [NSSortDescriptor sortDescriptorWithKey:@"priority" ascending:NO];
-    NSSortDescriptor *hotSort = [NSSortDescriptor sortDescriptorWithKey:@"hot" ascending:NO];
-    [request setSortDescriptors:@[prioritySort, hotSort]];
-    return request;
-}
-
-- (NSTimeInterval)autoRefreshTimeInterval {
-    return kAutoRefreshTimeInterval;
-}
-
-- (void)updateUI {
-    [self.collectionView reloadData];
-}
-
-#pragma mark - Private Methods
-
-- (void)fetchRemoteData {
-    [self fetchMyFavoriteSuccess:nil
-                 connectionError:nil
-                     serverError:nil];
 }
 
 @end

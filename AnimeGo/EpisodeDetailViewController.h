@@ -12,9 +12,9 @@
 
 @interface EpisodeDetailViewController : FetcherViewController
 
-@property (readonly, nonatomic) NSString *url;
+@property (nonatomic, readonly) NSString *url;
 
-@property (strong, nonatomic) NSNumber *bangumiIdentifier;
-@property (strong, nonatomic) NSNumber *episodeNumber;
+@property (nonatomic, strong) NSNumber *bangumiIdentifier;
+@property (nonatomic, strong) NSNumber *episodeNumber;
 
 @end

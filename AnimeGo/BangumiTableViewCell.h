@@ -11,6 +11,6 @@
 
 @interface BangumiTableViewCell : UITableViewCell
 
-@property (strong, nonatomic) Schedule *schedule;
+@property (nonatomic, strong) Schedule *schedule;
 
 @end

@@ -1,60 +1,60 @@
 //
-//  NSDate+Convert.m
+//  NSDate+Format.m
 //  AnimeGo
 //
 //  Created by Chaoran Li on 2016/12/3.
 //  Copyright © 2016年 Chaoran Li. All rights reserved.
 //
 
-#import "NSDate+Convert.h"
+#import "NSDate+Format.h"
 
 static NSString * const kOrginDate = @"2016-10-30";
 static const NSInteger kSecondsFromGMT = 8 * 60 * 60;
 static const NSInteger kDayTimeInterval = 24 * 60 * 60;
 
-@implementation NSDate (Convert)
+@implementation NSDate (Format)
 
-+ (NSArray *)weekdayNameArray {
++ (NSArray *)ag_weekdayNameArray {
     return @[@"", @"星期日", @"星期一", @"星期二", @"星期三", @"星期四", @"星期五", @"星期六"];
 }
 
-+ (NSDate *)dateToday {
-    return [NSDate dateFromString:[[[NSDate alloc] init] toString]];
++ (NSDate *)ag_dateToday {
+    return [NSDate ag_dateFromString:[[[NSDate alloc] init] ag_toString]];
 }
 
-+ (NSDate *)dateFromString:(NSString *)string {
++ (NSDate *)ag_dateFromString:(NSString *)string {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:kSecondsFromGMT];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     return [formatter dateFromString:string];
 }
 
-+ (NSDate *)dateFromIndex:(NSInteger)index {
-    return [[NSDate dateFromString:kOrginDate] dateByAddingTimeInterval:kDayTimeInterval * index];
++ (NSDate *)ag_dateFromIndex:(NSInteger)index {
+    return [[NSDate ag_dateFromString:kOrginDate] dateByAddingTimeInterval:kDayTimeInterval * index];
 }
 
-- (NSString *)toString {
+- (NSString *)ag_toString {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:kSecondsFromGMT];
     [formatter setDateFormat:@"yyyy-MM-dd"];
     return [formatter stringFromDate:self];
 }
 
-- (NSString *)toShortString {
+- (NSString *)ag_toShortString {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:kSecondsFromGMT];
     [formatter setDateFormat:@"MM-dd"];
     return [formatter stringFromDate:self];
 }
 
-- (NSInteger)toWeekday {
+- (NSInteger)ag_toWeekday {
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     calendar.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:kSecondsFromGMT];
     return [calendar component:NSCalendarUnitWeekday fromDate:self];
 }
 
-- (NSInteger)toIndex {
-    double interval = [self timeIntervalSinceDate:[NSDate dateFromString:kOrginDate]];
+- (NSInteger)ag_toIndex {
+    double interval = [self timeIntervalSinceDate:[NSDate ag_dateFromString:kOrginDate]];
     return floor(interval / kDayTimeInterval + 0.5);
 }
 

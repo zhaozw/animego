@@ -7,45 +7,49 @@
 //
 
 #import "IndicatorBarButton.h"
+
+#import <ReactiveObjC.h>
 #import "LayoutConstant.h"
 
 @interface IndicatorBarButton ()
 
-@property (strong, nonatomic, readwrite) UIButton *button;
-@property (strong, nonatomic) UIView *indicatorView;
+@property (nonatomic, strong) UIButton *button;
+@property (nonatomic, strong) UIView *indicatorView;
 
 @end
 
 @implementation IndicatorBarButton
 
-- (instancetype)initWithTitle:(NSString *)title indicatorColor:(UIColor *)color target:(id)target action:(SEL)action {
+#pragma mark - Public Methods
+
+- (instancetype)initWithTitle:(NSString *)title color:(UIColor *)color {
     self = [super init];
-    if (self) {
-        self.button = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.button setTitle:title forState:UIControlStateNormal];
-        CGSize size = self.button.intrinsicContentSize;
-        self.button.frame = CGRectMake(0, 0, size.width, size.height);
-        [self.button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:self.button];
-        
-        self.indicatorView = [[UIView alloc] init];
-        self.indicatorView.backgroundColor = color;
-        self.indicatorView.frame = CGRectMake(0, size.height - LCSelectedIndicatorHeight,
-                                              size.width, LCSelectedIndicatorHeight);
-        [self addSubview:self.indicatorView];
-        
-        self.frame = CGRectMake(0, 0, size.width, size.height);
-        self.indicator = NO;
-    }
+    if (!self) return nil;
+
+    self.button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.button setTitle:title forState:UIControlStateNormal];
+    CGSize size = self.button.intrinsicContentSize;
+    self.button.frame = CGRectMake(0, 0, size.width, size.height);
+    [self addSubview:self.button];
+    
+    self.indicatorView = [[UIView alloc] init];
+    self.indicatorView.backgroundColor = color;
+    self.indicatorView.frame = CGRectMake(0, size.height - LCSelectedIndicatorHeight,
+                                          size.width, LCSelectedIndicatorHeight);
+    [self addSubview:self.indicatorView];
+    
+    self.frame = CGRectMake(0, 0, size.width, size.height);
+    
+    RAC(self, indicatorView.hidden) = [RACObserve(self, indicator) map:^id _Nullable(NSNumber *indicator) {
+        return @(!(indicator.boolValue));
+    }];
+    
+    self.indicator = NO;
     return self;
 }
 
-- (BOOL)indicator {
-    return !self.indicatorView.hidden;
-}
-
-- (void)setIndicator:(BOOL)indicator {
-    self.indicatorView.hidden = !indicator;
+- (RACSignal *)touchSignal {
+    return [self.button rac_signalForControlEvents:UIControlEventTouchUpInside];
 }
 
 @end

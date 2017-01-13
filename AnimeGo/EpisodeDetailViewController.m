@@ -7,99 +7,66 @@
 //
 
 #import "EpisodeDetailViewController.h"
+
+#import "RoundRectSwitcher.h"
+#import "LayoutConstant.h"
+
+#import "NSDate+Format.h"
+
 #import "Bangumi+Create.h"
 #import "Schedule+Create.h"
 #import "NetworkConstant.h"
-#import "NSDate+Convert.h"
-#import "LayoutConstant.h"
 #import "NotificationManager.h"
+#import "AGRequest.h"
 
 #define MAS_SHORTHAND
 #import "Masonry.h"
 
 @interface EpisodeDetailViewController ()
 
-@property (strong, nonatomic) Schedule *schedule;
+@property (nonatomic, strong) Schedule *schedule;
+@property (nonatomic, strong) NSNumber *undoEpisodeNumber;
 
-@property (strong, nonatomic) UIView *contentView;
-@property (strong, nonatomic) UILabel *titleLabel;
-@property (strong, nonatomic) UILabel *statusLabel;
-@property (strong, nonatomic) UILabel *captionLabel;
-@property (strong, nonatomic) UIButton *openByBrowserButton;
-@property (strong, nonatomic) UILabel *openByBrowserLabel;
-@property (strong, nonatomic) UIButton *openByAppButton;
-@property (strong, nonatomic) UILabel *openByAppLabel;
+@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) RoundRectSwitcher *markSwitcher;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *statusLabel;
+@property (nonatomic, strong) UILabel *captionLabel;
+@property (nonatomic, strong) UIButton *openByBrowserButton;
+@property (nonatomic, strong) UILabel *openByBrowserLabel;
+@property (nonatomic, strong) UIButton *openByAppButton;
+@property (nonatomic, strong) UILabel *openByAppLabel;
 
 @end
 
 @implementation EpisodeDetailViewController
 
-#pragma mark - Life Cycle Mothods
+#pragma mark - UIViewController (super class)
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.contentView = [[UIView alloc] init];
-    [self.view addSubview:self.contentView];
-    
-    self.titleLabel = [[UILabel alloc] init];
-    self.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    self.titleLabel.text = @"正在加载 ...";
-    self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.contentView addSubview:self.titleLabel];
-    
-    self.statusLabel = [[UILabel alloc] init];
-    self.statusLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.contentView addSubview:self.statusLabel];
-    
-    self.captionLabel = [[UILabel alloc] init];
-    self.captionLabel.text = @"在线观看";
-    self.captionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    self.captionLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    self.openByBrowserButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.openByBrowserButton addTarget:self
-                                action:@selector(touchopenByBrowserButton)
-                       forControlEvents:UIControlEventTouchUpInside];
-    self.openByBrowserButton.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    self.openByBrowserLabel = [[UILabel alloc] init];
-    self.openByBrowserLabel.text = @"浏览器";
-    self.openByBrowserLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    self.openByBrowserLabel.translatesAutoresizingMaskIntoConstraints = NO;
-
-    
-    self.openByAppButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.openByAppButton addTarget:self
-                             action:@selector(touchopenByAppButton)
-                   forControlEvents:UIControlEventTouchUpInside];
-    self.openByAppButton.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    self.openByAppLabel = [[UILabel alloc] init];
-    self.openByAppLabel.text = @"客户端";
-    self.openByAppLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-    self.openByAppLabel.translatesAutoresizingMaskIntoConstraints = NO;
-
-    [self.contentView makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@0);
-        make.top.equalTo(@0);
-    }];
-    
-    [self.titleLabel makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(LCPadding));
-        make.right.lessThanOrEqualTo(@(-LCPadding));
-        make.top.equalTo(@(LCPadding));
-    }];
-    
-    [self.statusLabel makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(LCPadding));
-        make.right.lessThanOrEqualTo(@(-LCPadding));
-        make.top.equalTo(self.titleLabel.bottom).with.offset(LCPadding);
-        make.bottom.lessThanOrEqualTo(@(-LCPadding));
-    }];
-
+    [self p_addSubviews];
+    [self p_addConstraints];
     self.preferredContentSize = [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    
+    [[self.markSwitcher.touchSignal
+      deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(id  _Nullable x) {
+         [self p_touchMarkButton];
+     }];
+    
+    [[[self.openByBrowserButton rac_signalForControlEvents:UIControlEventTouchUpInside]
+      deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(__kindof UIControl * _Nullable x) {
+         [self p_touchOpenByBrowserButton];
+     }];
+    
+    [[[self.openByAppButton rac_signalForControlEvents:UIControlEventTouchUpInside]
+      deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(__kindof UIControl * _Nullable x) {
+         [self p_touchOpenByAppButton];
+     }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -107,116 +74,7 @@
     [self updateUI];
 }
 
-- (void)doJumpToEpisode {
-    [self performSegueWithIdentifier:@"Back" sender:self];
-}
-
-#pragma mark - Layout Methods
-
-- (void)showCaptionLabel:(BOOL)show {
-    if (show && !self.captionLabel.superview) {
-        [self.contentView addSubview:self.captionLabel];
-        
-        [self.captionLabel remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@(LCPadding));
-            make.right.lessThanOrEqualTo(@(-LCPadding));
-            make.top.equalTo(self.statusLabel.bottom).with.offset(LCPaddingLarge);
-            make.bottom.lessThanOrEqualTo(@(-LCPadding));
-        }];
-    } else if (!show && self.captionLabel.superview) {
-        [self.captionLabel removeFromSuperview];
-    }
-}
-
-- (void)showOpenByBrowserButton:(BOOL)show {
-    if (show && !self.openByBrowserButton.superview) {
-        [self.contentView addSubview:self.openByBrowserButton];
-        [self.contentView addSubview:self.openByBrowserLabel];
-        
-        [self.openByBrowserButton remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@(LCPadding));
-            make.right.lessThanOrEqualTo(@(-LCPadding));
-            make.top.equalTo(self.captionLabel.bottom).with.offset(LCPadding);
-            make.height.equalTo(@(LCAppIconLength));
-            make.width.equalTo(@(LCAppIconLength));
-            make.bottom.lessThanOrEqualTo(@(-LCPadding));
-        }];
-        [self.openByBrowserLabel makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(self.openByBrowserButton);
-            make.right.lessThanOrEqualTo(@(-LCPadding));
-            make.top.equalTo(self.openByBrowserButton.bottom).with.offset(LCPadding);
-            make.bottom.lessThanOrEqualTo(@(-LCPadding));
-        }];
-    } else if (!show && self.openByBrowserButton.superview) {
-        [self.openByBrowserButton removeFromSuperview];
-        [self.openByBrowserLabel removeFromSuperview];
-    }
-}
-
-- (void)showOpenByAppButton:(BOOL)show {
-    if (show && !self.openByAppButton.superview) {
-        [self.contentView addSubview:self.openByAppButton];
-        [self.contentView addSubview:self.openByAppLabel];
-        
-        [self.openByAppButton remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.greaterThanOrEqualTo(self.openByBrowserButton.right).with.offset(LCPadding);
-            make.left.equalTo(@(LCPadding)).priority(500);
-            make.top.equalTo(self.captionLabel.bottom).with.offset(LCPadding);
-            make.right.lessThanOrEqualTo(@(-LCPadding));
-            make.height.equalTo(@(LCAppIconLength));
-            make.width.equalTo(@(LCAppIconLength));
-            make.bottom.lessThanOrEqualTo(@(-LCPadding));
-        }];
-        [self.openByAppLabel makeConstraints:^(MASConstraintMaker *make) {
-            make.left.greaterThanOrEqualTo(self.openByBrowserLabel.right).with.offset(LCPadding);
-            make.centerX.equalTo(self.openByAppButton);
-            make.right.lessThanOrEqualTo(@(-LCPadding));
-            make.top.equalTo(self.openByAppButton.bottom).with.offset(LCPadding);
-            make.bottom.lessThanOrEqualTo(@(-LCPadding));
-        }];
-    } else if (!show && self.openByAppButton.superview) {
-        [self.openByAppButton removeFromSuperview];
-        [self.openByAppLabel removeFromSuperview];
-    }
-}
-
-#pragma mark - Private Methods
-
-- (void)updateWatchedEpisodes {
-    [self updateMyProgressWithBangumiId:self.schedule.bangumi.identifier
-                             isFavorite:self.schedule.bangumi.isFavorite
-                     lastWatchedEpisode:self.schedule.episodeNumber
-                                success:nil
-                        connectionError:nil
-                            serverError:nil];
-}
-
-- (void)touchopenByBrowserButton {
-    NSString *url = self.schedule.webURL;
-    [self dismissViewControllerAnimated:NO completion:nil];
-    [self updateWatchedEpisodes];
-    [self openURL:url];
-}
-
-- (void)touchopenByAppButton {
-    NSString *url = [self.schedule suitableAppURL];
-    [self dismissViewControllerAnimated:NO completion:nil];
-    [self updateWatchedEpisodes];
-    [self openURL:url];
-}
-
-- (void)openURL:(NSString *)url {
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]
-                                           options:@{}
-                                 completionHandler:nil];
-        
-    } else {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
-    }
-}
-
-#pragma mask - Protected Methods
+#pragma mark - FetcherViewController (super class)
 
 - (NSFetchRequest *)fetchRequest {
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Schedule"];
@@ -241,24 +99,28 @@
     if (self.schedule) {
         switch (self.schedule.status.integerValue) {
             case AGScheduleStatusNotReleased:
-                self.statusLabel.text = [NSString stringWithFormat:@"将于 %@ 更新", [self.schedule.releaseDate toString]];
+                self.markSwitcher.hidden = YES;
+                self.statusLabel.text = [NSString stringWithFormat:@"将于 %@ 更新", [self.schedule.releaseDate ag_toString]];
                 break;
             case AGScheduleStatusReleased:
-                self.statusLabel.text = [NSString stringWithFormat:@"已于 %@ 更新", [self.schedule.releaseDate toString]];
+                self.markSwitcher.hidden = NO;
+                self.statusLabel.text = [NSString stringWithFormat:@"已于 %@ 更新", [self.schedule.releaseDate ag_toString]];
                 break;
             case AGScheduleStatusCanceled:
                 ;
-            default:
-                ;
         }
+        
+        BOOL mark = (self.schedule.episodeNumber.integerValue == self.schedule.bangumi.lastWatchedEpisode.integerValue);
+        self.markSwitcher.status = mark;
+        self.markSwitcher.enabled = !mark || self.undoEpisodeNumber;
         
         BOOL hasBrowserURL = self.schedule.webURL && ![self.schedule.webURL isEqualToString:@""];
         NSString *appURL = [self.schedule suitableAppURL];
         BOOL canOpenApp = appURL && ![appURL isEqualToString:@""]
-            && [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appURL]];
-        [self showCaptionLabel:(hasBrowserURL || canOpenApp)];
-        [self showOpenByBrowserButton:hasBrowserURL];
-        [self showOpenByAppButton:canOpenApp];
+        && [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:appURL]];
+        [self p_showCaptionLabel:(hasBrowserURL || canOpenApp)];
+        [self p_showOpenByBrowserButton:hasBrowserURL];
+        [self p_showOpenByAppButton:canOpenApp];
         
         if (hasBrowserURL) {
             self.openByBrowserLabel.text = @"浏览器";
@@ -293,7 +155,200 @@
     self.preferredContentSize = [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
-#pragma mask - Public Properties
+- (void)doJumpToEpisode {
+    [self performSegueWithIdentifier:@"Back" sender:self];
+}
+
+#pragma mark - Private Methods
+
+- (void)p_addSubviews {
+    self.contentView = [[UIView alloc] init];
+    [self.view addSubview:self.contentView];
+    
+    self.markSwitcher = [[RoundRectSwitcher alloc] init];
+    self.markSwitcher.imageOn = [UIImage imageNamed:@"mark_on"];
+    self.markSwitcher.imageOff = [UIImage imageNamed:@"mark_off"];
+    [self.contentView addSubview:self.markSwitcher];
+    
+    self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    self.titleLabel.text = @"正在加载 ...";
+    self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.contentView addSubview:self.titleLabel];
+    
+    self.statusLabel = [[UILabel alloc] init];
+    self.statusLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    self.statusLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.contentView addSubview:self.statusLabel];
+    
+    self.captionLabel = [[UILabel alloc] init];
+    self.captionLabel.text = @"在线观看";
+    self.captionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    self.captionLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.openByBrowserButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.openByBrowserButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.openByBrowserLabel = [[UILabel alloc] init];
+    self.openByBrowserLabel.text = @"浏览器";
+    self.openByBrowserLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    self.openByBrowserLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    
+    self.openByAppButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.openByAppButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.openByAppLabel = [[UILabel alloc] init];
+    self.openByAppLabel.text = @"客户端";
+    self.openByAppLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    self.openByAppLabel.translatesAutoresizingMaskIntoConstraints = NO;
+}
+
+- (void)p_addConstraints {
+    [self.contentView makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@0);
+        make.top.equalTo(@0);
+    }];
+    
+    [self.markSwitcher makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.titleLabel);
+        make.right.equalTo(@(-LCPadding));
+        make.width.equalTo(self.markSwitcher.height);
+        make.height.equalTo(self.titleLabel);
+    }];
+    
+    [self.titleLabel makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@(LCPadding));
+        make.right.lessThanOrEqualTo(self.markSwitcher.left).with.offset(-LCPadding);
+        make.top.equalTo(@(LCPadding));
+    }];
+    
+    [self.titleLabel setContentHuggingPriority:UILayoutPriorityRequired
+                                       forAxis:UILayoutConstraintAxisVertical];
+    
+    [self.statusLabel makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@(LCPadding));
+        make.right.lessThanOrEqualTo(@(-LCPadding));
+        make.top.equalTo(self.titleLabel.bottom).with.offset(LCPadding);
+        make.bottom.lessThanOrEqualTo(@(-LCPadding));
+    }];
+}
+
+- (void)p_showCaptionLabel:(BOOL)show {
+    if (show && !self.captionLabel.superview) {
+        [self.contentView addSubview:self.captionLabel];
+        
+        [self.captionLabel remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(@(LCPadding));
+            make.right.lessThanOrEqualTo(@(-LCPadding));
+            make.top.equalTo(self.statusLabel.bottom).with.offset(LCPaddingLarge);
+            make.bottom.lessThanOrEqualTo(@(-LCPadding));
+        }];
+    } else if (!show && self.captionLabel.superview) {
+        [self.captionLabel removeFromSuperview];
+    }
+}
+
+- (void)p_showOpenByBrowserButton:(BOOL)show {
+    if (show && !self.openByBrowserButton.superview) {
+        [self.contentView addSubview:self.openByBrowserButton];
+        [self.contentView addSubview:self.openByBrowserLabel];
+        
+        [self.openByBrowserButton remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(@(LCPadding));
+            make.right.lessThanOrEqualTo(@(-LCPadding));
+            make.top.equalTo(self.captionLabel.bottom).with.offset(LCPadding);
+            make.height.equalTo(@(LCAppIconLength));
+            make.width.equalTo(@(LCAppIconLength));
+            make.bottom.lessThanOrEqualTo(@(-LCPadding));
+        }];
+        [self.openByBrowserLabel makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.openByBrowserButton);
+            make.right.lessThanOrEqualTo(@(-LCPadding));
+            make.top.equalTo(self.openByBrowserButton.bottom).with.offset(LCPadding);
+            make.bottom.lessThanOrEqualTo(@(-LCPadding));
+        }];
+    } else if (!show && self.openByBrowserButton.superview) {
+        [self.openByBrowserButton removeFromSuperview];
+        [self.openByBrowserLabel removeFromSuperview];
+    }
+}
+
+- (void)p_showOpenByAppButton:(BOOL)show {
+    if (show && !self.openByAppButton.superview) {
+        [self.contentView addSubview:self.openByAppButton];
+        [self.contentView addSubview:self.openByAppLabel];
+        
+        [self.openByAppButton remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.greaterThanOrEqualTo(self.openByBrowserButton.right).with.offset(LCPadding);
+            make.left.equalTo(@(LCPadding)).priority(500);
+            make.top.equalTo(self.captionLabel.bottom).with.offset(LCPadding);
+            make.right.lessThanOrEqualTo(@(-LCPadding));
+            make.height.equalTo(@(LCAppIconLength));
+            make.width.equalTo(@(LCAppIconLength));
+            make.bottom.lessThanOrEqualTo(@(-LCPadding));
+        }];
+        [self.openByAppLabel makeConstraints:^(MASConstraintMaker *make) {
+            make.left.greaterThanOrEqualTo(self.openByBrowserLabel.right).with.offset(LCPadding);
+            make.centerX.equalTo(self.openByAppButton);
+            make.right.lessThanOrEqualTo(@(-LCPadding));
+            make.top.equalTo(self.openByAppButton.bottom).with.offset(LCPadding);
+            make.bottom.lessThanOrEqualTo(@(-LCPadding));
+        }];
+    } else if (!show && self.openByAppButton.superview) {
+        [self.openByAppButton removeFromSuperview];
+        [self.openByAppLabel removeFromSuperview];
+    }
+}
+
+- (void)p_updateWatchedEpisodes {
+    AGRequest *request = [[AGRequest alloc] init];
+    [[request updateMyProgressWithBangumiId:self.schedule.bangumi.identifier
+                                 isFavorite:self.schedule.bangumi.isFavorite
+                         lastWatchedEpisode:self.schedule.episodeNumber]
+     subscribeCompleted:^ { }];
+}
+
+- (void)p_touchMarkButton {
+    if (self.markSwitcher.status) {
+        self.undoEpisodeNumber = self.schedule.bangumi.lastWatchedEpisode;
+        [self p_updateWatchedEpisodes];
+    } else {
+        AGRequest *request = [[AGRequest alloc] init];
+        [[request updateMyProgressWithBangumiId:self.schedule.bangumi.identifier
+                                     isFavorite:self.schedule.bangumi.isFavorite
+                             lastWatchedEpisode:self.undoEpisodeNumber]
+         subscribeCompleted:^ { }];
+        self.undoEpisodeNumber = nil;
+    }
+}
+
+- (void)p_touchOpenByBrowserButton {
+    NSString *url = self.schedule.webURL;
+    [self dismissViewControllerAnimated:NO completion:nil];
+    [self p_updateWatchedEpisodes];
+    [self p_openURL:url];
+}
+
+- (void)p_touchOpenByAppButton {
+    NSString *url = [self.schedule suitableAppURL];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    [self p_updateWatchedEpisodes];
+    [self p_openURL:url];
+}
+
+- (void)p_openURL:(NSString *)url {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]
+                                           options:@{}
+                                 completionHandler:nil];
+        
+    } else {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+    }
+}
+
+#pragma mark - Public Methods
 
 - (NSString *)url {
     return self.schedule.webURL;

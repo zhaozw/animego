@@ -11,14 +11,12 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, strong) UIWindow *window;
 
-@property (readonly, strong, nonatomic) NSManagedObjectContext *mainMOC;
-@property (readonly, strong, nonatomic) NSManagedObjectContext *privateMOC;
-@property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
-@property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCorrdinator;
-
-- (NSURL *)applicationDocumentsDirectory;
+@property (nonatomic, strong, readonly) NSManagedObjectContext *mainMOC;
+@property (nonatomic, strong, readonly) NSManagedObjectContext *privateMOC;
+@property (nonatomic, strong, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, strong, readonly) NSPersistentStoreCoordinator *persistentStoreCorrdinator;
 
 @end
 

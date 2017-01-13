@@ -31,10 +31,10 @@
 
 @interface VerticalTableView : UIView <UITableViewDelegate, UITableViewDataSource, NSFetchedResultsControllerDelegate>
 
-@property (strong, nonatomic) NSDate *date;
+@property (nonatomic, strong) NSDate *date;
 
-@property (weak, nonatomic) id<VerticalTableViewDelegate> delegate;
-@property (weak, nonatomic) id<VerticalTableViewDataSource> dataSource;
+@property (nonatomic, weak) id<VerticalTableViewDelegate> delegate;
+@property (nonatomic, weak) id<VerticalTableViewDataSource> dataSource;
 
 - (void)setRequest:(NSFetchRequest *)request withManagedObjectContext:(NSManagedObjectContext *)context;
 - (void)registerCellPrototypeClass:(Class)cellClass;

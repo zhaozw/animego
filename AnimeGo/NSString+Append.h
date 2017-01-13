@@ -10,6 +10,6 @@
 
 @interface NSString (Append)
 
-- (NSString *)stringByAppendingStringWithComma:(NSString *)aString;
+- (NSString *)ag_stringByAppendingStringWithComma:(NSString *)aString;
 
 @end

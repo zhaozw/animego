@@ -10,7 +10,7 @@
 
 @implementation NSString (Append)
 
-- (NSString *)stringByAppendingStringWithComma:(NSString *)aString {
+- (NSString *)ag_stringByAppendingStringWithComma:(NSString *)aString {
     if ([self isEqualToString:@""]) return aString;
     if ([aString isEqualToString:@""]) return self;
     return [NSString stringWithFormat:@"%@, %@", self, aString];

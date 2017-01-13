@@ -8,7 +8,7 @@
 
 #import "Bangumi+CoreDataClass.h"
 
-extern NSString * const kEntityNameBangumi;
+extern NSString * const AGEntityNameBangumi;
 
 @interface Bangumi (Create)
 
@@ -18,6 +18,10 @@ extern NSString * const kEntityNameBangumi;
 
 + (Bangumi *)getBangumiWithIdentifier:(NSNumber *)identifier
                inManagedObjectContext:(NSManagedObjectContext *)context;
+
++ (void)createBangumisWithArray:(NSArray *)bangumiArray
+         inManagedObjectContext:(NSManagedObjectContext *)context
+                       inDetail:(BOOL)detail;
 
 - (void)updateScheduleInfo;
 

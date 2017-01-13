@@ -1,39 +1,45 @@
 //
-//  CustomBadge.m
+//  CustomBadgeView.m
 //  AnimeGo
 //
 //  Created by Chaoran Li on 2016/12/4.
 //  Copyright © 2016年 Chaoran Li. All rights reserved.
 //
 
-#import "CustomBadge.h"
+#import "CustomBadgeView.h"
+
+#import <ReactiveObjC.h>
 #import "LayoutConstant.h"
 #import "UIColor+ExtraColor.h"
 
-@interface CustomBadge ()
+@interface CustomBadgeView ()
 
-@property (nonatomic) CGRect rectBounds;
+@property (nonatomic, assign) CGRect rectBounds;
 
 @end
 
-@implementation CustomBadge
+@implementation CustomBadgeView
 
-#pragma mark - Public Properties
+#pragma mark - UIView (super class)
 
-- (void)setIsFavorite:(BOOL)isFavorite {
-    if (_isFavorite == isFavorite) return;
-    _isFavorite = isFavorite;
-    [self setNeedsDisplay];
-}
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (!self) return nil;
 
-- (void)setEventCount:(NSInteger)eventCount {
-    if (_eventCount == eventCount) return;
-    _eventCount = eventCount;
-    [self setNeedsDisplay];
+    self.backgroundColor = nil;
+    self.opaque = NO;
+    self.contentMode = UIViewContentModeRedraw;
+    
+    [[[RACSignal merge:@[ RACObserve(self, favorite), RACObserve(self, eventCount) ]]
+      deliverOn:[RACScheduler mainThreadScheduler]]
+     subscribeNext:^(id  _Nullable x) {
+         [self setNeedsDisplay];
+     }];
+    return self;
 }
 
 - (void)drawRect:(CGRect)rect {
-    if (!self.isFavorite) return;
+    if (!self.favorite) return;
     
     UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
     CGFloat badgeHeight = (deviceType == UIUserInterfaceIdiomPad) ? LCCustomBadgeHeight : LCCustomBadgeHeightPhone;
@@ -54,7 +60,7 @@
         NSString *string = self.eventCount < 100 ? [NSString stringWithFormat:@"%ld", (long)self.eventCount] : @"99+";
         cornerText = [[NSAttributedString alloc] initWithString:string
                                                      attributes:attributes];
-
+        
         textRect.size = [cornerText size];
         NSInteger length = [cornerText length];
         CGFloat charWidth = [[NSAttributedString alloc] initWithString:@"0" attributes:attributes].size.width;
@@ -66,8 +72,8 @@
                                  badgeHeight);
     UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.rectBounds
                                                            cornerRadius:badgeHeight / 2];
-
-    [[UIColor pinkColor] setFill];
+    
+    [[UIColor ag_pinkColor] setFill];
     [roundedRect fill];
     
     if (self.eventCount) {
@@ -82,21 +88,9 @@
 - (CGSize)intrinsicContentSize {
     UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
     CGFloat badgeHeight = (deviceType == UIUserInterfaceIdiomPad) ? LCCustomBadgeHeight : LCCustomBadgeHeightPhone;
-
+    
     if (self.rectBounds.size.height < badgeHeight) return CGSizeMake(badgeHeight, badgeHeight);
     return self.rectBounds.size;
-}
-
-#pragma mark - Initialize
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.backgroundColor = nil;
-        self.opaque = NO;
-        self.contentMode = UIViewContentModeRedraw;
-    }
-    return self;
 }
 
 @end

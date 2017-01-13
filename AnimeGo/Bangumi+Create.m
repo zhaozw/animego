@@ -7,53 +7,38 @@
 //
 
 #import "Bangumi+Create.h"
+
 #import "Schedule+Create.h"
 #import "NetworkConstant.h"
 
-NSString * const kEntityNameBangumi = @"Bangumi";
+NSString * const AGEntityNameBangumi = @"Bangumi";
 
 @implementation Bangumi (Create)
+
+#pragma mark - Class Methods
 
 + (Bangumi *)createBangumiWithDictionary:(NSDictionary *)bangumiDictionary
                   inManagedObjectContext:(NSManagedObjectContext *)context
                                 inDetail:(BOOL)detail {
     
-    NSNumber *identifier = [bangumiDictionary valueForKey:AGBangumiKeyId];
-    BOOL deleted = ((NSNumber *)[bangumiDictionary valueForKey:AGBangumiKeyDeleted]).boolValue;
+    NSNumber *identifier = bangumiDictionary[AGBangumiKeyId];
+    BOOL deleted = ((NSNumber *) (bangumiDictionary[AGBangumiKeyDeleted])).boolValue;
     
     Bangumi *bangumi = [Bangumi getBangumiWithIdentifier:identifier
                                   inManagedObjectContext:context];
-
+    
     if (deleted) {
         if (bangumi) [context deleteObject:bangumi];
         return nil;
     }
     
     if (!bangumi) {
-        bangumi = [NSEntityDescription insertNewObjectForEntityForName:kEntityNameBangumi inManagedObjectContext:context];
+        bangumi = [NSEntityDescription insertNewObjectForEntityForName:AGEntityNameBangumi inManagedObjectContext:context];
     }
     
-    bangumi.identifier = identifier;
-    bangumi.title = [bangumiDictionary valueForKey:AGBangumiKeyTitle];
-    bangumi.hot = [bangumiDictionary valueForKey:AGBangumiKeyHot];
-    bangumi.coverImageURL = [bangumiDictionary valueForKey:AGBangumiKeyCoverImageURL];
-    bangumi.isFavorite = [bangumiDictionary valueForKey:AGBangumiKeyIsFavorite];
-    bangumi.releaseWeekday = [bangumiDictionary valueForKey:AGBangumiKeyReleaseWeekdays];
-    bangumi.totalEpisodes = [bangumiDictionary valueForKey:AGBangumiKeyTotalEpisodes];
-    bangumi.firstReleasedEpisode = [bangumiDictionary valueForKey:AGBangumiKeyFirstReleasedEpisode];
-    bangumi.lastReleasedEpisode = [bangumiDictionary valueForKey:AGBangumiKeyLastReleasedEpisode];
-    bangumi.lastWatchedEpisode = [bangumiDictionary valueForKey:AGBangumiKeyLastWatchedEpisode];
-    
-    bangumi.status = [bangumiDictionary valueForKey:AGBangumiKeyStatus];
-    
-    if (detail) {
-        bangumi.largeImageURL = [bangumiDictionary valueForKey:AGBangumiKeyLargeImageURL];
-        bangumi.stuff = [bangumiDictionary valueForKey:AGBangumiKeyStuff];
-        bangumi.characterVoice = [bangumiDictionary valueForKey:AGBangumiKeyCharacterVoice];
-        bangumi.synopsis = [bangumiDictionary valueForKey:AGBangumiKeySynopsis];
-    }
-    
-    [bangumi updateScheduleInfo];
+    [bangumi p_setValuesWithNetworkDictionary:bangumiDictionary
+                       inManagedObjectContext:context
+                                     inDetail:detail];
     return bangumi;
 }
 
@@ -61,13 +46,12 @@ NSString * const kEntityNameBangumi = @"Bangumi";
                inManagedObjectContext:(NSManagedObjectContext *)context {
     
     Bangumi *bangumi = nil;
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:kEntityNameBangumi];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:AGEntityNameBangumi];
     request.predicate = [NSPredicate predicateWithFormat:@"identifier == %@", identifier];
     NSError *error = nil;
     NSArray *matches = [context executeFetchRequest:request error:&error];
     
     if (!matches || error || [matches count] > 1) {
-        // TODO
         NSLog(@"Client database error.");
         return nil;
     }
@@ -79,9 +63,86 @@ NSString * const kEntityNameBangumi = @"Bangumi";
     return bangumi;
 }
 
++ (void)createBangumisWithArray:(NSArray *)bangumiArray
+         inManagedObjectContext:(NSManagedObjectContext *)context
+                       inDetail:(BOOL)detail {
+    
+    NSMutableArray *idArray = [[NSMutableArray alloc] init];
+    for (NSDictionary *bangumiDictionary in bangumiArray) {
+        [idArray addObject:bangumiDictionary[AGBangumiKeyId]];
+    }
+    
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:AGEntityNameBangumi];
+    request.predicate = [NSPredicate predicateWithFormat:@"identifier IN %@", idArray];
+    NSError *error = nil;
+    NSArray *matches = [context executeFetchRequest:request error:&error];
+    
+    if (!matches || error) {
+        NSLog(@"Client database error.");
+        return;
+    }
+    
+    for (NSDictionary *bangumiDictionary in bangumiArray) {
+        NSNumber *identifier = bangumiDictionary[AGBangumiKeyId];
+        BOOL deleted = ((NSNumber *) (bangumiDictionary[AGBangumiKeyDeleted])).boolValue;
+        
+        Bangumi *bangumi = nil;
+        for (Bangumi *match in matches) {
+            if ([match.identifier isEqual:identifier]) {
+                bangumi = match;
+                break;
+            }
+        }
+        
+        if (deleted) {
+            if (bangumi) [context deleteObject:bangumi];
+            continue;
+        }
+        
+        if (!bangumi) {
+            bangumi = [NSEntityDescription insertNewObjectForEntityForName:AGEntityNameBangumi
+                                                    inManagedObjectContext:context];
+        }
+        
+        [bangumi p_setValuesWithNetworkDictionary:bangumiDictionary
+                           inManagedObjectContext:context
+                                         inDetail:detail];
+    }
+}
+
+#pragma mark - Private Methods
+
+- (void)p_setValuesWithNetworkDictionary:(NSDictionary *)bangumiDictionary
+                  inManagedObjectContext:(NSManagedObjectContext *)context
+                                inDetail:(BOOL)detail {
+    
+    self.identifier = bangumiDictionary[AGBangumiKeyId];
+    self.title = bangumiDictionary[AGBangumiKeyTitle];
+    self.hot = bangumiDictionary[AGBangumiKeyHot];
+    self.coverImageURL = bangumiDictionary[AGBangumiKeyCoverImageURL];
+    self.isFavorite = bangumiDictionary[AGBangumiKeyIsFavorite];
+    self.releaseWeekday = bangumiDictionary[AGBangumiKeyReleaseWeekdays];
+    self.totalEpisodes = bangumiDictionary[AGBangumiKeyTotalEpisodes];
+    self.firstReleasedEpisode = bangumiDictionary[AGBangumiKeyFirstReleasedEpisode];
+    self.lastReleasedEpisode = bangumiDictionary[AGBangumiKeyLastReleasedEpisode];
+    self.lastWatchedEpisode = bangumiDictionary[AGBangumiKeyLastWatchedEpisode];
+    self.status = bangumiDictionary[AGBangumiKeyStatus];
+    
+    if (detail) {
+        self.largeImageURL = bangumiDictionary[AGBangumiKeyLargeImageURL];
+        self.stuff = bangumiDictionary[AGBangumiKeyStuff];
+        self.characterVoice = bangumiDictionary[AGBangumiKeyCharacterVoice];
+        self.synopsis = bangumiDictionary[AGBangumiKeySynopsis];
+    }
+    
+    [self updateScheduleInfo];
+}
+
+#pragma mark - Public Methods
+
 - (void)updateScheduleInfo {
     NSInteger priority = 0;
-    if (self.isFavorite.integerValue > 0) {
+    if (self.isFavorite.boolValue) {
         priority = (self.lastReleasedEpisode > self.lastWatchedEpisode) ? 2 : 1;
     }
     self.priority = @(priority);

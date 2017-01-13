@@ -25,11 +25,11 @@
 
 @interface HorizontalTableView : UIView <UIScrollViewDelegate>
 
-@property (weak, nonatomic) id<HorizontalTableViewDataSource> dataSource;
-@property (weak, nonatomic) id<HorizontalTableViewDelegate> delegate;
-@property (strong, readonly, nonatomic) NSMutableArray<__kindof UIView *> *displayCellArray;
-@property (nonatomic) NSInteger initIndex;
-@property (nonatomic) NSInteger currentIndex;
+@property (nonatomic, weak) id<HorizontalTableViewDataSource> dataSource;
+@property (nonatomic, weak) id<HorizontalTableViewDelegate> delegate;
+@property (nonatomic, strong, readonly) NSMutableArray<__kindof UIView *> *displayCellArray;
+@property (nonatomic, assign) NSInteger initIndex;
+@property (nonatomic, assign) NSInteger currentIndex;
 
 - (void)registerClass:(Class)cellClass;
 - (__kindof UIView *)dequeueReusableCell;

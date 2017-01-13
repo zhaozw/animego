@@ -6,10 +6,10 @@
 //  Copyright © 2016年 Chaoran Li. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "NetworkConstant.h"
 
-NSString * const ContentNeedUpdateNofification  = @"ContentNeedUpdateNofification";
+NSString * const AGErrorDomain                     = @"AGErrorDomain";
+NSString * const AGContentNeedUpdateNofification   = @"AGContentNeedUpdateNofification";
 
 NSString * const AGBangumiKeyId                    = @"id";
 NSString * const AGBangumiKeyTitle                 = @"title";

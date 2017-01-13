@@ -8,19 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <ReactiveObjC.h>
 
 @interface NetworkWorker : NSObject
 
-@property (nonatomic) BOOL isWebLoading;
-@property (nonatomic, readonly) BOOL isWorking;
-
 + (NetworkWorker *)sharedNetworkWorker;
 
-- (void)requestCommand:(NSString *)command
-        withParameters:(NSDictionary *)parameters
-               success:(void (^)(id result))success
-       connectionError:(void (^)(NSError *error))connectionError
-           serverError:(void (^)(NSInteger error))serverError;
+- (RACSignal *)requestCommand:(NSString *)command
+               withParameters:(NSDictionary *)parameters
+                  uniqueToken:(NSString *)uniqueToken;
 
 - (void)setImageURL:(NSString *)url forImageView:(UIImageView *)imageView;
 

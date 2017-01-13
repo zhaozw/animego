@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <ReactiveObjC.h>
 
 @interface IndicatorBarButton : UIView
 
-@property (strong, readonly, nonatomic) UIButton *button;
-@property (nonatomic) BOOL indicator;
+@property (nonatomic, assign) BOOL indicator;
+@property (nonatomic, readonly) RACSignal *touchSignal;
 
-- (instancetype)initWithTitle:(NSString *)title indicatorColor:(UIColor *)color target:(id)target action:(SEL)action;
+- (instancetype)initWithTitle:(NSString *)title color:(UIColor *)color;
 
 @end

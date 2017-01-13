@@ -7,8 +7,9 @@
 //
 
 #import "VerticalTableView.h"
+
 #import "LayoutConstant.h"
-#import "NSDate+Convert.h"
+#import "NSDate+Format.h"
 #import "UIColor+ExtraColor.h"
 #import "LayoutConstant.h"
 
@@ -19,12 +20,12 @@ static NSString * const kIdentifier = @"Cell";
 
 @interface VerticalTableView()
 
-@property (strong, nonatomic) UIView *headerView;
-@property (strong, nonatomic) UILabel *weekdayLabel;
-@property (strong, nonatomic) UILabel *dateLabel;
-@property (strong, nonatomic) UITableView *tableView;
-@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic) BOOL didConstraintsSetup;
+@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) UILabel *weekdayLabel;
+@property (nonatomic, strong) UILabel *dateLabel;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, assign) BOOL didConstraintsSetup;
 
 @end
 
@@ -34,7 +35,7 @@ static NSString * const kIdentifier = @"Cell";
     return YES;
 }
 
-#pragma Initialize (UI Layout)
+#pragma mark - UIView (super class)
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
@@ -43,7 +44,7 @@ static NSString * const kIdentifier = @"Cell";
         UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
         
         self.headerView = [[UIView alloc] init];
-        self.headerView.backgroundColor = [UIColor pinkColor];
+        self.headerView.backgroundColor = [UIColor ag_pinkColor];
         [self addSubview:self.headerView];
         
         UIFont *weekdayLabelFont = (deviceType == UIUserInterfaceIdiomPad)
@@ -60,12 +61,7 @@ static NSString * const kIdentifier = @"Cell";
         [self.headerView addSubview:self.dateLabel];
         
         self.tableView = [[UITableView alloc] init];
-//        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-//        self.tableView.separatorColor = [UIColor grayColor];
-//        self.tableView.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
-//        UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-//        UIVibrancyEffect *vibrancyEffect = [UIVibrancyEffect effectForBlurEffect:blurEffect];
-//        self.tableView.separatorEffect = vibrancyEffect;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
         CGFloat tableCellAspectRatio = (deviceType == UIUserInterfaceIdiomPad)
             ? LCTableCellAspectRatio
@@ -161,89 +157,45 @@ static NSString * const kIdentifier = @"Cell";
 
 #pragma mark - <NSFetchedResultsControllerDelegate>
 
-//- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
-//    [[self tableView] beginUpdates];
-//}
-//
-//- (void)controller:(NSFetchedResultsController *)controller
-//  didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
-//           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-//    
-//    switch(type) {
-//        case NSFetchedResultsChangeInsert:
-//            [[self tableView] insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//        case NSFetchedResultsChangeDelete:
-//            [[self tableView] deleteSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//        case NSFetchedResultsChangeMove:
-//        case NSFetchedResultsChangeUpdate:
-//            break;
-//    }
-//}
-//
-//- (void)controller:(NSFetchedResultsController *)controller
-//   didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath
-//     forChangeType:(NSFetchedResultsChangeType)type
-//      newIndexPath:(NSIndexPath *)newIndexPath {
-//    
-//    switch(type) {
-//        case NSFetchedResultsChangeInsert:
-//            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//        case NSFetchedResultsChangeDelete:
-//            [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//        case NSFetchedResultsChangeUpdate:
-//            [self configureCell:[[self tableView] cellForRowAtIndexPath:indexPath] atIndexPath:indexPath];
-//            break;
-//        case NSFetchedResultsChangeMove:
-//            [[self tableView] deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            [[self tableView] insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-//            break;
-//    }
-//}
-
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
     [self.tableView reloadData];
-//    [[self tableView] endUpdates];
 }
 
-#pragma mark Public Property
+#pragma mark - Public Methods
 
 - (void)setDate:(NSDate *)date {
     _date = date;
-    NSInteger weekday = [date toWeekday];
-    self.weekdayLabel.text = [NSDate weekdayNameArray][weekday];
+    NSInteger weekday = [date ag_toWeekday];
+    self.weekdayLabel.text = [NSDate ag_weekdayNameArray][weekday];
     UIColor *headerColor = nil;
     switch (weekday) {
         case 1:
-            headerColor = [UIColor colorWith256Red:255 green:0 blue:0];
+            headerColor = [UIColor ag_colorWith256Red:255 green:0 blue:0];
             break;
         case 2:
-            headerColor = [UIColor colorWith256Red:255 green:77 blue:0];
+            headerColor = [UIColor ag_colorWith256Red:255 green:77 blue:0];
             break;
         case 3:
-            headerColor = [UIColor colorWith256Red:255 green:152 blue:0];
+            headerColor = [UIColor ag_colorWith256Red:255 green:152 blue:0];
             break;
         case 4:
-            headerColor = [UIColor colorWith256Red:157 green:233 blue:0];
+            headerColor = [UIColor ag_colorWith256Red:157 green:233 blue:0];
             break;
         case 5:
-            headerColor = [UIColor colorWith256Red:0 green:199 blue:30];
+            headerColor = [UIColor ag_colorWith256Red:0 green:199 blue:30];
             break;
         case 6:
-            headerColor = [UIColor colorWith256Red:0 green:131 blue:0];
+            headerColor = [UIColor ag_colorWith256Red:0 green:131 blue:0];
             break;
         case 7:
-            headerColor = [UIColor colorWith256Red:0 green:77 blue:169];
+            headerColor = [UIColor ag_colorWith256Red:0 green:77 blue:169];
             break;
         default:
             ;
     }
     self.headerView.backgroundColor = headerColor;
-    NSString *shortDate = [date toShortString];
-    if ([shortDate isEqualToString:[[NSDate dateToday] toShortString]]) {
+    NSString *shortDate = [date ag_toShortString];
+    if ([shortDate isEqualToString:[[NSDate ag_dateToday] ag_toShortString]]) {
         self.dateLabel.text = [NSString stringWithFormat:@"%@ (今天)", shortDate];
     } else {
         self.dateLabel.text = shortDate;
@@ -257,12 +209,11 @@ static NSString * const kIdentifier = @"Cell";
 
 - (void)setRequest:(NSFetchRequest *)request withManagedObjectContext:(NSManagedObjectContext *)context {
     if (!self.fetchedResultsController) {
-//        NSString *cacheName = [self.date toString];
-        NSString *cacheName = nil;
+        // TODO: cachename -> [self.date ag_toString]
         self.fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request
                                                                             managedObjectContext:context
                                                                               sectionNameKeyPath:nil
-                                                                                       cacheName:cacheName];
+                                                                                       cacheName:nil];
         
         self.fetchedResultsController.delegate = self;
         [self.fetchedResultsController performFetch:nil];
@@ -280,8 +231,6 @@ static NSString * const kIdentifier = @"Cell";
 - (void)performFetch {
     [self.fetchedResultsController performFetch:nil];
 }
-
-#pragma mark Public Methods
 
 - (void)registerCellPrototypeClass:(Class)cellClass {
     [self.tableView registerClass:cellClass forCellReuseIdentifier:kIdentifier];

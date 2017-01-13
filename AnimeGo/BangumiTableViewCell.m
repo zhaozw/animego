@@ -7,11 +7,12 @@
 //
 
 #import "BangumiTableViewCell.h"
+
 #import "Bangumi+Create.h"
 #import "NetworkWorker.h"
 #import "LayoutConstant.h"
 #import "NetworkConstant.h"
-#import "CustomBadge.h"
+#import "CustomBadgeView.h"
 #import "UIColor+ExtraColor.h"
 #import "InsetsLabel.h"
 
@@ -20,76 +21,29 @@
 
 @interface BangumiTableViewCell()
 
-@property (strong, nonatomic) UIImageView *coverImageView;
-@property (strong, nonatomic) CustomBadge *indicator;
-@property (strong, nonatomic) InsetsLabel *titleLabel;
-@property (strong, nonatomic) InsetsLabel *progressLabel;
-@property (strong, nonatomic) UIStackView *stackView;
+@property (nonatomic, strong) UIImageView *coverImageView;
+@property (nonatomic, strong) CustomBadgeView *indicator;
+@property (nonatomic, strong) InsetsLabel *titleLabel;
+@property (nonatomic, strong) InsetsLabel *progressLabel;
+@property (nonatomic, strong) UIStackView *stackView;
 
 @end
 
 @implementation BangumiTableViewCell
 
-#pragma mark Initialize (UI Layout)
+#pragma mark - UITableViewCell (super class)
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self initSubView];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        [self p_addSubviews];
+        [self p_addConstraints];
     }
     return self;
 }
 
-- (void)initSubView {
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    UIView *superView = self.contentView;
-    
-    self.coverImageView = [[UIImageView alloc] init];
-    self.coverImageView.contentMode = UIViewContentModeScaleAspectFill;
-    self.coverImageView.clipsToBounds = YES;
-    [superView addSubview:self.coverImageView];
-    
-    self.indicator = [[CustomBadge alloc] init];
-    [superView insertSubview:self.indicator aboveSubview:self.coverImageView];
-    
-    self.titleLabel = [[InsetsLabel alloc] init];
-    self.titleLabel.insets = UIEdgeInsetsMake(LCPadding / 2, LCPadding, LCPadding / 4, LCPadding);
-    self.titleLabel.backgroundColor = [UIColor translucentBlackColor];
-    self.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-    [superView addSubview:self.titleLabel];
-    
-    self.progressLabel = [[InsetsLabel alloc] init];
-    self.progressLabel.insets = UIEdgeInsetsMake(LCPadding / 4, LCPadding, LCPadding / 2, LCPadding);
-    self.progressLabel.backgroundColor = [UIColor translucentBlackColor];
-    self.progressLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-    [superView addSubview:self.progressLabel];
-    
-    [self.coverImageView remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@0);
-        make.right.equalTo(@0);
-        make.top.equalTo(@(LCPadding / 2));
-        make.bottom.equalTo(@(-LCPadding / 2));
-    }];
-    
-    [self.indicator makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.coverImageView.top).with.offset(LCPadding / 2);
-        make.left.equalTo(self.coverImageView.left).with.offset(LCPadding / 2);
-    }];
-    
-    [self.progressLabel makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.coverImageView);
-        make.left.equalTo(self.coverImageView);
-        make.right.equalTo(self.coverImageView);
-    }];
-    
-    [self.titleLabel makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.progressLabel.top);
-        make.left.equalTo(self.coverImageView);
-        make.right.equalTo(self.coverImageView);
-    }];
-}
-
-#pragma mark Public Property
+#pragma mark - Public Methods
 
 - (void)setSchedule:(Schedule *)schedule {
     _schedule = schedule;
@@ -119,8 +73,6 @@
                             [NSString stringWithFormat:@"第%@话 %@", schedule.episodeNumber, schedule.title];
                     }
                     break;
-                default:
-                    ;
             }
             break;
         case AGScheduleStatusCanceled:
@@ -137,10 +89,62 @@
     
     [[NetworkWorker sharedNetworkWorker] setImageURL:bangumi.coverImageURL forImageView:self.coverImageView];
     
-    self.indicator.isFavorite = schedule.bangumi.isFavorite.boolValue;
+    self.indicator.favorite = schedule.bangumi.isFavorite.boolValue;
     NSInteger releasedEpisodes = schedule.bangumi.lastReleasedEpisode.integerValue;
     NSInteger watchedEpisodes = schedule.bangumi.lastWatchedEpisode.integerValue;
     self.indicator.eventCount = releasedEpisodes - watchedEpisodes;
+}
+
+#pragma mark - Private Methods
+
+- (void)p_addSubviews {
+    UIView *superView = self.contentView;
+    
+    self.coverImageView = [[UIImageView alloc] init];
+    self.coverImageView.contentMode = UIViewContentModeScaleAspectFill;
+    self.coverImageView.clipsToBounds = YES;
+    [superView addSubview:self.coverImageView];
+    
+    self.indicator = [[CustomBadgeView alloc] init];
+    [superView insertSubview:self.indicator aboveSubview:self.coverImageView];
+    
+    self.titleLabel = [[InsetsLabel alloc] init];
+    self.titleLabel.insets = UIEdgeInsetsMake(LCPadding / 2, LCPadding, LCPadding / 4, LCPadding);
+    self.titleLabel.backgroundColor = [UIColor ag_translucentBlackColor];
+    self.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    [superView addSubview:self.titleLabel];
+    
+    self.progressLabel = [[InsetsLabel alloc] init];
+    self.progressLabel.insets = UIEdgeInsetsMake(LCPadding / 4, LCPadding, LCPadding / 2, LCPadding);
+    self.progressLabel.backgroundColor = [UIColor ag_translucentBlackColor];
+    self.progressLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    [superView addSubview:self.progressLabel];
+}
+
+- (void)p_addConstraints {
+    [self.coverImageView remakeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@0);
+        make.right.equalTo(@0);
+        make.top.equalTo(@(LCPadding / 2));
+        make.bottom.equalTo(@(-LCPadding / 2));
+    }];
+    
+    [self.indicator makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.coverImageView.top).with.offset(LCPadding / 2);
+        make.left.equalTo(self.coverImageView.left).with.offset(LCPadding / 2);
+    }];
+    
+    [self.progressLabel makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.coverImageView);
+        make.left.equalTo(self.coverImageView);
+        make.right.equalTo(self.coverImageView);
+    }];
+    
+    [self.titleLabel makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.progressLabel.top);
+        make.left.equalTo(self.coverImageView);
+        make.right.equalTo(self.coverImageView);
+    }];
 }
 
 @end

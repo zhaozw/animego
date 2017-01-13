@@ -8,7 +8,7 @@
 
 #import "Schedule+CoreDataClass.h"
 
-extern NSString * const kEntityNameSchedule;
+extern NSString * const AGEntityNameSchedule;
 
 @interface Schedule (Create)
 
@@ -20,6 +20,12 @@ extern NSString * const kEntityNameSchedule;
 + (Schedule *)getScheduleWithIdentifier:(NSNumber *)identifier
                  inManagedObjectContext:(NSManagedObjectContext *)context;
 
-@property (readonly, nonatomic) NSString *suitableAppURL;
++ (void)createSchedulesWithArray:(NSArray *)scheduleArray
+         commonBangumiDictionary:(NSDictionary *)bangumiDictionary
+          inManagedObjectContext:(NSManagedObjectContext *)context
+                scheduleInDetail:(BOOL)scheduleInDetail
+                 bangumiInDetial:(BOOL)bangumiInDetail;
+
+@property (nonatomic, readonly) NSString *suitableAppURL;
 
 @end
