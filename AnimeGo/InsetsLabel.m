@@ -8,8 +8,6 @@
 
 #import "InsetsLabel.h"
 
-#import <ReactiveObjC.h>
-
 @implementation InsetsLabel
 
 #pragma mark - UILabel (super class)
@@ -17,12 +15,6 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (!self) return nil;
-    
-    [[RACObserve(self, insets)
-      deliverOn:[RACScheduler mainThreadScheduler]]
-     subscribeNext:^(id  _Nullable x) {
-        [self setNeedsDisplay];
-     }];
     
     self.insets = UIEdgeInsetsMake(0, 0, 0, 0);
     return self;
@@ -37,6 +29,13 @@
     size.width += self.insets.left + self.insets.right;
     size.height += self.insets.top + self.insets.bottom;
     return size;
+}
+
+#pragma mark - Public Methods
+
+- (void)setInsets:(UIEdgeInsets)insets {
+    _insets = insets;
+    [self setNeedsDisplay];
 }
 
 @end

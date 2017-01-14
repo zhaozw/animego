@@ -7,7 +7,6 @@
 //
 
 #import "LayoutConstant.h"
-#import <Foundation/Foundation.h>
 
 const CGFloat LCPadding = 8;
 const CGFloat LCPaddingLarge = 20;
@@ -19,7 +18,7 @@ const CGFloat LCTableCellAspectRatio = 0.8;
 const CGFloat LCCoverImageAspectRatio = 1.0;
 const CGFloat LCCustomBadgeHeight = 20;
 const CGFloat LCMaxCustomBadgeWidth = 60;
-const CGFloat LCCustomBadgeFontFactor = 0.04;
+const CGFloat LCCustomBadgeFontFactor = 0.05;
 const CGFloat LCMinCollectionCellWidth = 140;
 
 const CGFloat LCLargeImageAspectRatio = 1.5;
@@ -36,4 +35,3 @@ const CGFloat LCCustomBadgeHeightPhone = 16;
 const CGFloat LCMaxCustomBadgeWidthPhone = 60;
 const CGFloat LCMinEpisodeButtonWidthPhone = 40;
 const CGFloat LCDetailSpaceOccupiyRatioPhone = 0.4;
-

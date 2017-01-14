@@ -109,7 +109,10 @@ NSString * const AGShowDetailSegueIdentifier = @"Show Detail";
 - (void)doJumpToEpisode {
     NotificationManager *manager = [NotificationManager sharedNotificationManager];
     NSNumber *bangumiIdentifier = manager.jumpDestinationBangumiIdentifier;
-    [self performSegueWithIdentifier:AGShowDetailSegueIdentifier sender:bangumiIdentifier];
+    if (bangumiIdentifier) {
+        manager.jumpDestinationBangumiIdentifier = nil;
+        [self performSegueWithIdentifier:AGShowDetailSegueIdentifier sender:bangumiIdentifier];
+    }
 }
 
 #pragma mark - Private Methods

@@ -269,10 +269,12 @@ static NSString * const kReuseIdentifier = @"Cell";
                                    episodeNumber:@(episodeNumber)]
          subscribeCompleted:^{ }];
 
-        EpisodeDetailViewController *episodeDetailVC = [[EpisodeDetailViewController alloc] init];
+        CGSize sizeLimit = CGSizeMake(self.view.bounds.size.width * 0.8, self.view.bounds.size.height * 0.8);
+        EpisodeDetailViewController *episodeDetailVC = [[EpisodeDetailViewController alloc] initWithSizeLimit:sizeLimit];
         episodeDetailVC.modalPresentationStyle = UIModalPresentationPopover;
         UIPopoverPresentationController *popoverPC = episodeDetailVC.popoverPresentationController;
         popoverPC.backgroundColor = [UIColor lightGrayColor];
+        popoverPC.permittedArrowDirections = UIPopoverArrowDirectionUp | UIPopoverArrowDirectionDown;
         popoverPC.sourceView = episodeButtonCell;
         popoverPC.sourceRect = episodeButtonCell.contentView.bounds;
         popoverPC.delegate = self;
@@ -596,8 +598,6 @@ static NSString * const kReuseIdentifier = @"Cell";
         make.right.equalTo(self.separationLine);
         make.bottom.equalTo(@(-padding));
     }];
-    
-    [super updateViewConstraints];
 }
 
 

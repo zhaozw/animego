@@ -24,6 +24,7 @@
 
 @interface EpisodeDetailViewController ()
 
+@property (nonatomic, assign) CGSize sizeLimit;
 @property (nonatomic, strong) Schedule *schedule;
 @property (nonatomic, strong) NSNumber *undoEpisodeNumber;
 
@@ -171,6 +172,7 @@
     [self.contentView addSubview:self.markSwitcher];
     
     self.titleLabel = [[UILabel alloc] init];
+    self.titleLabel.numberOfLines = 1;
     self.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     self.titleLabel.text = @"正在加载 ...";
     self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -208,18 +210,20 @@
     [self.contentView makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@0);
         make.top.equalTo(@0);
+        if (self.sizeLimit.height > 0) make.height.lessThanOrEqualTo(@(self.sizeLimit.height));
+        if (self.sizeLimit.width > 0) make.width.lessThanOrEqualTo(@(self.sizeLimit.width));
     }];
     
     [self.markSwitcher makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.titleLabel);
-        make.right.equalTo(@(-LCPadding));
+        make.right.lessThanOrEqualTo(@(-LCPadding));
         make.width.equalTo(self.markSwitcher.height);
         make.height.equalTo(self.titleLabel);
     }];
     
     [self.titleLabel makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(@(LCPadding));
-        make.right.lessThanOrEqualTo(self.markSwitcher.left).with.offset(-LCPadding);
+        make.right.equalTo(self.markSwitcher.left).with.offset(-LCPadding);
         make.top.equalTo(@(LCPadding));
     }];
     
@@ -258,11 +262,11 @@
             make.left.equalTo(@(LCPadding));
             make.right.lessThanOrEqualTo(@(-LCPadding));
             make.top.equalTo(self.captionLabel.bottom).with.offset(LCPadding);
+            make.bottom.lessThanOrEqualTo(@(-LCPadding));
             make.height.equalTo(@(LCAppIconLength));
             make.width.equalTo(@(LCAppIconLength));
-            make.bottom.lessThanOrEqualTo(@(-LCPadding));
         }];
-        [self.openByBrowserLabel makeConstraints:^(MASConstraintMaker *make) {
+        [self.openByBrowserLabel remakeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self.openByBrowserButton);
             make.right.lessThanOrEqualTo(@(-LCPadding));
             make.top.equalTo(self.openByBrowserButton.bottom).with.offset(LCPadding);
@@ -288,7 +292,7 @@
             make.width.equalTo(@(LCAppIconLength));
             make.bottom.lessThanOrEqualTo(@(-LCPadding));
         }];
-        [self.openByAppLabel makeConstraints:^(MASConstraintMaker *make) {
+        [self.openByAppLabel remakeConstraints:^(MASConstraintMaker *make) {
             make.left.greaterThanOrEqualTo(self.openByBrowserLabel.right).with.offset(LCPadding);
             make.centerX.equalTo(self.openByAppButton);
             make.right.lessThanOrEqualTo(@(-LCPadding));
@@ -349,6 +353,13 @@
 }
 
 #pragma mark - Public Methods
+
+- (instancetype)initWithSizeLimit:(CGSize)sizeLimit {
+    self = [super init];
+    if (!self) return nil;
+    self.sizeLimit = sizeLimit;
+    return self;
+}
 
 - (NSString *)url {
     return self.schedule.webURL;

@@ -13,8 +13,9 @@
 @interface EpisodeDetailViewController : FetcherViewController
 
 @property (nonatomic, readonly) NSString *url;
-
 @property (nonatomic, strong) NSNumber *bangumiIdentifier;
 @property (nonatomic, strong) NSNumber *episodeNumber;
+
+- (instancetype)initWithSizeLimit:(CGSize)sizeLimit;
 
 @end

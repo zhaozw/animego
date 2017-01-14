@@ -8,7 +8,6 @@
 
 #import "RoundRectSwitcher.h"
 
-#import <ReactiveObjC.h>
 #import "LayoutConstant.h"
 #import "UIColor+ExtraColor.h"
 
@@ -24,15 +23,6 @@
     self = [super initWithFrame:frame];
     if (!self) return nil;
     
-    [[[RACSignal merge:@[ RACObserve(self, status),
-                          RACObserve(self, titleOn), RACObserve(self, titleOff),
-                          RACObserve(self, imageOn), RACObserve(self, imageOff) ]]
-      deliverOn:[RACScheduler mainThreadScheduler]]
-     subscribeNext:^(id  _Nullable x) {
-         
-         [self p_updateUI];
-     }];
-    
     self.layer.cornerRadius = 10;
     self.titleEdgeInsets = UIEdgeInsetsMake(0, LCPadding, 0, LCPadding);
     self.status = NO;
@@ -44,21 +34,13 @@
     return CGSizeMake(size.width + 2 * LCPadding, size.height);
 }
 
-#pragma mark - Public Methods
-
-- (RACSignal *)touchSignal {
-    return [[self rac_signalForControlEvents:UIControlEventTouchUpInside]
-            doNext:^(__kindof UIControl * _Nullable x) {
-                self.status = !self.status;
-            }];
-}
-
 #pragma mark - Private Methods
 
 - (void)p_updateUI {
     if (self.status) {
         if (self.imageOn) {
             self.layer.borderWidth = 0;
+            self.backgroundColor = nil;
             [self setBackgroundImage:self.imageOn forState:UIControlStateNormal];
         } else {
             self.layer.borderWidth = 0;
@@ -69,6 +51,7 @@
     } else {
         if (self.imageOn) {
             self.layer.borderWidth = 0;
+            self.backgroundColor = nil;
             [self setBackgroundImage:self.imageOff forState:UIControlStateNormal];
         } else {
             self.layer.borderWidth = 1;
@@ -78,6 +61,40 @@
         [self setTitle:self.titleOff forState:UIControlStateNormal];
         [self setTitleColor:[UIColor ag_pinkColor] forState:UIControlStateNormal];
     }
+}
+
+#pragma mark - Public Methods
+
+- (RACSignal *)touchSignal {
+    return [[self rac_signalForControlEvents:UIControlEventTouchUpInside]
+            doNext:^(__kindof UIControl * _Nullable x) {
+                self.status = !self.status;
+            }];
+}
+
+- (void)setStatus:(BOOL)status {
+    _status = status;
+    [self p_updateUI];
+}
+
+- (void)setTitleOn:(NSString *)titleOn {
+    _titleOn = titleOn;
+    [self p_updateUI];
+}
+
+- (void)setTitleOff:(NSString *)titleOff {
+    _titleOff = titleOff;
+    [self p_updateUI];
+}
+
+- (void)setImageOn:(UIImage *)imageOn {
+    _imageOn = imageOn;
+    [self p_updateUI];
+}
+
+- (void)setImageOff:(UIImage *)imageOff {
+    _imageOff = imageOff;
+    [self p_updateUI];
 }
 
 @end

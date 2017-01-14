@@ -6,9 +6,9 @@
 //  Copyright © 2016年 Chaoran Li. All rights reserved.
 //
 
-#import "RoundRectSwitcher.h"
-
 #import "EpisodeButtonCell.h"
+
+#import "RoundRectSwitcher.h"
 #import "LayoutConstant.h"
 #import "UIColor+ExtraColor.h"
 

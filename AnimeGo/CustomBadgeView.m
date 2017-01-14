@@ -8,7 +8,6 @@
 
 #import "CustomBadgeView.h"
 
-#import <ReactiveObjC.h>
 #import "LayoutConstant.h"
 #import "UIColor+ExtraColor.h"
 
@@ -30,11 +29,6 @@
     self.opaque = NO;
     self.contentMode = UIViewContentModeRedraw;
     
-    [[[RACSignal merge:@[ RACObserve(self, favorite), RACObserve(self, eventCount) ]]
-      deliverOn:[RACScheduler mainThreadScheduler]]
-     subscribeNext:^(id  _Nullable x) {
-         [self setNeedsDisplay];
-     }];
     return self;
 }
 
@@ -50,7 +44,7 @@
     if (self.eventCount) {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         paragraphStyle.alignment = NSTextAlignmentCenter;
-        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
+        UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         font = [font fontWithSize:font.pointSize * (badgeHeight * LCCustomBadgeFontFactor)];
         
         NSDictionary *attributes = @{ NSFontAttributeName: font,
@@ -91,6 +85,20 @@
     
     if (self.rectBounds.size.height < badgeHeight) return CGSizeMake(badgeHeight, badgeHeight);
     return self.rectBounds.size;
+}
+
+#pragma mark - Public Methods
+
+- (void)setEventCount:(NSInteger)eventCount {
+    if (_eventCount == eventCount) return;
+    _eventCount = eventCount;
+    [self setNeedsDisplay];
+}
+
+- (void)setFavorite:(BOOL)favorite {
+    if (_favorite == favorite) return;
+    _favorite = favorite;
+    [self setNeedsDisplay];
 }
 
 @end

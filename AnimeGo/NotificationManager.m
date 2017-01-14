@@ -93,19 +93,24 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 }
 
 - (void)getNotificationSettingsWithCompletionHandler:(void (^)(BOOL granted))handler {
+    [self requestAuthorization];
     if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0) {
         UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
         [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
             if (settings.alertSetting == UNNotificationSettingEnabled) {
+                [self p_enableRemoteNotificationFeatures];
                 handler(YES);
             } else {
+                [self p_disableRemoteNotificationFeatures];
                 handler(NO);
             }
         }];
     } else {
         if ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+            [self p_enableRemoteNotificationFeatures];
             handler(YES);
         } else {
+            [self p_disableRemoteNotificationFeatures];
             handler(NO);
         }
     }
@@ -114,6 +119,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (void)setDeviceToken:(NSData *)token {
     NSString *stringToken;
     if (token) {
+        [self p_enableRemoteNotificationFeatures];
         stringToken = [[[[token description]
                          stringByReplacingOccurrencesOfString: @"<" withString: @""]
                         stringByReplacingOccurrencesOfString: @">" withString: @""]
@@ -163,11 +169,8 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
         [[[request updateDeviceToken:token]
           deliverOn:[RACScheduler mainThreadScheduler]]
          subscribeError:^(NSError * _Nullable error) {
-             [self p_disableRemoteNotificationFeatures];
              [self p_forwardTokenToServer:token tryTimes:tryTimes + 1];
-         } completed:^{
-             if (![token isEqualToString:@""]) [self p_enableRemoteNotificationFeatures];
-         }];
+         } completed:^{ }];
     };
     
     if (tryTimes == 0) {
