@@ -7,9 +7,13 @@
 //
 
 #import "AppDelegate.h"
+
 #import "NotificationManager.h"
 
-#import <ReactiveObjC.h>
+NSString * const AGDynamicShortcutKeyBangumiIdentifer = @"AGDynamicShortcutKeyBangumiIdentifer";
+NSString * const AGSpotlightIdentifierPrefix = @"com.lainiwakura.animego.spotlight.identifier";
+
+static NSString * const kShortcutTypeSearch = @"com.lainiwakura.animego.shortcut.search";
 
 @interface AppDelegate ()
 
@@ -38,6 +42,42 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo {
     // iOS 9 only
     [[NotificationManager sharedNotificationManager] handleNotification:userInfo];
+}
+
+- (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem
+  completionHandler:(void (^)(BOOL))completionHandler {
+    
+    NotificationManager *manager = [NotificationManager sharedNotificationManager];
+    if ([shortcutItem.type isEqualToString:kShortcutTypeSearch]) {
+        manager.jumpDestinationPageIdentifier = @(-1);
+        manager.jumpStatus = AGJumpByNotaficationStatusUntreated;
+        [[NSNotificationCenter defaultCenter] postNotificationName:AGJumpToPageNotification object:self];
+    } else if (shortcutItem.userInfo && shortcutItem.userInfo[AGDynamicShortcutKeyBangumiIdentifer]) {
+        id identifier = shortcutItem.userInfo[AGDynamicShortcutKeyBangumiIdentifer];
+        if ([identifier isKindOfClass:[NSNumber class]]) {
+            manager.jumpDestinationPageIdentifier = (NSNumber *) shortcutItem.userInfo[AGDynamicShortcutKeyBangumiIdentifer];
+            manager.jumpStatus = AGJumpByNotaficationStatusUntreated;
+            [[NSNotificationCenter defaultCenter] postNotificationName:AGJumpToPageNotification object:self];
+        }
+    }
+    completionHandler(YES);
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray * _Nullable))restorationHandler {
+    NSString *identifier = userActivity.userInfo[@"kCSSearchableItemActivityIdentifier"];
+    if ([identifier hasPrefix:AGSpotlightIdentifierPrefix]) {
+        NSString *prefix = [NSString stringWithFormat:@"%@.", AGSpotlightIdentifierPrefix];
+        identifier = [identifier stringByReplacingOccurrencesOfString:prefix withString:@""];
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        NSNumber *page = [numberFormatter numberFromString:identifier];
+        if (page) {
+            NotificationManager *manager = [NotificationManager sharedNotificationManager];
+            manager.jumpDestinationPageIdentifier = page;
+            manager.jumpStatus = AGJumpByNotaficationStatusUntreated;
+            [[NSNotificationCenter defaultCenter] postNotificationName:AGJumpToPageNotification object:self];
+        }
+    }
+    return YES;
 }
 
 #pragma mark - Core Data Stack

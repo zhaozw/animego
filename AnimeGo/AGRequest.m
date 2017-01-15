@@ -8,12 +8,15 @@
 
 #import "AGRequest.h"
 
+#import "NotificationManager.h"
 #import "NetworkWorker.h"
 #import "NetworkConstant.h"
 #import "NSDate+Format.h"
 #import "Bangumi+Create.h"
 #import "Schedule+Create.h"
-#import "AppDelegate.h"
+#import "AppDelegate+CoreData.h"
+#import "AppDelegate+Shortcut.h"
+#import "AppDelegate+Spotlight.h"
 
 static const NSInteger kPasswordLength = 20;
 static const NSInteger kDaysOfWeek = 7;
@@ -30,28 +33,6 @@ static const NSInteger kDaysOfWeek = 7;
     }
     cstring[kPasswordLength - 1] = '\0';
     return [NSString stringWithFormat:@"%s", cstring];
-}
-
-- (void)p_performBlockWithPrivateMOC:(void (^)(NSManagedObjectContext *))operation {
-    AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
-    NSManagedObjectContext *mainMOC = appDelegate.mainMOC;
-    NSManagedObjectContext *privateMOC = appDelegate.privateMOC;
-    
-    [privateMOC performBlock:^{
-        operation(privateMOC);
-        
-        NSError *error = nil;
-        if (![privateMOC save:&error]) {
-            NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-        }
-        
-        [mainMOC performBlock:^{
-            NSError *error = nil;
-            if (![mainMOC save:&error]) {
-                NSLog(@"Error saving context: %@\n%@", [error localizedDescription], [error userInfo]);
-            }
-        }];
-    }];
 }
 
 - (RACSignal *)p_localUserInfo {
@@ -91,20 +72,24 @@ static const NSInteger kDaysOfWeek = 7;
                                     uniqueToken:(NSString *)uniqueToken {
 
     NetworkWorker *worker = [NetworkWorker sharedNetworkWorker];
-    return [[[self p_localUserInfo]
-            flattenMap:^__kindof RACSignal * _Nullable(NSDictionary *userInfo) {
-                NSMutableDictionary *finalParameters = [[NSMutableDictionary alloc] init];
-                [finalParameters addEntriesFromDictionary:userInfo];
-                [finalParameters addEntriesFromDictionary:parameters];
-                return [worker requestCommand:command withParameters:finalParameters uniqueToken:uniqueToken];
-            }] doError:^(NSError * _Nonnull error) {
-                if (error.domain == AGErrorDomain
-                    && (error.code == AGErrorServerWrongPassword || error.code == AGErrorClientNotRegistered)) {
-
-                    NSString *password = [self p_randomPassword];
-                    [[self p_registerNewUserWithPassword:password] subscribeCompleted:^{ }];
-                }
-            }];
+    return [[[[self p_localUserInfo]
+              flattenMap:^__kindof RACSignal * _Nullable(NSDictionary *userInfo) {
+                  NSMutableDictionary *finalParameters = [[NSMutableDictionary alloc] init];
+                  [finalParameters addEntriesFromDictionary:userInfo];
+                  [finalParameters addEntriesFromDictionary:parameters];
+                  return [worker requestCommand:command withParameters:finalParameters uniqueToken:uniqueToken];
+              }] doError:^(NSError * _Nonnull error) {
+                  if (error.domain == AGErrorDomain
+                      && (error.code == AGErrorServerWrongPassword || error.code == AGErrorClientNotRegistered)) {
+                      
+                      NSString *password = [self p_randomPassword];
+                      [[self p_registerNewUserWithPassword:password] subscribeCompleted:^{ }];
+                  }
+              }] doCompleted:^{
+                  AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                  [appDelegate addShortcutItems];
+                  [appDelegate addSpotlightItems];
+              }];
 }
 
 #pragma mark - Public Methods
@@ -132,13 +117,14 @@ static const NSInteger kDaysOfWeek = 7;
     return [[self p_requestPasswordRequiredCommand:@"daily_delivery" withParameters:parameters uniqueToken:nil]
             doNext:^(id  _Nullable result) {
                 if (![result isKindOfClass:[NSArray class]] || ![result count]) return;
-                [self p_performBlockWithPrivateMOC:^(NSManagedObjectContext *context) {
+                AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                [[appDelegate asyncOperationWithPrivateMOC:^(NSManagedObjectContext *context) {
                     [Schedule createSchedulesWithArray:result
                                commonBangumiDictionary:nil
                                 inManagedObjectContext:context
                                       scheduleInDetail:NO
                                        bangumiInDetial:YES];
-                }];
+                }] subscribeCompleted:^{ }];
             }];
 }
 
@@ -146,11 +132,30 @@ static const NSInteger kDaysOfWeek = 7;
     return [[self p_requestPasswordRequiredCommand:@"my_favorite" withParameters:@{ } uniqueToken:nil]
             doNext:^(id  _Nullable result) {
                 if (![result isKindOfClass:[NSArray class]] || ![result count]) return;
-                [self p_performBlockWithPrivateMOC:^(NSManagedObjectContext *context) {
+                
+                AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                [[appDelegate asyncOperationWithPrivateMOC:^(NSManagedObjectContext *context) {
                     [Bangumi createBangumisWithArray:result
                               inManagedObjectContext:context
                                             inDetail:NO];
-                }];
+                    
+                    NSMutableArray *idArray = [[NSMutableArray alloc] init];
+                    for (NSDictionary *bangumiDictionary in result) {
+                        [idArray addObject:bangumiDictionary[AGBangumiKeyId]];
+                    }
+                    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:AGEntityNameBangumi];
+                    request.predicate = [NSPredicate predicateWithFormat:@"NOT(identifier IN %@)", idArray];
+                    NSError *error = nil;
+                    NSArray *matches = [context executeFetchRequest:request error:&error];
+                    
+                    if (!matches || error) {
+                        NSLog(@"Client database error.");
+                        return;
+                    }
+                    for (Bangumi *bangumi in matches) {
+                        bangumi.isFavorite = @NO;
+                    }
+                }] subscribeCompleted:^{ }];
             }];
 }
 
@@ -160,11 +165,12 @@ static const NSInteger kDaysOfWeek = 7;
             doNext:^(id  _Nullable result) {
                 if (![result isKindOfClass:[NSDictionary class]]) return;
                 NSDictionary *bangumi = (NSDictionary *)result;
-                [self p_performBlockWithPrivateMOC:^(NSManagedObjectContext *context) {
+                AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                [[appDelegate asyncOperationWithPrivateMOC:^(NSManagedObjectContext *context) {
                     [Bangumi createBangumiWithDictionary:bangumi
                                   inManagedObjectContext:context
                                                 inDetail:YES];
-                }];
+                }] subscribeCompleted:^{ }];
             }];
 }
 
@@ -173,11 +179,12 @@ static const NSInteger kDaysOfWeek = 7;
     return [[self p_requestPasswordRequiredCommand:@"list_all_bangumis" withParameters:parameters uniqueToken:nil]
             doNext:^(id  _Nullable result) {
                 if (![result isKindOfClass:[NSArray class]] || ![result count]) return;
-                [self p_performBlockWithPrivateMOC:^(NSManagedObjectContext *context) {
+                AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                [[appDelegate asyncOperationWithPrivateMOC:^(NSManagedObjectContext *context) {
                     [Bangumi createBangumisWithArray:result
                               inManagedObjectContext:context
                                             inDetail:NO];
-                }];
+                }] subscribeCompleted:^{ }];
             }];
 }
 
@@ -186,13 +193,14 @@ static const NSInteger kDaysOfWeek = 7;
     return [[self p_requestPasswordRequiredCommand:@"list_all_episodes" withParameters:parameters uniqueToken:nil]
             doNext:^(id  _Nullable result) {
                 if (![result isKindOfClass:[NSArray class]] || ![result count]) return;
-                [self p_performBlockWithPrivateMOC:^(NSManagedObjectContext *context) {
+                AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                [[appDelegate asyncOperationWithPrivateMOC:^(NSManagedObjectContext *context) {
                     [Schedule createSchedulesWithArray:result
                                commonBangumiDictionary:@{ AGBangumiKeyId: bangumiId }
                                 inManagedObjectContext:context
                                       scheduleInDetail:YES
                                        bangumiInDetial:NO];
-                }];
+                }] subscribeCompleted:^{ }];
             }];
 }
 
@@ -204,13 +212,14 @@ static const NSInteger kDaysOfWeek = 7;
     return [[self p_requestPasswordRequiredCommand:@"episode_detail" withParameters:parameters uniqueToken:nil]
             doNext:^(id  _Nullable result) {
                 if (![result isKindOfClass:[NSArray class]] || ![result count]) return;
-                [self p_performBlockWithPrivateMOC:^(NSManagedObjectContext *context) {
+                AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                [[appDelegate asyncOperationWithPrivateMOC:^(NSManagedObjectContext *context) {
                     [Schedule createSchedulesWithArray:result
                                commonBangumiDictionary:nil
                                 inManagedObjectContext:context
                                       scheduleInDetail:YES
                                        bangumiInDetial:NO];
-                }];
+                }] subscribeCompleted:^{ }];
             }];
 }
 
@@ -223,20 +232,25 @@ static const NSInteger kDaysOfWeek = 7;
                                   @"lastWatchedEpisode": lastWatchedEpisode };
     return [[self p_requestPasswordRequiredCommand:@"update_my_progress" withParameters:parameters uniqueToken:nil]
             doNext:^(id  _Nullable result) {
-                [self p_performBlockWithPrivateMOC:^(NSManagedObjectContext *context) {
+                AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                [[[appDelegate asyncOperationWithPrivateMOC:^(NSManagedObjectContext *context) {
                     Bangumi *bangumi = [Bangumi getBangumiWithIdentifier:bangumiId
                                                   inManagedObjectContext:context];
                     bangumi.isFavorite = isFavorite;
                     bangumi.lastWatchedEpisode = lastWatchedEpisode;
                     [bangumi updateScheduleInfo];
-                }];
+                }] deliverOn:[RACScheduler mainThreadScheduler]]
+                 subscribeCompleted:^{
+                     [[NSNotificationCenter defaultCenter] postNotificationName:AGContentNeedReOrderNofification object:self];
+                 }];
             }];
 }
 
 - (RACSignal *)markAllEpisodesWatched {
     return [[self p_requestPasswordRequiredCommand:@"mark_all_episodes_watched" withParameters:@{ } uniqueToken:nil]
             doNext:^(id  _Nullable result) {
-                [self p_performBlockWithPrivateMOC:^(NSManagedObjectContext *context) {
+                AppDelegate *appDelegate = (AppDelegate *) [UIApplication sharedApplication].delegate;
+                [[appDelegate asyncOperationWithPrivateMOC:^(NSManagedObjectContext *context) {
                     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:AGEntityNameBangumi];
                     request.predicate = [NSPredicate predicateWithFormat:@"isFavorite == TRUE"];
                     NSError *error = nil;
@@ -248,7 +262,7 @@ static const NSInteger kDaysOfWeek = 7;
                         bangumi.lastWatchedEpisode = bangumi.lastReleasedEpisode;
                         [bangumi updateScheduleInfo];
                     }
-                }];
+                }] subscribeCompleted:^{ }];
             }];
 }
 

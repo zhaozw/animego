@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <SDWebImage/UIImageView+WebCache.h>
 #import <ReactiveObjC.h>
 
 @interface AGRequest : NSObject

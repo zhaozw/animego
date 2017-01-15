@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
+extern NSString * const AGDynamicShortcutKeyBangumiIdentifer;
+extern NSString * const AGSpotlightIdentifierPrefix;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, strong) UIWindow *window;

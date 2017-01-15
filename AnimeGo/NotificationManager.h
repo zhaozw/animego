@@ -15,12 +15,14 @@ typedef NS_ENUM(NSInteger, AGJumpByNotaficationStatus) {
     AGJumpByNotaficationStatusCompleted = 3
 };
 
-extern NSString * const AGJumpToEpisodeNotification;
+extern NSString * const AGJumpToPageNotification;
+extern NSString * const AGContentNeedUpdateNofification;
+extern NSString * const AGContentNeedReOrderNofification;
 
 @interface NotificationManager : NSObject <UNUserNotificationCenterDelegate>
 
 @property (nonatomic, assign) AGJumpByNotaficationStatus jumpStatus;
-@property (nonatomic, strong) NSNumber *jumpDestinationBangumiIdentifier;
+@property (nonatomic, strong) NSNumber *jumpDestinationPageIdentifier;
 @property (nonatomic, assign, readonly) BOOL enable;
 
 + (NotificationManager *)sharedNotificationManager;

@@ -9,6 +9,7 @@
 #import "SearchViewController.h"
 
 #import "BangumiCollectionViewCell.h"
+#import "BangumiDetailViewController.h"
 #import "MainViewController.h"
 #import "LayoutConstant.h"
 #import "AGRequest.h"
@@ -23,6 +24,7 @@ static NSString * const kReuseIdentifier = @"Cell";
 @property (nonatomic, strong) UISearchBar *searchBar;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, assign) BOOL isFirstTimeAppear;
+@property (nonatomic, strong) NSIndexPath *touchIndexPath;
 
 @end
 
@@ -37,6 +39,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     UIUserInterfaceIdiom deviceType = [[UIDevice currentDevice] userInterfaceIdiom];
     
     self.searchBar = [[UISearchBar alloc] init];
+    self.searchBar.showsCancelButton = NO;
     self.searchBar.placeholder = @"输入要搜索的番剧名称";
     self.searchBar.delegate = self;
     [self.view addSubview:self.searchBar];
@@ -71,6 +74,8 @@ static NSString * const kReuseIdentifier = @"Cell";
         make.left.equalTo(@0);
         make.right.equalTo(@0);
     }];
+    
+    [self registerForPreviewingWithDelegate:self sourceView:self.collectionView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -88,15 +93,6 @@ static NSString * const kReuseIdentifier = @"Cell";
     [super viewWillDisappear:animated];
     
     self.parentViewController.navigationItem.rightBarButtonItem = nil;
-}
-
-#pragma mark - <UISearchBarDelegate>
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    NSString *pattern = [NSString stringWithFormat:@"*%@*", searchText];
-    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"title LIKE[cd] %@", pattern];
-    [self.fetchedResultsController performFetch:nil];
-    [self.collectionView reloadData];
 }
 
 #pragma mark - FetcherViewController (super class)
@@ -146,6 +142,33 @@ static NSString * const kReuseIdentifier = @"Cell";
     return cell;
 }
 
+#pragma mark - <UISearchBarDelegate>
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    NSString *pattern = [NSString stringWithFormat:@"*%@*", searchText];
+    self.fetchedResultsController.fetchRequest.predicate = [NSPredicate predicateWithFormat:@"title LIKE[cd] %@", pattern];
+    [self.fetchedResultsController performFetch:nil];
+    [self.collectionView reloadData];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:YES animated:YES];
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+}
+
 #pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -154,6 +177,30 @@ static NSString * const kReuseIdentifier = @"Cell";
         Bangumi *bangumi = (Bangumi *)object;
         [self.parentViewController performSegueWithIdentifier:AGShowDetailSegueIdentifier sender:bangumi.identifier];
     }
+}
+
+#pragma mark - <UIViewControllerPreviewingDelegate>
+
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+              viewControllerForLocation:(CGPoint)location {
+    
+    self.touchIndexPath = [self.collectionView indexPathForItemAtPoint:location];
+    id object = [self.fetchedResultsController objectAtIndexPath:self.touchIndexPath];
+    if (![object isKindOfClass:[Bangumi class]]) return nil;
+    Bangumi *bangumi = (Bangumi *)object;
+    
+    CGRect rect = [self.collectionView cellForItemAtIndexPath:self.touchIndexPath].frame;
+    previewingContext.sourceRect = rect;
+    
+    BangumiDetailViewController *detailVC = [[BangumiDetailViewController alloc] init];
+    detailVC.bangumiIdentifier = bangumi.identifier;
+    return detailVC;
+}
+
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+     commitViewController:(UIViewController *)viewControllerToCommit {
+    
+    [self collectionView:self.collectionView didSelectItemAtIndexPath:self.touchIndexPath];
 }
 
 @end

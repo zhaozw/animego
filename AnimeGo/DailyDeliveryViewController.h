@@ -12,6 +12,8 @@
 #import "VerticalTableView.h"
 
 @interface DailyDeliveryViewController : FetcherViewController
-<HorizontalTableViewDelegate, HorizontalTableViewDataSource, VerticalTableViewDelegate, VerticalTableViewDataSource>
+<HorizontalTableViewDelegate, HorizontalTableViewDataSource,
+VerticalTableViewDelegate, VerticalTableViewDataSource,
+UIViewControllerPreviewingDelegate>
 
 @end

@@ -33,9 +33,13 @@
 
 @property (nonatomic, strong) NSDate *date;
 
+@property (nonatomic, strong, readonly) UITableView *tableView;
 @property (nonatomic, weak) id<VerticalTableViewDelegate> delegate;
 @property (nonatomic, weak) id<VerticalTableViewDataSource> dataSource;
 
+- (__kindof UITableViewCell *)cellForIndex:(NSInteger)index;
+- (NSInteger)indexForPoint:(CGPoint)point;
+- (id)fetchResultForIndex:(NSInteger)index;
 - (void)setRequest:(NSFetchRequest *)request withManagedObjectContext:(NSManagedObjectContext *)context;
 - (void)registerCellPrototypeClass:(Class)cellClass;
 - (__kindof UIView *)dequeueReusableCellForIndex:(NSInteger)index;

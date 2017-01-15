@@ -10,6 +10,6 @@
 #import "FetcherViewController.h"
 
 @interface MyFavoriteViewController : FetcherViewController
-<UICollectionViewDelegate, UICollectionViewDataSource>
+<UICollectionViewDelegate, UICollectionViewDataSource, UIViewControllerPreviewingDelegate>
 
 @end

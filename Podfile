@@ -8,6 +8,6 @@ target 'AnimeGo' do
   # Pods for AnimeGo
   pod 'Masonry'
   pod 'AFNetworking', '~> 3.0'
-  pod 'SDWebImage', '~>3.8'
+  pod 'SDWebImage', '~>4.0'
   pod 'ReactiveObjC', '~> 2.1.2'
 end

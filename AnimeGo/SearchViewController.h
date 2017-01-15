@@ -9,6 +9,6 @@
 #import "FetcherViewController.h"
 
 @interface SearchViewController : FetcherViewController
-<UISearchBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource>
+<UISearchBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UIViewControllerPreviewingDelegate>
 
 @end

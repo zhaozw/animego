@@ -11,6 +11,7 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "AFNetworking.h"
 #import "NetworkConstant.h"
+#import "NotificationManager.h"
 
 static NSString * const kRequestURL = @"https://lainiwakura.com/animego/request.php";
 static NSString * const kImageURL = @"https://lainiwakura.com/animego/image/";

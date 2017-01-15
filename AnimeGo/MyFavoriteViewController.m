@@ -9,6 +9,7 @@
 #import "MyFavoriteViewController.h"
 #import "BangumiCollectionViewCell.h"
 #import "MainViewController.h"
+#import "BangumiDetailViewController.h"
 #import "LayoutConstant.h"
 
 #import "AGRequest.h"
@@ -23,6 +24,7 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, assign) BOOL isFirstTimeAppear;
+@property (nonatomic, strong) NSIndexPath *touchIndexPath;
 
 @end
 
@@ -59,6 +61,8 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
         make.left.equalTo(@0);
         make.right.equalTo(@0);
     }];
+    
+    [self registerForPreviewingWithDelegate:self sourceView:self.collectionView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -150,6 +154,30 @@ static NSInteger kAutoRefreshTimeInterval = 30 * 60;
         Bangumi *bangumi = (Bangumi *)object;
         [self.parentViewController performSegueWithIdentifier:AGShowDetailSegueIdentifier sender:bangumi.identifier];
     }
+}
+
+#pragma mark - <UIViewControllerPreviewingDelegate>
+
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+              viewControllerForLocation:(CGPoint)location {
+    
+    self.touchIndexPath = [self.collectionView indexPathForItemAtPoint:location];
+    id object = [self.fetchedResultsController objectAtIndexPath:self.touchIndexPath];
+    if (![object isKindOfClass:[Bangumi class]]) return nil;
+    Bangumi *bangumi = (Bangumi *)object;
+    
+    CGRect rect = [self.collectionView cellForItemAtIndexPath:self.touchIndexPath].frame;
+    previewingContext.sourceRect = rect;
+    
+    BangumiDetailViewController *detailVC = [[BangumiDetailViewController alloc] init];
+    detailVC.bangumiIdentifier = bangumi.identifier;
+    return detailVC;
+}
+
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+     commitViewController:(UIViewController *)viewControllerToCommit {
+    
+    [self collectionView:self.collectionView didSelectItemAtIndexPath:self.touchIndexPath];
 }
 
 @end

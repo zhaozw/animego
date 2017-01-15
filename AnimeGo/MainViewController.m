@@ -63,7 +63,7 @@ NSString * const AGShowDetailSegueIdentifier = @"Show Detail";
     NotificationManager *manager = [NotificationManager sharedNotificationManager];
     if (manager.jumpStatus == AGJumpByNotaficationStatusHandling) {
         manager.jumpStatus = AGJumpByNotaficationStatusCompleted;
-        [self doJumpToEpisode];
+        [self jumpToPage];
     }
 }
 
@@ -106,12 +106,15 @@ NSString * const AGShowDetailSegueIdentifier = @"Show Detail";
     [UIApplication sharedApplication].applicationIconBadgeNumber = count;
 }
 
-- (void)doJumpToEpisode {
+- (void)jumpToPage {
     NotificationManager *manager = [NotificationManager sharedNotificationManager];
-    NSNumber *bangumiIdentifier = manager.jumpDestinationBangumiIdentifier;
-    if (bangumiIdentifier) {
-        manager.jumpDestinationBangumiIdentifier = nil;
+    NSNumber *bangumiIdentifier = manager.jumpDestinationPageIdentifier;
+    if (!bangumiIdentifier) return;
+    manager.jumpDestinationPageIdentifier = nil;
+    if (bangumiIdentifier.integerValue >= 0) {
         [self performSegueWithIdentifier:AGShowDetailSegueIdentifier sender:bangumiIdentifier];
+    } else if (bangumiIdentifier.integerValue == -1) {
+        [self p_touchSearchButton];
     }
 }
 

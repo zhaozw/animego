@@ -11,7 +11,7 @@
 @implementation UIColor (ExtraColor)
 
 + (UIColor *)ag_colorWith256Red:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue alpha:(CGFloat)alpha {
-    return [UIColor colorWithRed:(CGFloat)red/255 green:(CGFloat)green/255 blue:(CGFloat)blue/255 alpha:alpha];
+    return [UIColor colorWithRed:(CGFloat)red/255.0 green:(CGFloat)green/255.0 blue:(CGFloat)blue/255.0 alpha:alpha];
 }
 
 + (UIColor *)ag_colorWith256Red:(NSInteger)red green:(NSInteger)green blue:(NSInteger)blue {

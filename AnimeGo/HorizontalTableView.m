@@ -227,6 +227,18 @@ static const NSInteger kCacheSize = 5;
     }
 }
 
+- (__kindof UIView *)cellForPoint:(CGPoint)point {
+    CGPoint scrollViewLocation = [self.scrollView convertPoint:point fromView:self];
+    NSInteger index = scrollViewLocation.x / self.tableSize.width;
+    for (UIView *cell in self.displayCellArray) {
+        if ([self p_indexForCell:cell] == index) {
+            return cell;
+            break;
+        }
+    }
+    return nil;
+}
+
 - (void)registerClass:(Class)cellClass {
     self.cellClass = cellClass;
 }

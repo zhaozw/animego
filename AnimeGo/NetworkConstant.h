@@ -42,7 +42,6 @@ typedef NS_ENUM(NSInteger, AGBangumiStatus) {
 };
 
 extern NSString * const AGErrorDomain;
-extern NSString * const AGContentNeedUpdateNofification;
 
 extern NSString * const AGBangumiKeyId;
 extern NSString * const AGBangumiKeyTitle;

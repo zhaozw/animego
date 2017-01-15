@@ -9,6 +9,7 @@
 #import "DailyDeliveryViewController.h"
 
 #import "MainViewController.h"
+#import "BangumiDetailViewController.h"
 #import "VerticalTableView.h"
 #import "BangumiTableViewCell.h"
 
@@ -30,6 +31,7 @@ static NSInteger kMinNormalFetchTimeInterval = 30 * 60;
 @property (nonatomic, strong) HorizontalTableView *horizontalTableView;
 @property (nonatomic, strong) NSMutableDictionary *nextFetchTryTime;
 @property (nonatomic, assign) BOOL isFirstTimeAppear;
+@property (nonatomic, strong) Bangumi *touchBangumi;
 
 @end
 
@@ -54,20 +56,14 @@ static NSInteger kMinNormalFetchTimeInterval = 30 * 60;
         make.left.equalTo(@0);
         make.right.equalTo(@0);
     }];
+    
+    [self registerForPreviewingWithDelegate:self sourceView:self.horizontalTableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.parentViewController.navigationItem.rightBarButtonItem = self.navigationItem.rightBarButtonItem;
-    if (!self.isFirstTimeAppear) {
-        for (UIView *cell in self.horizontalTableView.displayCellArray) {
-            if ([cell isKindOfClass:[VerticalTableView class]]) {
-                VerticalTableView *tableCell = (VerticalTableView *)cell;
-                [tableCell performFetch];
-                [tableCell reloadData];
-            }
-        }
-    }
+    if (!self.isFirstTimeAppear) [self p_reloadData];
     self.isFirstTimeAppear = NO;
 }
 
@@ -83,15 +79,7 @@ static NSInteger kMinNormalFetchTimeInterval = 30 * 60;
 }
 
 - (void)fetchRemoteData {
-    [self fetchCurrentIndexDataForce:YES];
-}
-
-- (void)fetchCurrentIndexDataForce:(BOOL)force {
-    NSInteger currentIndex = self.horizontalTableView.currentIndex;
-    NSInteger week = currentIndex / 7;
-    [self fetchRemoteDataForWeek:week force:force];
-    [self fetchRemoteDataForWeek:week - 1 force:force];
-    [self fetchRemoteDataForWeek:week + 1 force:force];
+    [self p_fetchCurrentIndexDataForce:YES];
 }
 
 - (void)touchRefreshButton {
@@ -118,10 +106,14 @@ static NSInteger kMinNormalFetchTimeInterval = 30 * 60;
      } completed:^{ }];
 }
 
+- (void)contentNeedReOrderNofification {
+    [self p_reloadData];
+}
+
 #pragma mark - <HorizontalTableViewDelegate>
 
 - (void)horizontalTableView:(HorizontalTableView *)sender scrollToIndex:(NSInteger)index {
-    [self fetchCurrentIndexDataForce:NO];
+    [self p_fetchCurrentIndexDataForce:NO];
 }
 
 #pragma mark - <HorizontalTableViewDataSource>
@@ -181,11 +173,59 @@ static NSInteger kMinNormalFetchTimeInterval = 30 * 60;
     }
 }
 
+#pragma mark - <UIViewControllerPreviewingDelegate>
+
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+              viewControllerForLocation:(CGPoint)location {
+    
+    VerticalTableView *verticalTableView = [self.horizontalTableView cellForPoint:location];
+    CGPoint cellLocation = [verticalTableView convertPoint:location fromView:self.horizontalTableView];
+    NSInteger index = [verticalTableView indexForPoint:cellLocation];
+    id fetchResult = [verticalTableView fetchResultForIndex:index];
+    if (![fetchResult isKindOfClass:[Schedule class]]) return nil;
+    self.touchBangumi = ((Schedule *) fetchResult).bangumi;
+    
+    BangumiTableViewCell *cell = [verticalTableView cellForIndex:index];
+    CGRect rect = [self.horizontalTableView convertRect:cell.bounds fromView:cell];
+    previewingContext.sourceRect = rect;
+    
+    BangumiDetailViewController *detailVC = [[BangumiDetailViewController alloc] init];
+    detailVC.bangumiIdentifier = self.touchBangumi.identifier;
+    return detailVC;
+}
+
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext
+     commitViewController:(UIViewController *)viewControllerToCommit {
+    
+    if (self.touchBangumi) {
+        [self.parentViewController performSegueWithIdentifier:AGShowDetailSegueIdentifier
+                                                       sender:self.touchBangumi.identifier];
+    }
+}
+
 #pragma mark - Private Methods
 
 - (NSMutableDictionary *)nextFetchTryTime {
     if (!_nextFetchTryTime) _nextFetchTryTime = [[NSMutableDictionary alloc] init];
     return _nextFetchTryTime;
+}
+
+- (void)p_fetchCurrentIndexDataForce:(BOOL)force {
+    NSInteger currentIndex = self.horizontalTableView.currentIndex;
+    NSInteger week = currentIndex / 7;
+    [self fetchRemoteDataForWeek:week force:force];
+    [self fetchRemoteDataForWeek:week - 1 force:force];
+    [self fetchRemoteDataForWeek:week + 1 force:force];
+}
+
+- (void)p_reloadData {
+    for (UIView *cell in self.horizontalTableView.displayCellArray) {
+        if ([cell isKindOfClass:[VerticalTableView class]]) {
+            VerticalTableView *tableCell = (VerticalTableView *)cell;
+            [tableCell performFetch];
+            [tableCell reloadData];
+        }
+    }
 }
 
 @end

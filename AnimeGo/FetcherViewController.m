@@ -77,8 +77,12 @@
                                                  name:AGContentNeedUpdateNofification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(contentNeedReOrderNofification)
+                                                 name:AGContentNeedReOrderNofification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(p_jumpToEpisodeHandler)
-                                                 name:AGJumpToEpisodeNotification
+                                                 name:AGJumpToPageNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didBecomeActive)
@@ -117,7 +121,7 @@
     NotificationManager *manager = [NotificationManager sharedNotificationManager];
     if (manager.jumpStatus != AGJumpByNotaficationStatusUntreated) return;
     manager.jumpStatus = AGJumpByNotaficationStatusHandling;
-    [self doJumpToEpisode];
+    [self jumpToPage];
 }
 
 #pragma mark - Protected Methods
@@ -137,7 +141,11 @@
     [self updateUI];
 }
 
-- (void)doJumpToEpisode {
+- (void)contentNeedReOrderNofification {
+
+}
+
+- (void)jumpToPage {
     
 }
 

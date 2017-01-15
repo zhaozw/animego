@@ -156,7 +156,7 @@
     self.preferredContentSize = [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }
 
-- (void)doJumpToEpisode {
+- (void)jumpToPage {
     [self performSegueWithIdentifier:@"Back" sender:self];
 }
 

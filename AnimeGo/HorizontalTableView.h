@@ -31,6 +31,7 @@
 @property (nonatomic, assign) NSInteger initIndex;
 @property (nonatomic, assign) NSInteger currentIndex;
 
+- (__kindof UIView *)cellForPoint:(CGPoint)point;
 - (void)registerClass:(Class)cellClass;
 - (__kindof UIView *)dequeueReusableCell;
 

@@ -23,7 +23,8 @@ static NSString * const kIdentifier = @"Cell";
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *weekdayLabel;
 @property (nonatomic, strong) UILabel *dateLabel;
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong, readwrite) UITableView *tableView;
+
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, assign) BOOL didConstraintsSetup;
 
@@ -203,8 +204,20 @@ static NSString * const kIdentifier = @"Cell";
     
 }
 
-- (NSFetchRequest *)request {
-    return self.fetchedResultsController.fetchRequest;
+- (__kindof UITableViewCell *)cellForIndex:(NSInteger)index {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    return [self.tableView cellForRowAtIndexPath:indexPath];
+}
+
+- (NSInteger)indexForPoint:(CGPoint)point {
+    CGPoint tableViewLocation = [self.tableView convertPoint:point fromView:self];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:tableViewLocation];
+    return indexPath.row;
+}
+
+- (id)fetchResultForIndex:(NSInteger)index {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    return [self.fetchedResultsController objectAtIndexPath:indexPath];
 }
 
 - (void)setRequest:(NSFetchRequest *)request withManagedObjectContext:(NSManagedObjectContext *)context {

@@ -9,7 +9,6 @@
 #import "NetworkConstant.h"
 
 NSString * const AGErrorDomain                     = @"AGErrorDomain";
-NSString * const AGContentNeedUpdateNofification   = @"AGContentNeedUpdateNofification";
 
 NSString * const AGBangumiKeyId                    = @"id";
 NSString * const AGBangumiKeyTitle                 = @"title";

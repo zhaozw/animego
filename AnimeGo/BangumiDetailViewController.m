@@ -62,6 +62,8 @@ static NSString * const kReuseIdentifier = @"Cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     self.firstReleasedEpisode = -1;
     self.lastReleasedEpisode = -1;
     self.lastWatchedEpisode = -1;
@@ -111,6 +113,28 @@ static NSString * const kReuseIdentifier = @"Cell";
      }];
 }
 
+- (NSArray<id<UIPreviewActionItem>> *)previewActionItems {
+    UIPreviewAction *itemFavorite = [UIPreviewAction actionWithTitle:@"追番" style:UIPreviewActionStyleDefault
+        handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+            AGRequest *request = [[AGRequest alloc] init];
+            [[request updateMyProgressWithBangumiId:self.bangumiIdentifier
+                                         isFavorite:@YES
+                                 lastWatchedEpisode:self.bangumi.lastWatchedEpisode]
+             subscribeCompleted:^{ }];
+        }];
+    
+    UIPreviewAction *itemAbandon = [UIPreviewAction actionWithTitle:@"弃番" style:UIPreviewActionStyleDestructive
+        handler:^(UIPreviewAction * _Nonnull action, UIViewController * _Nonnull previewViewController) {
+            AGRequest *request = [[AGRequest alloc] init];
+            [[request updateMyProgressWithBangumiId:self.bangumiIdentifier
+                                         isFavorite:@NO
+                                 lastWatchedEpisode:self.bangumi.lastWatchedEpisode]
+             subscribeCompleted:^{ }];
+        }];
+    
+    return ([self.bangumi.isFavorite isEqual:@YES]) ? @[ itemAbandon ] : @[ itemFavorite ];
+}
+
 #pragma mark - FetcherViewController (super class)
 
 - (void)didBecomeActive {
@@ -118,7 +142,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     [self.episodeButtonsView reloadData];
 }
 
-- (void)doJumpToEpisode {
+- (void)jumpToPage {
     [self performSegueWithIdentifier:@"Back" sender:self];
 }
 
@@ -145,7 +169,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     if (self.bangumi.synopsis) {
         self.synopsisLabel.text = self.bangumi.synopsis;
     }
-    self.favoriteButton.status = [self.bangumi.isFavorite isEqual:@(YES)];
+    self.favoriteButton.status = [self.bangumi.isFavorite isEqual:@YES];
     
     [[NotificationManager sharedNotificationManager] getNotificationSettingsWithCompletionHandler:^(BOOL granted) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -359,7 +383,7 @@ static NSString * const kReuseIdentifier = @"Cell";
 }
 
 - (void)p_touchFavoriteButton {
-    NSNumber *isFavorite = self.favoriteButton.status ? @(YES) : @(NO);
+    NSNumber *isFavorite = self.favoriteButton.status ? @YES : @NO;
     
     AGRequest *request = [[AGRequest alloc] init];
     [[request updateMyProgressWithBangumiId:self.bangumiIdentifier
@@ -372,7 +396,7 @@ static NSString * const kReuseIdentifier = @"Cell";
     if (self.bangumi.status.integerValue == AGBangumiStatusOver) {
         self.captionLabel.text = @"动画已完结";
     } else {
-        if ([self.bangumi.isFavorite isEqual:@(YES)]) {
+        if ([self.bangumi.isFavorite isEqual:@YES]) {
             if ([NotificationManager sharedNotificationManager].enable) {
                 self.captionLabel.text = @"动画已收藏, 新的集数一旦更新, 将会立即推送给您";
             } else {

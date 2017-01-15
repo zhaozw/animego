@@ -12,7 +12,9 @@
 #import "AGRequest.h"
 #import "NetworkConstant.h"
 
-NSString * const AGJumpToEpisodeNotification = @"AGJumpToEpisodeNotification";
+NSString * const AGJumpToPageNotification          = @"AGJumpToPageNotification";
+NSString * const AGContentNeedUpdateNofification   = @"AGContentNeedUpdateNofification";
+NSString * const AGContentNeedReOrderNofification  = @"AGContentNeedReOrderNofification";
 
 static NSString * const kNatificationKeyBangumiIdentifier = @"bangumi_id";
 static const NSTimeInterval kRetryInterval = 2.0;
@@ -33,7 +35,7 @@ static const NSTimeInterval kRetryInterval = 2.0;
     dispatch_once(&onceToken, ^{
         sharedNotificationManager = [[NotificationManager alloc] init];
         sharedNotificationManager.enable = NO;
-        sharedNotificationManager.jumpDestinationBangumiIdentifier = nil;
+        sharedNotificationManager.jumpDestinationPageIdentifier = nil;
         sharedNotificationManager.jumpStatus = AGJumpByNotaficationStatusCompleted;
         
         if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0) {
@@ -44,7 +46,7 @@ static const NSTimeInterval kRetryInterval = 2.0;
     return sharedNotificationManager;
 }
 
-#pragma mark - UNUserNotificationCenterDelegate
+#pragma mark - <UNUserNotificationCenterDelegate>
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
        willPresentNotification:(UNNotification *)notification
@@ -188,13 +190,13 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     if (remoteNotification) {
         id info = remoteNotification[kNatificationKeyBangumiIdentifier];
         if (info && [info isKindOfClass:[NSNumber class]]) {
-            self.jumpDestinationBangumiIdentifier = (NSNumber *)info;
+            self.jumpDestinationPageIdentifier = (NSNumber *)info;
             self.jumpStatus = AGJumpByNotaficationStatusUntreated;
         } else {
-            self.jumpDestinationBangumiIdentifier = nil;
+            self.jumpDestinationPageIdentifier = nil;
             self.jumpStatus = AGJumpByNotaficationStatusCompleted;
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:AGJumpToEpisodeNotification object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:AGJumpToPageNotification object:self];
     }
 }
 

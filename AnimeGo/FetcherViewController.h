@@ -25,6 +25,7 @@
 - (void)didBecomeActive;
 - (void)willResignActive;
 - (void)contentNeedUpdateNofification;
-- (void)doJumpToEpisode;
+- (void)contentNeedReOrderNofification;
+- (void)jumpToPage;
 
 @end
