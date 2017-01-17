@@ -605,7 +605,7 @@ static NSString * const kReuseIdentifier = @"Cell";
         make.top.equalTo(self.separationLine.bottom).with.offset(padding);
         make.right.equalTo(self.separationLine);
         make.width.equalTo(self.showEpisodeTitleButton.height);
-        make.height.equalTo(self.progressLabel).multipliedBy(1.5);
+        make.height.equalTo(self.progressLabel).multipliedBy(2);
     }];
     
     [self.progressLabel makeConstraints:^(MASConstraintMaker *make) {

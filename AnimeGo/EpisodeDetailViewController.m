@@ -147,6 +147,9 @@
             } else if ([appURL hasPrefix:@"ipadletvclient://"]) {
                 self.openByAppLabel.text = @"乐视视频HD";
                 [self.openByAppButton setBackgroundImage:[UIImage imageNamed:@"letv"] forState:UIControlStateNormal];
+            } else if ([appURL hasPrefix:@"pptv://"]) {
+                self.openByAppLabel.text = @"聚力视频";
+                [self.openByAppButton setBackgroundImage:[UIImage imageNamed:@"pptv"] forState:UIControlStateNormal];
             } else {
                 self.openByAppLabel.text = @"App";
                 [self.openByAppButton setBackgroundImage:[UIImage imageNamed:@"animego"] forState:UIControlStateNormal];
